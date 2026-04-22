@@ -1,2 +1,236 @@
-<html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Альт Линукс: Основные настройки</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <!-- Кнопка ПЕЧАТЬ -->
+    <button class="print-btn" onclick="window.print()" title="Распечатать страницу">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px;height:16px">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Печать
+    </button>
+
+    <!-- Кнопка СКАЧАТЬ -->
+    <a href="https://github.com/tohch/madalt/archive/refs/heads/main.zip" 
+    class="download-btn" 
+    title="Скачать всю документацию (.zip)"
+    download>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px;height:16px">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Скачать
+    </a>
+
+    <nav class="sidebar">
+        <h2>📖 Оглавление</h2>
+        <ul>
+            <li><a href="#intro">Введение</a></li>
+            <li><a href="#dist">Дистрибутивы</a></li>
+            <li><a href="#install-alt-10-work">Установка Альт СП 10 Рабочая станция</a>
+                <ul>
+                    <li><a href="#install-alt-10-work-install">Установка</a></li>
+                    <li><a href="#install-UEFI">Создание разделов для микропрограммы UEFI</a></li>
+                    <li><a href="#install-Legacy">Создание разделов для микропрограммы Legacy(BIOS)</a></li>
+                    <li><a href="#after-install-alt-10-work">После установки</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main">
+        <section id="intro-header" class="doc-header">
+            <!-- Git-стиль: основной заголовок -->
+            <div class="git-main">
+                <div class="git-meta">
+                    <span class="branch-badge">main</span>
+                    <span class="commit-hash">commit 68c8a90</span>
+                    <span class="author">@tohch</span>
+                </div>
+                <h1 class="git-title">Альт Линукс: Основные настройки</h1>
+            </div>
+
+            <!-- Разделитель "ИЛИ" -->
+            <div class="or-divider">
+                <span class="line"></span>
+                <span class="or-text">ИЛИ</span>
+                <span class="line"></span>
+            </div>
+
+            <!-- Подзаголовок -->
+            <h2 class="subtitle">Безумие Морского Котика 🐱‍</h2>
+
+            <!-- Дата последнего изменения -->
+            <div class="last-modified">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Последнее обновление:</span>
+                <time datetime="2026-04-22">22 апреля 2026</time>
+            </div>
+
+            <!-- Изображение -->
+            <div class="hero-image">
+                <img src="img/logo/fur-seal.png" alt="Безумие Морского Котика">
+                <div class="image-caption">Талисман проекта: когда сеть падает, а кофе заканчивается</div>
+            </div>
+        </section>
+
+        <section id="intro">
+            <h1>Введение</h1>
+            <p>Документация по автоматизации развертывания и обслуживания Альт Линукс СП Рабочая станция. Все команды протестированы на стабильной ветке c10f2.</p>
+            
+            <div class="alert alert-note">
+                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Система <code>ALT SP Workstation 11100-01</code> на дату 22.04.2026 имеет версию ядра:</p>
+                    <p class="alert-text"><code>6.12.74-6.12-alt0.c10f.2</code></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dist">
+            <h1>Дистрибутивы</h1>
+            <p>Все необходимые `.iso`, `.rpm` и архивы собраны в отдельной директории на Яндекс Диске.</p>
+            <a href="https://disk.yandex.ru/d/MtKNzEzZKz7qhg" class="dist-link">📁 Скачать dist</a>
+        </section>
+
+        <section id="install-alt-10-work">
+            <h1>Установка Альт СП 10 Рабочая станция</h1>
+            <section id="install-alt-10-work-install">
+                <h2>Установка</h2>
+                <p>Выберите: Установить ALT SP Workstation</p>
+                <img src="img/install-alt-10-work/img-install-alt-1.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <p>Выберите профиль: Вручную</p>
+                <img src="img/install-alt-10-work/img-install-alt-2.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <p>Удалите старые разделы</p>
+                <img src="img/install-alt-10-work/img-install-alt-3.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <section id="install-UEFI">
+                    <h2>Создание раздела для микропрограммы UEFI</h2>
+                    <!-- Внимание -->
+                    <div class="alert alert-warning">
+                        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                        <div class="alert-content">
+                            <div class="alert-title">Внимание</div>
+                            <p class="alert-text">При установке в режиме UEFI обязательно создайте раздел EFI размером 512 МБ, файловая система FAT32, точка монтирования /boot/efi. В противном случае система не загрузится.
+                                Если используется режим Legacy(BIOS), то создавать EFI-раздел не нужно.
+                                Чтобы понять какая микропрограмма стоит достаточно раскрыть список "Тип раздела" при создании раздела, если в списке есть "efi system partition", значит UEFI, если только "FAT32", значит Legacy(BIOS).
+                            </p>
+                        </div>
+                    </div>
+                    <p>1. Создание раздела efi</p>
+                    <img src="img/install-alt-10-work/img-install-alt-4.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-5.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-6.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-7.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <p>2. Создание раздела swap</p>
+                    <p>Обязательно создайте раздел для Swap (подкачка) хотя бы 8Гб. В некоторых ситуациях отсутствие swap может привести к "тормозам", даже если ОЗУ свободно.</p>
+                    <img src="img/install-alt-10-work/img-install-alt-8.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-9.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-10.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <p>3. Создание основного раздела /</p>
+                    <img src="img/install-alt-10-work/img-install-alt-11.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-12.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-13.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-14.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-15.png" alt="Установка Альт СП 10 Рабочая Станция">
+                </section>
+                <section id="install-Legacy">
+                    <h2>Создание разделов для микропрограммы Legacy(BIOS)</h2>
+                    <p>1. Создание раздела swap</p>
+                    <p>Обязательно создайте раздел для Swap (подкачка) хотя бы 8Гб. В некоторых ситуациях отсутствие swap может привести к "тормозам", даже если ОЗУ свободно.</p>
+                    <img src="img/install-alt-10-work/img-install-alt-16.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-17.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <p>2. Создание основного раздела /</p>
+                    <img src="img/install-alt-10-work/img-install-alt-18.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-19.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-20.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-21.png" alt="Установка Альт СП 10 Рабочая Станция">
+                    <img src="img/install-alt-10-work/img-install-alt-22.png" alt="Установка Альт СП 10 Рабочая Станция">
+                </section>
+                <p>Далее. Загрузитесь с жесткого диска.</p>
+                <p>После загрузки с жесткого диска.</p>
+                <p>Снять галочку "Установить или сбросить пароль"</p>
+                <img src="img/install-alt-10-work/img-install-alt-23.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <p>Настройте сеть</p>
+                <img src="img/install-alt-10-work/img-install-alt-24.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <p>Задайте пароль root</p>
+                <img src="img/install-alt-10-work/img-install-alt-25.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <p>Создайте учетную запись пользователя</p>
+                <img src="img/install-alt-10-work/img-install-alt-26.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <img src="img/install-alt-10-work/img-install-alt-27.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <section id="after-install-alt-10-work">
+                    <h2>После установки</h2>
+                    <p>Удалить атрибут <b>noexec</b> в /etc/fstab с <b>/tmp</b> и <b>/home</b></p>
+                    <!-- Примечание -->
+                    <div class="alert alert-note">
+                        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div class="alert-content">
+                            <div class="alert-title">Примечание</div>
+                            <p class="alert-text">Если раздел /home отдельно не создавался при разметке диска, то его и не будет в fstab</p>
+                        </div>
+                    </div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            Копировать
+                        </button>
+                        <div class="code-block">
+                            <div class="cmd cmd-user">su -</div>
+                            <div class="cmd cmd-root">vim /etc/fstab</div>
+                        </div>
+                    </div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            Копировать
+                        </button>
+                        <div class="code-block">
+                            <div class="config-line"><span class="config-value">proc         /proc       proc                nosuid,noexec,gid=proc          0 0</span></div>
+                            <div class="config-line"><span class="config-value">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620  0 0</span></div>
+                            <div class="config-line"><span class="config-value">tmpfs        <span class="mark">/tmp</span>        tmpfs               <span class="mark">nosuid</span>                          0 0</span></div>
+                            <div class="config-line"><span class="config-value">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime       1 1</span></div>
+                            <div class="config-line"><span class="config-value">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults       0 0</span></div>
+                            <div class="config-line"><span class="config-value">tmpfs        /tmp/.private/root     tmpfs                     defaults       0 0</span></div>
+                            <div class="config-line"><span class="config-value">/dev/sr0    /media/ALTLinux   udf,iso9660   ro,noauto,user,utf8,nofail,comment=x-gvfs-show 0 0</span></div>
+                        </div>
+                    </div>
+                    <p>Для СП фиксация для исключения деградации</p>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            Копировать
+                        </button>
+                        <div class="code-block">
+                            <div class="cmd cmd-user">su -</div>
+                            <div class="cmd cmd-root">integalert fix</div>
+                        </div>
+                    </div>
+                </section>
+            </section> 
+        </section>
+    </main>
+
+    <script>
+    function copyCode(btn) {
+        const codeBlock = btn.nextElementSibling;
+        const commands = Array.from(codeBlock.querySelectorAll('.cmd, .config-line, .vim-line'))
+            .map(el => el.textContent.trim())
+            .filter(text => text && !text.startsWith('#'))
+            .join('\n');
+        
+        navigator.clipboard.writeText(commands).then(() => {
+            const original = btn.innerHTML;
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Скопировано!';
+            setTimeout(() => btn.innerHTML = original, 2000);
+        });
+    }
+    </script>
+</body>
 </html>
