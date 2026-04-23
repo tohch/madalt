@@ -219,7 +219,7 @@ img { max-width: 100%; height: auto; border: 1px solid var(--border); border-rad
 .config-value { color: var(--string); }
 .vim-command { color: var(--keyword); }
 .vim-variable { color: var(--variable); }
-.vim-string { color: var(--string); }
+.code-block > .vim-string { color: var(--string); }
 
 /* =========================================
    6. УВЕДОМЛЕНИЯ И ЭЛЕМЕНТЫ
