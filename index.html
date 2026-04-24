@@ -106,7 +106,7 @@
         <section id="dist">
             <h1>Дистрибутивы</h1>
             <p>Все необходимые `.iso`, `.rpm` и архивы собраны в отдельной директории dist на Яндекс Диске.</p>
-            <a href="https://disk.yandex.ru/d/MtKNzEzZKz7qhg" class="dist-link">📁 Скачать dist</a>
+            <a href="https://disk.yandex.ru/d/MtKNzEzZKz7qhg" class="dist-link">📁 Перейти на Яндекс Диск для скачивания dist</a>
         </section>
 
         <section id="install-alt-10-work">
@@ -123,7 +123,6 @@
                     <h2>Создание раздела для микропрограммы UEFI</h2>
                     <!-- Внимание -->
                     <div class="alert alert-warning">
-                        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
                         <div class="alert-content">
                             <div class="alert-title">Внимание</div>
                             <p class="alert-text">При установке в режиме UEFI обязательно создайте раздел EFI размером 512 МБ, файловая система FAT32, точка монтирования /boot/efi. В противном случае система не загрузится.
@@ -178,40 +177,32 @@
                     <p>Удалить атрибут <b>noexec</b> в /etc/fstab с <b>/tmp</b> и <b>/home</b></p>
                     <!-- Примечание -->
                     <div class="alert alert-note">
-                        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <div class="alert-content">
                             <div class="alert-title">Примечание</div>
                             <p class="alert-text">Если раздел /home отдельно не создавался при разметке диска, то его и не будет в fstab</p>
                         </div>
                     </div>
                     <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                            Копировать
-                        </button>
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                         <div class="code-block">
                             <div class="cmd cmd-user">su -</div>
                             <div class="cmd cmd-root">vim /etc/fstab</div>
                         </div>
                     </div>
                     <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                            Копировать
-                        </button>
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                         <div class="code-block">
-                            <div class="vim-line"><span class="vim-string">proc         /proc       proc                nosuid,noexec,gid=proc          0 0</span></div>
-                            <div class="vim-line"><span class="vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620  0 0</span></div>
-                            <div class="vim-line"><span class="vim-string">tmpfs        <span class="vim-command">/tmp</span>        tmpfs               <span class="vim-command">nosuid</span>                          0 0</span></div>
-                            <div class="vim-line"><span class="vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime       1 1</span></div>
-                            <div class="vim-line"><span class="vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults       0 0</span></div>
-                            <div class="vim-line"><span class="vim-string">tmpfs        /tmp/.private/root     tmpfs                     defaults       0 0</span></div>
-                            <div class="vim-line"><span class="vim-string">/dev/sr0    /media/ALTLinux   udf,iso9660   ro,noauto,user,utf8,nofail,comment=x-gvfs-show 0 0</span></div>
+                            <div class="vim-line vim-string">proc         /proc       proc                nosuid,noexec,gid=proc          0 0</span></div>
+                            <div class="vim-line vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620  0 0</span></div>
+                            <div class="vim-line vim-string">tmpfs        <span class="mark">/tmp</span>        tmpfs               <span class="mark">nosuid</span>                          0 0</span></div>
+                            <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime       1 1</span></div>
+                            <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults       0 0</span></div>
+                            <div class="vim-line vim-string">tmpfs        /tmp/.private/root     tmpfs                     defaults       0 0</span></div>
+                            <div class="vim-line vim-string">/dev/sr0    /media/ALTLinux   udf,iso9660   ro,noauto,user,utf8,nofail,comment=x-gvfs-show 0 0</span></div>
                         </div>
                     </div>
                     <!-- Подсказка -->
                     <div class="alert alert-tip">
-                        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <div class="alert-content">
                             <div class="alert-title">Подсказка</div>
                             <p class="alert-text">В редакторе vim для входа в режим ввода нажмите: <code>a</code> или <code>i</code> или <code>o</code></p>
@@ -222,10 +213,7 @@
                     </div>
                     <p>Для СП фиксация для исключения деградации</p>
                     <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                            Копировать
-                        </button>
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                         <div class="code-block">
                             <div class="cmd cmd-user">su -</div>
                             <div class="cmd cmd-root">integalert fix</div>
@@ -239,10 +227,7 @@
             <h1>Управление пользователями</h1>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd-comment"># Добавление нового пользователя user1</div>
@@ -263,28 +248,24 @@
             <p>Для простоты обновления был написан bash скрипт  update-kernel_10.2.sh. Данный скрипт выполняет все действия, которые описаны в нижестоящих главах, а именно: переход на ветку c10f2, обновление ядра и проверка с фиксацией. Путь до скрипта: <code>distr/update_kernel/update_kernel_10.2.sh</code></p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Сделайте скрипт исполняемым</div>
                     <div class="cmd cmd-user">chmod +x ./update_kernel_10.2.sh</div>
                     <div class="cmd-comment"># Запустите скрипт</div>
                     <div class="cmd cmd-user">./update_kernel_10.2.sh</div>
                     <div class="config-line"><span class="config-value"># выберете пункт 1</span></div>
-                    <div class="config-line"><span class="config-value"># следуйте инструкциям (нажимайте enter на все вопросы)</span></div>
-                    <div class="config-line"><span class="config-value"># после перезагрузки запустите скрипт еще раз...</span></div>
+                    <div class="cmd-comment"># следуйте инструкциям (нажимайте enter на все вопросы)</div>
+                    <div class="cmd-comment"># после перезагрузки запустите скрипт еще раз...</div>
                     <div class="cmd cmd-user">./update_kernel_10.2.sh</div>
                     <div class="config-line"><span class="config-value"># выберете пункт 2</span></div>
-                    <div class="config-line"><span class="config-value"># ...</span></div>
-                    <div class="config-line"><span class="config-value"># Обновление до ALT Linux СП 10.2 завершено!</span></div>
+                    <div class="cmd-comment"># ...</div>
+                    <div class="cmd-comment"># Обновление до ALT Linux СП 10.2 завершено!</div>
                     <div class="cmd-comment"># Если после выполнения 2-го пункта видите такую надпись, значит обновление прошло успешно</div>
                 </div>
             </div>
             <!-- Примечание -->
             <div class="alert alert-note">
-                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div class="alert-content">
                     <div class="alert-title">Примечание</div>
                     <p class="alert-text">Если скрипт выполнился успешно, то никаких других действий по переходу выполнения не надо.</p>
@@ -294,10 +275,7 @@
             <p>Закомментировать диск с установщиком Альта в fstab, иначе без установщика диска будет ошибка при обновлении дистрибутивов</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /etc/fstab</div>       
@@ -305,10 +283,7 @@
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="vim-line vim-string">proc         /proc       proc                nosuid,noexec,gid=proc          0 0</div>
                     <div class="vim-line vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620  0 0</div>
@@ -322,20 +297,14 @@
             <p>Закомментировать диск с установщиком Альта в source.list</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">vim /etc/apt/sources.list.d/sources.list</div>         
                 </div>
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="vim-comment">#rpm cdrom:[ALT SP Workstation 11100-01 x86_64 build 2023-05-28]/ ALTLinux main</div>           
                 </div>
@@ -343,10 +312,7 @@
             <p>Раскомментировать репозитории. Раскомментировать/добавить три строчки. Если почему-то репозитории по http подвисают, то использовать по ftp</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>      
@@ -354,10 +320,7 @@
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="vim-comment"># update.altsp.su (IVK, Moscow)</div>
                     <div class="vim-comment"># ALT Certified 10</div>
@@ -373,10 +336,7 @@
             <p>Выполните обновление системы</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">apt-repo</div>
                     <div class="cmd cmd-root">apt-get update</div>
@@ -386,7 +346,6 @@
             </div>
             <!-- Внимание -->
             <div class="alert alert-warning">
-                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
                     <p class="alert-text">Если файловая система защищена от изменений механизмом IMA/EVM, отключите его. Для этого запустите от имени root команду <code>integrity-remover</code>, после чего система будет перезагружена.</p>
@@ -396,10 +355,7 @@
             <p>Переключите бранч на 10.2</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">echo '%_priority_distbranch c10f2' >/etc/rpm/macros.d/priority_distbranch</div>
                     <div class="cmd-comment"># Убедитесь, что бранч переключен, в выводе следующей команды -- «c10f2»:</div>
@@ -410,20 +366,14 @@
             <p>Снова внесите изменения в файл <code>/etc/apt/sources.list.d/altsp.list</code> и другие источники APT. Добавить <code>c10f2</code></p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>     
                 </div>
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f<span class="mark">2</span>/branch/x86_64 classic gostcrypto</div>
                     <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f<span class="mark">2</span>/branch/x86_64-i586 classic</div>
@@ -432,10 +382,7 @@
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># проверить: должно выдать c10f2</div>
                     <div class="cmd cmd-root">apt-repo</div>     
@@ -443,7 +390,6 @@
             </div>
             <!-- Подсказка -->
             <div class="alert alert-tip">
-                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div class="alert-content">
                     <div class="alert-title">Подсказка</div>
                     <p class="alert-text">Чтобы проверить, используется ли integalert используйте команду: <code>systemctl is-enabled integalert</code></p>
@@ -452,10 +398,7 @@
             <p>При наличии каталога /etc/osec, переместите куда-нибудь файлы настройки старого сканера проверки целостности на основе OSEC (используется утилитой integalert)</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">mkdir -p /root/integalert.old</div>
                     <div class="cmd cmd-root">mv /etc/osec/{integalert,integalert_fix,alterator-pipe.conf,run-osec,pipe.conf} /root/integalert.old/</div>
@@ -464,10 +407,7 @@
             <p>Обновите индексы для нового источника и систему, затем обновите ядро и перезагрузитесь. Убедиться, что ядро обновилось выполнив <code>uname -r</code> до <code>update-kernel</code> и после <code>reboot</code></p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">apt-get update</div>
@@ -478,7 +418,6 @@
             </div>
             <!-- Примечание -->
             <div class="alert alert-note">
-                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div class="alert-content">
                     <div class="alert-title">Примечание</div>
                     <p class="alert-text">Если в процессе выполнения первых трёх команд возникнут сообщения про несовпадение размера пакета или контрольных сумм, повторите команды, начиная с <code>apt-get update</code>.</p>
@@ -486,7 +425,6 @@
             </div>
             <!-- Внимание -->
             <div class="alert alert-warning">
-                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
                     <p class="alert-text"><code>update-kernel</code> ищет обновление только к конкретной версии ядра. Если вышла другая серия, к примеру, стоит <code>un-def</code>, а вышла <code>std-def</code> (просто <code>kernel-image</code>), то в <code>update-kernel</code> надо указывать конкретное ядро.</p>
@@ -497,10 +435,7 @@
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">uname -r</div>
@@ -516,10 +451,7 @@
             <p>После перезагрузки</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">remove-old-kernels</div>
@@ -530,10 +462,7 @@
             <p>Зафиксируйте новое состояние системы для корректной работы сканера проверки целостности на основе OSEC, если он использовался ранее и при перезагрузке компьютера выводилось сообщение о возможном нарушении целостности</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">integalert fix</div>
@@ -541,7 +470,6 @@
             </div>
             <!-- Внимание -->
             <div class="alert alert-warning">
-                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
                     <p class="alert-text">Внимание! Если перед обновлением файловая система была защищена от изменений механизмом IMA/EVM, включите его обратно при помощи утилиты <code>integrity-applier</code></p>
@@ -550,10 +478,7 @@
             <p>После обновления ядра перестает работать virtualbox, т.к. под каждое ядро надо пересобирать ядро для виртуальных машин. Проще переустановить виртуальную машину</p>
             <!-- Команды -->
             <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    Копировать
-                </button>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Удаление virtualbox</div>
                     <div class="cmd cmd-root">apt-get remove virtualbox-*</div>
@@ -564,19 +489,40 @@
     </main>
 
     <script>
-    function copyCode(btn) {
-        const codeBlock = btn.nextElementSibling;
-        const commands = Array.from(codeBlock.querySelectorAll('.cmd, .config-line, .vim-line'))
-            .map(el => el.textContent.trim())
-            .filter(text => text && !text.startsWith('#'))
-            .join('\n');
-        
-        navigator.clipboard.writeText(commands).then(() => {
-            const original = btn.innerHTML;
-            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Скопировано!';
-            setTimeout(() => btn.innerHTML = original, 2000);
-        });
-    }
+        function copyCode(btn) {
+            const codeBlock = btn.nextElementSibling;
+            const commands = Array.from(codeBlock.querySelectorAll('.cmd, .config-line, .vim-line'))
+                .map(el => el.textContent.trim())
+                .filter(text => text && !text.startsWith('#'))
+                .join('\n');
+            
+            // Сохраняем оригинальный текст в data-атрибут (только при первом клике)
+            if (!btn.dataset.original) {
+                btn.dataset.original = btn.textContent.trim();
+            }
+            
+            // Сбрасываем предыдущий таймер, если он есть (защита от быстрых кликов)
+            if (btn.dataset.timeout) {
+                clearTimeout(parseInt(btn.dataset.timeout));
+                delete btn.dataset.timeout;
+            }
+            
+            navigator.clipboard.writeText(commands).then(() => {
+                // Меняем состояние кнопки
+                btn.classList.add('copied');
+                btn.textContent = 'Скопировано!';
+                
+                // Планируем возврат к исходному состоянию
+                btn.dataset.timeout = setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.textContent = btn.dataset.original; // Берём из data-атрибута, а не из DOM
+                    delete btn.dataset.timeout;
+                }, 2000);
+            }).catch(err => {
+                console.error('Не удалось скопировать:', err);
+                // Опционально: показать ошибку пользователю
+            });
+        }
     </script>
 </body>
 </html>
