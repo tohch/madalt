@@ -47,6 +47,7 @@
                     <li><a href="#updae-kernel-10">Обновление до версии 10.2</a></li>
                 </ul>
             </li>
+            <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
         </ul>
     </nav>
 
@@ -484,6 +485,40 @@
                     <div class="cmd-comment"># Удаление virtualbox</div>
                     <div class="cmd cmd-root">apt-get remove virtualbox-*</div>
                     <div class="cmd-comment"># Установка virtualbox см раздел <a href="#VirtualBox">VirtualBox</a></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="intall-them-windows">
+            <h1>Установка темы "Windows"</h1>
+            <p>Установка самой темы. Пакет необходимо установить до создания пользователя, затем создать пользователя.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install theme-mate-windows</div>
+                    <div class="cmd cmd-root">reboot</div>
+                </div>
+            </div>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Если требуется установить тему под текущим пользователем, то необходимо после установки пакета перегрузить компьютер, выполнить от пользователя:</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">dconf reset -f /</div>
+                    <div class="cmd-comment"># Далее можно (НЕ ОБЯЗАТЕЛЬНО) установить тему windows 10</div>
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get install gtk-theme-windows-10</div>
+                    <div class="cmd-comment"># И после этого выбрать ее в темах оформления</div>
                 </div>
             </div>
         </section>
