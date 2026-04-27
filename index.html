@@ -48,10 +48,12 @@
                 </ul>
             </li>
             <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
+            <li><a href="#xfce4">Окружение Xfce4</a></li>
         </ul>
     </nav>
 
     <main class="main">
+        <!-- Глава -->
         <section id="intro-header" class="doc-header">
             <!-- Git-стиль: основной заголовок -->
             <div class="git-main">
@@ -90,6 +92,7 @@
             </div>
         </section>
 
+        <!-- Глава -->
         <section id="intro">
             <h1>Введение</h1>
             <p>Документация по автоматизации развертывания и обслуживания Альт Линукс СП Рабочая станция. Все команды протестированы на стабильной ветке c10f2.</p>
@@ -104,6 +107,7 @@
             </div>
         </section>
 
+        <!-- Глава -->
         <section id="dist">
             <h1>Дистрибутивы</h1>
             <p>Все необходимые .iso, .rpm и архивы собраны в отдельных директориях: dist и iso на Яндекс Диске.</p>
@@ -111,6 +115,7 @@
             <a href="https://disk.yandex.ru/d/sP38HdX6TMyIHQ" class="dist-link">📁 Перейти на Яндекс Диск для скачивания iso</a>
         </section>
 
+        <!-- Глава -->
         <section id="install-alt-10-work">
             <h1>Установка Альт СП 10 Рабочая станция</h1>
             <section id="install-alt-10-work-install">
@@ -225,6 +230,7 @@
             </section> 
         </section>
 
+        <!-- Глава -->
         <section id="useradd">
             <h1>Управление пользователями</h1>
             <!-- Команды -->
@@ -244,6 +250,7 @@
             </div>
         </section>
 
+        <!-- Глава -->
         <section id="update-kernel">
             <h1>Обновление Альт СП релиз 10 до версии 10.2</h1>
             <h2 id="auto-update-kernel">Автоматическое обновление</h2>
@@ -521,6 +528,39 @@
                     <div class="cmd-comment"># И после этого выбрать ее в темах оформления</div>
                 </div>
             </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="xfce4">
+            <h1>Окружение Xfce4</h1>
+            <p>После обновления до с10f2 обновляется окружение MATE до 1.26.1, у которой наблюдаются проблемы с дочерними окнами, они открываются за главным окном.
+            _NET_ACTIVE_WINDOW message with a timestamp of 0
+            Приложение пытается активировать своё окно через стандартный X11-протокол, но не передаёт корректный таймстамп (временную метку последнего пользовательского события — клика, нажатия клавиши). По стандарту EWMH таймстамп не может быть 0.</p>
+            <p>meta_window_activate called by a pager with a 0 timestamp
+            Marco (как и его «родитель» Mutter из GNOME) игнорирует такие запросы — это защита от «фокус-хищений» (когда вредоносное приложение могло бы принудительно перехватывать фокус ввода).
+            Из-за игнорирования запроса активации всплывающее окно (диалог загрузки, файловый менеджер) не поднимается поверх родительского окна — остаётся в фоне.</p>
+            <p>Решение: перейти на другое окружение, например Xfce4.</p>
+            <p>Установка окружения Xfce4</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get install xfce4-full</div>
+                </div>
+            </div>
+            <p>Выберите сессию Xfce при входе: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
+            <img src="img/xfce4/img-xfce4-1.png" alt="Выберете сессию XFCE">
+            <p>Отключить звуковой сигнал встроенного динамика. Работает до перезагрузки. Чтобы работало постоянно, надо добавить в автозапуск (Сеансы и запуск) команду xset b off.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">xfce4-session-settings</div>
+                    <div class="cmd cmd-user">xset b off</div>
+                </div>
+            </div>
+            <img src="img/xfce4/img-xfce4-2.png" alt="Отключить звуковой сигнал">
         </section>
     </main>
 
