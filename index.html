@@ -51,6 +51,7 @@
             <li><a href="#xfce4">Окружение Xfce4</a></li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#repo">Управление репозиториями</a></li>
+            <li><a href="#rules">Права</a></li>
         </ul>
     </nav>
 
@@ -611,6 +612,96 @@
                     <div class="cmd cmd-root">vim /etc/apt/sources.list.d/myrepo.list</div>
                     <div class="config-line"><span class="config-value">rpm http://example.com/rop/p10/ x86_64-classic</span></div>
                     <div class="cmd cmd-root">rpm --import http://example.com/keys/RPM-GPG-KEY-example</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="rules">
+            <h1>Права</h1>
+            <p>Форма записи</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">ls -la</div>
+                    <div class="cmd-comment"># - rw- r-- r--</div>
+                    <div><span class="config-value">1) - файл, d – директория, l – ссылка</span></div>
+                    <div><span class="config-value">2) rw- права для владельца</span></div>
+                    <div><span class="config-value">3) r-- права для группы владельца</span></div>
+                    <div><span class="config-value">4) r-- права для всех остальных</span></div>          
+                </div>
+            </div>
+            <p>chmod ugo</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># дать права всем</div>
+                    <div class="cmd cmd-user">chmod ugo=rwx test</div>
+                    <div class="cmd-comment"># дать права пользователю (user), группе (group), другим (other)</div>
+                    <div class="cmd cmd-user">chmod u=rws,g=r+r,o= test</div>
+                    <div class="cmd-comment"># убрать права (кроме root)</div>
+                    <div class="cmd cmd-user">chmod ugo= test</div>     
+                </div>
+            </div>
+            <p>chmod цифры</p>
+            <table>
+                <tr>
+                    <th>Символы</th>
+                    <th>rwx</th>
+                    <th>rw-</th>
+                    <th>r-x</th>
+                    <th>r--</th>
+                    <th>-wx</th>
+                    <th>-w-</th>
+                    <th>--x</th>
+                    <th>---</th>
+                </tr>
+                <tr>
+                    <th>Цифры</th>
+                    <th>7</th>
+                    <th>6</th>
+                    <th>5</th>
+                    <th>4</th>
+                    <th>3</th>
+                    <th>2</th>
+                    <th>1</th>
+                    <th>0</th>
+                </tr>
+            </table>
+            <p>Дать права на директорию без вложений</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod 0750 test</div>
+                    <div class="cmd cmd-user">ls -la</div>
+                    <div><span class="config-value">-rwxr-x--- test</span></div>
+                    <div><span class="config-value">1) - файл</span></div>
+                    <div><span class="config-value">2) rwx 7 права для владельца</span></div>
+                    <div><span class="config-value">3) r-x 5 права для группы владельца</span></div>
+                    <div><span class="config-value">4) --- 0 права для всех остальных</span></div>          
+                </div>
+            </div>
+            <p>Дать права директории и вложениям</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod -R 0777 osec_old</div>         
+                </div>
+            </div>
+            <p>Изменение владельца</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># изменить владельца и группу владельца</div>
+                    <div class="cmd cmd-user">chown globonet:globonet dirs.conf</div>
+                    <div class="cmd-comment"># пользователь:группа директория</div>
+                    <div class="cmd-comment"># изменить только группу</div>
+                    <div class="cmd cmd-user">chown :root dirs.conf</div>       
                 </div>
             </div>
         </section>

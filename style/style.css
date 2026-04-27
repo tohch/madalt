@@ -104,6 +104,34 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
 
 img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 6px; margin: 1.5em 0; background: var(--bg-sidebar); display: block; }
 
+table {
+    /* Убирает двойные линии, соединяя границы соседних ячеек в одну */
+    border-collapse: collapse; 
+    width: 100%;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    overflow-x: auto;
+    line-height: 1.6;
+    position: relative; 
+    margin: 1em 0; 
+}
+
+th, td {
+    /* Добавляет сплошную линию толщиной 1px серого цвета */
+    border: 1px solid var(--border);
+    /* Добавляет отступы внутри ячеек, чтобы текст не прилипал к полосам */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    /* Дополнительно можно выделить фон заголовков */
+    background-color: var(--bg-code);
+    font-weight: normal;
+}
+
 /* =========================================
    4. КНОПКИ (ОБНОВЛЕНО: иконки через ::before)
    ========================================= */
