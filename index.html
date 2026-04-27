@@ -50,6 +50,7 @@
             <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
             <li><a href="#xfce4">Окружение Xfce4</a></li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
+            <li><a href="#repo">Управление репозиториями</a></li>
         </ul>
     </nav>
 
@@ -573,7 +574,43 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">xfce4-session-settings</div>
-                    <div class="config-lin"><span class="config-value">Приложения - Настройки - Сеансы и запуск - Kerberos Ticket Watcher (отключить)</span></div>
+                    <div><span class="config-value">Приложения - Настройки - Сеансы и запуск - Kerberos Ticket Watcher (отключить)</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="repo">
+            <h1>Управление репозиториями</h1>
+            <p>Удаление репозитория</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd-comment"># Посмотреть список подключенных репозиториев</div>
+                    <div class="cmd cmd-root">apt-repo list</div>
+                    <div class="cmd-comment"># Удалить репозиторий</div>
+                    <div class="cmd cmd-root">apt-repo rm <имя_репозитория></div>
+                    <div class="cmd-comment"># Ручное удаление репозитория</div>
+                    <div class="cmd cmd-root">ls /etc/apt/sources.list.d/</div>
+                    <div class="cmd cmd-root">rm /etc/apt/sources.list.d/имя_файла_list</div>
+                    <div class="cmd-comment"># Проверка основного файла источников</div>
+                    <div class="cmd cmd-root">vim /etc/apt/sources.list</div>
+                </div>
+            </div>
+            <p>Установка репозитория</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-repo list</div>
+                    <div class="cmd cmd-root">apt-repo add <имя_профиля></div>
+                    <div class="cmd-comment"># Ручная установка репозитория</div>
+                    <div class="cmd cmd-root">vim /etc/apt/sources.list.d/myrepo.list</div>
+                    <div class="config-line"><span class="config-value">rpm http://example.com/rop/p10/ x86_64-classic</span></div>
+                    <div class="cmd cmd-root">rpm --import http://example.com/keys/RPM-GPG-KEY-example</div>
                 </div>
             </div>
         </section>
