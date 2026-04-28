@@ -54,6 +54,10 @@
             <li><a href="#rules">Права</a></li>
             <li><a href="#sytemd">Система инициализации</a></li>
             <li><a href="#daemon">Создание демона</a></li>
+            <li><a href="#rpm">rpm - управление пакетами</a></li>
+            <li><a href="#apt-get">apt-get - управление пакетами</a></li>
+            <li><a href="#wine">wine</a></li>
+            <li><a href="#vim">Vim</a></li>
         </ul>
     </nav>
 
@@ -883,6 +887,242 @@
                     <div class="cmd cmd-user">sudo systemctl restart notify_listener.service</div>
                     <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
                     <div class="cmd cmd-user">sudo journalctl -u notify_listener.service -f</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="rpm">
+            <h1>rpm - управление пакетами</h1>
+            <p>Основные команды.</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Установка пакетов rpm. Лучше использовать с локальными пакетами</div>
+                    <div class="cmd cmd-root">rpm -i имя.rpm</div>
+                    <div class="cmd-comment"># видеть установку</div>
+                    <div class="cmd cmd-root">rpm -ivh имя.rpm</div>
+                    <div class="cmd-comment"># установить все пакеты rpm в папке</div>
+                    <div class="cmd cmd-root">rpm -ivh *.rpm</div>
+                    <div class="cmd-comment"># удалить</div>
+                    <div class="cmd cmd-root">rpm -e имя</div>
+                    <div class="cmd-comment"># установленные пакеты</div>
+                    <div class="cmd cmd-root">rpm -qa</div>
+                    <div class="cmd-comment"># конкретно (grep поиск)</div>
+                    <div class="cmd cmd-root">rpm -qa | grep wine</div>
+                    <div class="cmd-comment"># отключить проверку при установке</div>
+                    <div class="cmd cmd-root">rpm -ivh --nodeps имя.rpm</div>
+                    <div class="cmd-comment"># удалить запись в пакетном бд, а пакет оставить</div>
+                    <div class="cmd cmd-root">rpm -e --justdb имя_пакета</div>
+                    <div class="cmd-comment"># тестовая установка</div>
+                    <div class="cmd cmd-root">rpm -ivh --test имя.rpm</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="apt-get">
+            <h1>apt-get – управление пакетами</h1>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># обновить ссылки на репозитории</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd-comment"># обновление всех установленных пакетов до последних версий, </div>
+                    <div class="cmd-comment"># но без изменения зависимостей</div>
+                    <div class="cmd-comment"># (т. е. не удаляет старые пакеты и не ставит новые, </div>
+                    <div class="cmd-comment"># даже если это нужно для обновления).</div>
+                    <div class="cmd cmd-root">apt-get -upgrade</div>
+                    <div class="cmd-comment"># Умнее обрабатывает зависимости: может удалять старые пакеты или</div>
+                    <div class="cmd-comment"># устанавливать новые, если это необходимо для корректного обновления.</div>
+                    <div class="cmd-comment"># Используется при серьёзных обновлениях системы, например, </div>
+                    <div class="cmd-comment"># при переходе на новую версию дистрибутива.</div>
+                    <div class="cmd cmd-root">apt-get dist-upgrade</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="wine">
+            <h1>wine</h1>
+            <p>Установка</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install i586-wine</div>
+                    <div class="cmd cmd-root">apt-get install winetricks</div>
+                    <div class="cmd cmd-root">apt-get install wine-mono-8.1.0</div>
+                    <div class="cmd cmd-root">exit</div>
+                    <div class="cmd cmd-user">wineboot</div>
+                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
+                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
+                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
+                    <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="vim">
+            <h1>Vim</h1>
+            <p>Vim: рабочие режимы, хоткейсы и команды</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string"><span class="vim-command">/</span> - поиск вниз</div>
+                    <div class="vim-line vim-string"><span class="vim-command">?</span> – поиск вверх</div>
+                    <div class="vim-line vim-string"><span class="vim-command">de</span> - Удалить символы с текущего до конца слова, не включая пунктуация</div>
+                    <div class="vim-line vim-string"><span class="vim-command">x</span> – удалить символ под курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">dd</span> – удалить строку</div>
+                    <div class="vim-line vim-string"><span class="vim-command">i</span> – перейти в режим редактирования текста перед курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Shift + i</span> — перейти в режим редактирования текста сначала строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">a</span> — перейти в режим редактирования текста после курсора</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Shift + a</span> — перейти в режим редактирования текста с конца строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">o</span> — перейти в режим редактирования текста с новой строки под курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Esc</span> – режим команд</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:w</span> – записать</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:q!</span> – выйти без сохранения</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:w!</span> – записать в новый файл</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:sav имя_файла</span> – сохранить как</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:wq</span> – сохранить и выйти</div>
+                    <div class="vim-line vim-string"><span class="vim-command">/DBASE</span> – начать поиск по имени DBASE</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vly</span> - копировать заданное количество символов</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yy</span> – копировать строку целиком, включая символ новой строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yiw</span> – скопировать слова целиком</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yw</span> – скопировать символы от курсора до конца слова</div>
+                    <div class="vim-line vim-string"><span class="vim-command">число yy</span> – скопировать заданное кол-во строк, включая текущую</div>
+                    <div class="vim-line vim-string"><span class="vim-command">y$ (Shift + 4)</span> — скопировать всё от курсора до конца строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">y) (Shift + 0)</span> — скопировать всё от курсора до конца абзаца</div>
+                    <div class="vim-line vim-string"><span class="vim-command">y( (Shift + 9)</span> — скопировать всё от курсора до начала абзаца</div>
+                    <div class="vim-line vim-string"><span class="vim-command">p</span> – вставить содержимое буфера после курсора</div>
+                    <div class="vim-line vim-string"><span class="vim-command">P</span> – вставить содержимое буфера перед курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vey</span> – скопировать по словам</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vEy</span> – скопировать все слово</div>
+                    <div class="vim-line vim-string"><span class="vim-command">«_x</span> – удалить один символ вправо без копирования в буфер</div>
+                    <div class="vim-line vim-string"><span class="vim-command">«_dw</span> – удалить от курсора до конца слова без копирования в буфер</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="share">
+            <h1>Сетевые папки</h1>
+            <h2 id="requir-mout">Монтированние по запросу к сетевому ресурсу</h2>
+            <p>Создать папки для монтирования и ссылок</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mkdir /mnt/talsql/out</div>
+                    <div class="cmd cmd-root">mkdir /mnt/talsql/pochta</div>
+                    <div class="cmd cmd-root">mkdir /home/.wine/dosdevices/unc/192.168.205.4</div>
+                </div>
+            </div>
+            <p>Создать ссылки</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">ln -s /mnt/talsql/out /home/user/.wine/dosdevices/unc/192.168.205.4/out</div>
+                    <div class="cmd cmd-root">ln -s /mnt/talsql/pochta /home/user/.wine/dosdevices/unc/192.168.205.4/pochta</div>
+                </div>
+            </div>
+            <h2 id="smb1">SMB1</h2>
+            <!-- Важно -->
+            <div class="alert alert-important">
+                <div class="alert-content">
+                    <div class="alert-title">Важно</div>
+                    <p class="alert-text">SMB1 (NT1) устарел и его использование небезопасно. Использовать только в крайнем случае, если требуется подключиться по Samba к Windows Server 2003 с smb1</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">vim /etc/samba/smb.conf</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-command vim-string">[global]</div>
+                    <div class="vim-command vim-string">    client min protocol = NT1</div>
+                    <div class="vim-command vim-string">    client max protocol = SMB3</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">systemctl restart smb.service nmb.service</div>
+                </div>
+            </div>
+            <p>Создать папки для монтирования и ссылок</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mkdir /mnt/tal/trash</div>
+                    <div class="cmd-comment"># создать ссылку</div>
+                    <div class="cmd cmd-root">ln -s /mnt/tal/trash /home/user/Рабочий\ стол/Общая\ папка</div>
+                </div>
+            </div>
+            <p>Создать логин и пароль для сетевого подключение</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su –</div>
+                    <div class="cmd cmd-root">vim /root/.usermnt</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">username=userbuh</div>
+                    <div class="vim-line vim-string">password=gla9Ckflrbq</div>
+                    <div class="vim-line vim-string">domain=RCBUSO</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">chmod 600 /root/.usermnt</div>
+                </div>
+            </div>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Если в именах путей есть пробелы, то замените их на <span class="mark">\040</span></p>
+                    <p class="alert-text">Например путь //192.168.205.4/Общая папка</p> 
+                    <p class="alert-text">Заменить на //192.168.205.4/Общая<span class="mark">\040</span>папка</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su –</div>
+                    <div class="cmd cmd-root">vim /etc/fstab</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>     
                 </div>
             </div>
         </section>
