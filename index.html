@@ -52,6 +52,8 @@
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#repo">Управление репозиториями</a></li>
             <li><a href="#rules">Права</a></li>
+            <li><a href="#sytemd">Система инициализации</a></li>
+            <li><a href="#daemon">Создание демона</a></li>
         </ul>
     </nav>
 
@@ -702,6 +704,185 @@
                     <div class="cmd-comment"># пользователь:группа директория</div>
                     <div class="cmd-comment"># изменить только группу</div>
                     <div class="cmd cmd-user">chown :root dirs.conf</div>       
+                </div>
+            </div>
+        </section>
+        
+        <!-- Глава -->
+        <section id="sytemd">
+            <h1>Система инициализации</h1>
+            <p>Службы = Юнит</p>
+            <p>systemd</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># показать службы</div>
+                    <div class="cmd cmd-root">systemctl</div>
+                    <div class="cmd-comment"># старт службы</div>
+                    <div class="cmd cmd-root">systemctl start cups.service</div>
+                    <div class="cmd-comment"># варианты:</div>
+                    <div class="cmd-comment">#start,stop,restart,status</div>
+                    <div class="cmd-comment"># включить при перезагрузки ОС</div>
+                    <div class="cmd cmd-root">systemctl enable cups</div>
+                    <div class="cmd-comment"># выключить</div>
+                    <div class="cmd cmd-root">systemctl disable cups</div>         
+                </div>
+            </div>
+            <p>Юниты хранятся:</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">cd /lib/systemd/system</div>
+                    <div class="cmd cmd-root">cd /usr/lib/systemd/system</div>
+                    <div class="cmd cmd-root">cd /run/systemd/system</div>
+                    <div class="cmd cmd-root">cd /etc/systemd/system</div>
+                </div>
+            </div>
+            <p>Заново прочитать все конфигурации юнитов</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">system daemon-reload</div>
+                </div>
+            </div>
+            <p>Примерное описание конфигурации unit</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">cat /etc/systemd/system/dbus-org.bluez.service</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Unit]</div>
+                    <div class="vim-line vim-string">Description=Bluetooth service #описание</div>
+                    <div class="vim-line vim-string">Wants = #зависимость запуска</div>
+                    <div class="vim-line vim-string">After = #зависимость порядка запуска, запустить только после указанных юнитов</div>
+                    <div class="vim-line vim-string">Before = #запустить перед</div>
+                    <div class="vim-line vim-string">[Install]</div>
+                    <div class="vim-line vim-string">#команды для systemd</div>
+                    <div class="vim-line vim-string">Alias=dbus-org.bluez.service #псевдоним</div>
+                </div>
+            </div>
+            <p>Создание собственного юнита</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">touch /etc/systemd/system/ping.service</div>
+                    <div class="cmd cmd-root">vim /etc/systemd/system/ping.service</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Unit]</div>
+                    <div class="vim-line vim-string">Description = Ping Utilis Tray Service</div>
+                    <div class="vim-line vim-string">After = network.target</div>
+                    <div class="vim-line vim-string">[Service]</div>
+                    <div class="vim-line vim-string">User = globonet</div>
+                    <div class="vim-line vim-string">Environment = DISPLAY =:0</div>
+                    <div class="vim-line vim-string">Environment = XAUTHORITY =/home/globonet/.Xauthority</div>
+                    <div class="vim-line vim-string">ExecStart = /home/globonet/ping/ing.bin</div>
+                    <div class="vim-line vim-string">Restart = always</div>
+                    <div class="vim-line vim-string">RestartSec = 5</div>
+                    <div class="vim-line vim-string">[Install]</div>
+                    <div class="vim-line vim-string">WantedBy = default.target</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">systemctl daemon-reload</div>
+                    <div class="cmd cmd-root">systemctl enable ping.service</div>
+                    <div class="cmd cmd-root">systemctl start ping.service</div>
+                    <div class="cmd-comment"># так же можно сделать и для bash скрипта</div>
+                </div>
+            </div>
+            <p>systemv</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># запустить службы</div>
+                    <div class="cmd cmd-root">service cups start</div>
+                    <div class="cmd-comment"># включить при перезагрузки ОС</div>
+                    <div class="cmd cmd-root">chkconfig cups on</div>
+                    <div class="cmd-comment"># прочитать конкретную конфигурацию</div>
+                    <div class="cmd cmd-root">chkconfig cups --add</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="daemon">
+            <h1>Создание демона</h1>
+            <p>Создать файл сервис systemd</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">sudo vim /etc/systemd/system/notify_listener.service</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Unit]</div>
+                    <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
+                    <div class="vim-line vim-string">After=network.target</div>
+                    <div class="vim-line vim-string">[Service]</div>
+                    <div class="vim-comment"># Путь к интерпретатору Python (или к виртуальному окружению)</div>
+                    <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/admin/bin/notify_listener.py</div>
+                    <div class="vim-comment"># Рабочая директория скрипта</div>
+                    <div class="vim-line vim-string">WorkingDirectory=/home/admin/bin</div>
+                    <div class="vim-comment"># Пользователь, от имени которого запускается (не рекомендуется root без нужды)</div>
+                    <div class="vim-line vim-string">User=admin</div>
+                    <div class="vim-line vim-string">Group=admin</div>
+                    <div class="vim-comment"># Автоматический перезапуск при падении</div>
+                    <div class="vim-line vim-string">Restart=always</div>
+                    <div class="vim-comment"># Ждать 5 секунд перед перезапуском</div>
+                    <div class="vim-line vim-string">RestartSec=5</div>
+                    <div class="vim-comment"># Стандартный вывод и ошибки писать в журнал systemd</div>
+                    <div class="vim-line vim-string">StandardOutput=journal</div>
+                    <div class="vim-line vim-string">StandardError=journal</div>
+                    <div class="vim-line vim-string">[Install]</div>
+                    <div class="vim-line vim-string">WantedBy=multi-user.target</div>
+                </div>
+            </div>
+            <p>Активировать и запустить сервис</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Перезагрузите конфигурацию systemd, чтобы он увидел новый файл:</div>
+                    <div class="cmd cmd-user">sudo systemctl daemon-reload</div>
+                    <div class="cmd-comment"># Включите автозагрузку при старте системы:</div>
+                    <div class="cmd cmd-user">sudo systemctl enable notify_listener.service</div>
+                    <div class="cmd-comment"># Запустите сервис прямо сейчас:</div>
+                    <div class="cmd cmd-user">sudo systemctl start notify_listener.service</div>
+                </div>
+            </div>
+            <p>Управление и логи</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Проверить статус:</div>
+                    <div class="cmd cmd-user">sudo systemctl status notify_listener.service</div>
+                    <div class="cmd-comment"># Остановить:</div>
+                    <div class="cmd cmd-user">sudo systemctl stop notify_listener.service</div>
+                    <div class="cmd-comment"># Перезапустить:</div>
+                    <div class="cmd cmd-user">sudo systemctl restart notify_listener.service</div>
+                    <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
+                    <div class="cmd cmd-user">sudo journalctl -u notify_listener.service -f</div>
                 </div>
             </div>
         </section>
