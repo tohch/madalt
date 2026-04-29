@@ -58,6 +58,14 @@
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
             <li><a href="#wine">wine</a></li>
             <li><a href="#vim">Vim</a></li>
+            <li><a href="#share">Сетевые папки</a>
+                <ul>
+                    <li><a href="#requir-mout">Монтированние по запросу к сетевому ресурсу</a></li>
+                    <li><a href="#smb1">SMB1</a></li>
+                    <li><a href="#permanent-mount">Постоянное монтирование</a></li>
+                    <li><a href="#button-mount">Простое подключение сетевой папки через кнопку</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -448,7 +456,7 @@
                     <p class="alert-text"><code>update-kernel</code> ищет обновление только к конкретной версии ядра. Если вышла другая серия, к примеру, стоит <code>un-def</code>, а вышла <code>std-def</code> (просто <code>kernel-image</code>), то в <code>update-kernel</code> надо указывать конкретное ядро.</p>
                     <p class="alert-text">Проверить можно командой: <code>update-kernel -l</code> </p>
                     <p class="alert-text">Должно быть: <code>*  (36 d) kernel-image-6.12-6.12.74-alt0.c10f.2 [default]</code></p>
-                    <p class="alert-text"><b>Следующий пункт выполнять только если ядро не обновилось из-за разных серий (<code>un-def</code>, <code>std-def</code> – просто <code>kernel-image</code>)</b></p>
+                    <p class="alert-text"><b>Следующий пункт выполнять только если ядро не обновилось из-за разных серий (<code>un-def</code>, <code>std-def</code> - просто <code>kernel-image</code>)</b></p>
                 </div>
             </div>
             <!-- Команды -->
@@ -632,7 +640,7 @@
                 <div class="code-block">
                     <div class="cmd cmd-user">ls -la</div>
                     <div class="cmd-comment"># - rw- r-- r--</div>
-                    <div><span class="config-value">1) - файл, d – директория, l – ссылка</span></div>
+                    <div><span class="config-value">1) - файл, d - директория, l - ссылка</span></div>
                     <div><span class="config-value">2) rw- права для владельца</span></div>
                     <div><span class="config-value">3) r-- права для группы владельца</span></div>
                     <div><span class="config-value">4) r-- права для всех остальных</span></div>          
@@ -923,7 +931,7 @@
 
         <!-- Глава -->
         <section id="apt-get">
-            <h1>apt-get – управление пакетами</h1>
+            <h1>apt-get - управление пакетами</h1>
             <!-- Команда -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -977,36 +985,36 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="vim-line vim-string"><span class="vim-command">/</span> - поиск вниз</div>
-                    <div class="vim-line vim-string"><span class="vim-command">?</span> – поиск вверх</div>
+                    <div class="vim-line vim-string"><span class="vim-command">?</span> - поиск вверх</div>
                     <div class="vim-line vim-string"><span class="vim-command">de</span> - Удалить символы с текущего до конца слова, не включая пунктуация</div>
-                    <div class="vim-line vim-string"><span class="vim-command">x</span> – удалить символ под курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">dd</span> – удалить строку</div>
-                    <div class="vim-line vim-string"><span class="vim-command">i</span> – перейти в режим редактирования текста перед курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">x</span> - удалить символ под курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">dd</span> - удалить строку</div>
+                    <div class="vim-line vim-string"><span class="vim-command">i</span> - перейти в режим редактирования текста перед курсором</div>
                     <div class="vim-line vim-string"><span class="vim-command">Shift + i</span> — перейти в режим редактирования текста сначала строки</div>
                     <div class="vim-line vim-string"><span class="vim-command">a</span> — перейти в режим редактирования текста после курсора</div>
                     <div class="vim-line vim-string"><span class="vim-command">Shift + a</span> — перейти в режим редактирования текста с конца строки</div>
                     <div class="vim-line vim-string"><span class="vim-command">o</span> — перейти в режим редактирования текста с новой строки под курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">Esc</span> – режим команд</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:w</span> – записать</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:q!</span> – выйти без сохранения</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:w!</span> – записать в новый файл</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:sav имя_файла</span> – сохранить как</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:wq</span> – сохранить и выйти</div>
-                    <div class="vim-line vim-string"><span class="vim-command">/DBASE</span> – начать поиск по имени DBASE</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Esc</span> - режим команд</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:w</span> - записать</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:q!</span> - выйти без сохранения</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:w!</span> - записать в новый файл</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:sav имя_файла</span> - сохранить как</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:wq</span> - сохранить и выйти</div>
+                    <div class="vim-line vim-string"><span class="vim-command">/DBASE</span> - начать поиск по имени DBASE</div>
                     <div class="vim-line vim-string"><span class="vim-command">vly</span> - копировать заданное количество символов</div>
-                    <div class="vim-line vim-string"><span class="vim-command">yy</span> – копировать строку целиком, включая символ новой строки</div>
-                    <div class="vim-line vim-string"><span class="vim-command">yiw</span> – скопировать слова целиком</div>
-                    <div class="vim-line vim-string"><span class="vim-command">yw</span> – скопировать символы от курсора до конца слова</div>
-                    <div class="vim-line vim-string"><span class="vim-command">число yy</span> – скопировать заданное кол-во строк, включая текущую</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yy</span> - копировать строку целиком, включая символ новой строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yiw</span> - скопировать слова целиком</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yw</span> - скопировать символы от курсора до конца слова</div>
+                    <div class="vim-line vim-string"><span class="vim-command">число yy</span> - скопировать заданное кол-во строк, включая текущую</div>
                     <div class="vim-line vim-string"><span class="vim-command">y$ (Shift + 4)</span> — скопировать всё от курсора до конца строки</div>
                     <div class="vim-line vim-string"><span class="vim-command">y) (Shift + 0)</span> — скопировать всё от курсора до конца абзаца</div>
                     <div class="vim-line vim-string"><span class="vim-command">y( (Shift + 9)</span> — скопировать всё от курсора до начала абзаца</div>
-                    <div class="vim-line vim-string"><span class="vim-command">p</span> – вставить содержимое буфера после курсора</div>
-                    <div class="vim-line vim-string"><span class="vim-command">P</span> – вставить содержимое буфера перед курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">vey</span> – скопировать по словам</div>
-                    <div class="vim-line vim-string"><span class="vim-command">vEy</span> – скопировать все слово</div>
-                    <div class="vim-line vim-string"><span class="vim-command">«_x</span> – удалить один символ вправо без копирования в буфер</div>
-                    <div class="vim-line vim-string"><span class="vim-command">«_dw</span> – удалить от курсора до конца слова без копирования в буфер</div>
+                    <div class="vim-line vim-string"><span class="vim-command">p</span> - вставить содержимое буфера после курсора</div>
+                    <div class="vim-line vim-string"><span class="vim-command">P</span> - вставить содержимое буфера перед курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vey</span> - скопировать по словам</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vEy</span> - скопировать все слово</div>
+                    <div class="vim-line vim-string"><span class="vim-command">«_x</span> - удалить один символ вправо без копирования в буфер</div>
+                    <div class="vim-line vim-string"><span class="vim-command">«_dw</span> - удалить от курсора до конца слова без копирования в буфер</div>
                 </div>
             </div>
         </section>
@@ -1032,6 +1040,66 @@
                 <div class="code-block">
                     <div class="cmd cmd-root">ln -s /mnt/talsql/out /home/user/.wine/dosdevices/unc/192.168.205.4/out</div>
                     <div class="cmd cmd-root">ln -s /mnt/talsql/pochta /home/user/.wine/dosdevices/unc/192.168.205.4/pochta</div>
+                </div>
+            </div>
+            <p>Создать логин и пароль для сетевого подключение</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">vim /root/.cifsmnt</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">username=administrator</div>
+                    <div class="vim-line vim-string">password=mir9Ckflrbq</div>
+                    <div class="vim-line vim-string">domain=RCBUSO</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">chmod 600 /root/.cifsmnt</div>
+                </div>
+            </div>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Если в именах сетевых путей есть пробелы, то замените их на <span class="mark">\040</span></p>
+                    <p class="alert-text">Например путь //192.168.205.4/Общая папка</p>
+                    <p class="alert-text">Заменить на //192.168.205.4/Общая<span class="mark">\040</span>папка</p>
+                </div>
+            </div>
+            <p>Загрузка через /etc/fstab</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">vim /etc/fstab</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-comment"># smb3</div>
+                    <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="vim-comment"># без file_mode и dir_mode - только чтение</div>
+                    <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">reboot</div>
                 </div>
             </div>
             <h2 id="smb1">SMB1</h2>
@@ -1081,7 +1149,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su –</div>
+                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /root/.usermnt</div>
                 </div>
             </div>
@@ -1105,7 +1173,7 @@
             <div class="alert alert-warning">
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
-                    <p class="alert-text">Если в именах путей есть пробелы, то замените их на <span class="mark">\040</span></p>
+                    <p class="alert-text">Если в именах сетевых путей есть пробелы, то замените их на <span class="mark">\040</span></p>
                     <p class="alert-text">Например путь //192.168.205.4/Общая папка</p> 
                     <p class="alert-text">Заменить на //192.168.205.4/Общая<span class="mark">\040</span>папка</p>
                 </div>
@@ -1114,7 +1182,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su –</div>
+                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /etc/fstab</div>
                 </div>
             </div>
@@ -1125,6 +1193,39 @@
                     <div class="vim-line vim-string">//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>     
                 </div>
             </div>
+            <h2 id="permanent-mount">Постоянное монтирование</h2> 
+            <p>Загрузка через /etc/fstab</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">vim /etc/fstab</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-comment"># vers=1.0 - если требуется smb1</div>
+                    <div class="vim-line vim-string">//tal/trash /mnt/tal/trash cifs vers=1.0,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="vim-comment"># smb3</div>
+                    <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs _netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="vim-comment"># без file_mode и dir_mode - только чтение</div>
+                    <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs _netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mount -a</div>
+                </div>
+            </div>
+            <h2 id="button-mount">Простое подключение сетевой папки через кнопку</h2>
+            <p>ПКМ - Создать кнопку запуска… Тип: Расположение, Название: любое, Команда: smb://tal/trash</p>
+            <!-- Картинка -->
+            <img src="img/share/img-share-1.png" alt="Простое подключение сетевой папки через кнопку">
         </section>
     </main>
 

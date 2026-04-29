@@ -454,7 +454,7 @@ th {
     .dist-link { width: 100%; justify-content: center; }
 }
 
-/* 💻 ПЛАНШЕТЫ / СРЕДНИЕ ЭКРАНЫ (851px – 1399px) */
+/* 💻 ПЛАНШЕТЫ / СРЕДНИЕ ЭКРАНЫ (851px - 1399px) */
 @media (max-width: 1399px) and (min-width: 851px) {
     .main {
         width: calc(100% - 280px);
