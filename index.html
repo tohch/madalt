@@ -64,6 +64,7 @@
                     <li><a href="#smb1">SMB1</a></li>
                     <li><a href="#permanent-mount">Постоянное монтирование</a></li>
                     <li><a href="#button-mount">Простое подключение сетевой папки через кнопку</a></li>
+                    <li><a href="#sshfs">Монтирование SSHFS</a></li>
                 </ul>
             </li>
         </ul>
@@ -1226,6 +1227,23 @@
             <p>ПКМ - Создать кнопку запуска… Тип: Расположение, Название: любое, Команда: smb://tal/trash</p>
             <!-- Картинка -->
             <img src="img/share/img-share-1.png" alt="Простое подключение сетевой папки через кнопку">
+            <h2 id="sshfs">Монтирование SSHFS</h2>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Подключение SSHFS в Linux</div>
+                    <div class="cmd-comment"># Установка</div>
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get install sshfs</div>
+                    <div class="cmd cmd-root">exit</div>
+                    <div class="cmd-comment"># Монтирование SSHFS выполняется с помощью одноимённой команды. Её синтаксис такой:</div>
+                    <div class="cmd cmd-user">sshfs опции имя_пользователя@адрес:/путь /точка/монтирования</div>
+                    <div class="cmd cmd-user">sshfs user_buh@192.168.218.4:/D:/Talisman_SQL  ~/test</div>
+                    <div class="cmd-comment"># Для того чтобы отмонтировать файловую систему используйте привычную команду umount:</div>
+                    <div class="cmd cmd-user">umount ~/mnt/</div>
+                </div>
+            </div>
         </section>
     </main>
 
