@@ -67,6 +67,16 @@
                     <li><a href="#sshfs">Монтирование SSHFS</a></li>
                 </ul>
             </li>
+            <li><a href="#talisman-sql">Талисман-SQL</a>
+                <ul>
+                    <li><a href="#talisman-sql-install-wine">Установка Wine</a></li>
+                    <li><a href="#talisman-sql-setting-share">Настройка сетевых папок</a></li>
+                    <li><a href="#talisman-sql-install-talsql">Установка Талисмана SQL</a></li>
+                    <li><a href="#designfr">Установка designfr</a></li>
+                    <li><a href="#talisman-sql-xfce">Проблема: дочерние окна открываются за главным окном</a></li>
+                    <li><a href="#talisman-sql-richedit">Проблема: в печатной форме не отображается заголовок</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -1244,6 +1254,281 @@
                     <div class="cmd cmd-user">umount ~/mnt/</div>
                 </div>
             </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="talisman-sql">
+            <h1>Талисман-SQL</h1>
+            <section id="talisman-sql-install-wine">
+                <h2>Установка Wine</h2>
+                <p>Проверить что репозитории добавлены</p>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Для обновленной системы 10.2 используйте репозиторий c10f2</p>
+                        <p class="alert-text">Если система 10 не обновлялась, то используйте репозиторий c10f</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su-</div>
+                        <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-comment"># update.altsp.su (IVK, Moscow)</div>
+                        <div class="vim-comment"># ALT Certified 10.2</div>
+                        <div class="vim-comment"># rpm [cert8] ftp://update.altsop.su/pub/distributions/ALTLinux c10f2/branch/x86_64 classic gostcrypto</div>
+                        <div class="vim-comment"># rpm [cert8] ftp://update.altsop.su/pub/distributions/ALTLinux c10f2/branch/x86_64-i586 classic</div>
+                        <div class="vim-comment"># rpm [cert8] ftp://update.altsop.su/pub/distributions/ALTLinux c10f2/branch/noarch classic</div>
+                        <div class="vim-line vim-string">rpm [cert8] http://update.altsop.su/pub/distributions/ALTLinux c10f2/branch/x86_64 classic gostcrypto</div>
+                        <div class="vim-line vim-string">rpm [cert8] http://update.altsop.su/pub/distributions/ALTLinux c10f2/branch/x86_64-i586 classic</div>
+                        <div class="vim-line vim-string">rpm [cert8] http://update.altsop.su/pub/distributions/ALTLinux c10f2/branch/noarch classic</div>
+                    </div>
+                </div>
+                <p>Установите Wine</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install i586-wine</div>
+                        <div class="cmd cmd-root">apt-get install winetricks</div>
+                        <div class="cmd cmd-root">apt-get install wine-mono-8.1.0</div>
+                        <div class="cmd cmd-root">exit</div>
+                    </div>
+                </div>
+                <p>Создайте префикс и установите дополнительные компоненты</p>
+                <!-- Внимание -->
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Обязательно создавайте 32-х битный префикс</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql WINEARCH=win32 wineboot</div>
+                        <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
+                        <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
+                        <div class="cmd cmd-serial">vcrun2012 vcrun2013 win2k8 glsl=disabled ddr=gdi; do</div>
+                        <div class="cmd cmd-serial">WINEPREFIX=~/.talsql winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                        <div class="cmd cmd-serial">done</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Чтобы проверить Версию Windows в настройка Wine: <code>$ WINEPREFIX=~/.talsql winecfg</code></p>
+                        <p class="alert-text">«Приложения» - «Установки по умолчанию» указать Версия Windows: «Windows 2008».</p>
+                    </div>
+                </div>
+            </section>
+            <section id="talisman-sql-setting-share">
+                <h2>Настройка сетевых папок</h2>
+                <p>Создайте директории для монтирования</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir -p /mnt/talsql/strah</div>
+                        <div class="cmd cmd-root">mkdir -p /mnt/talsql/out</div>
+                        <div class="cmd cmd-root">mkdir -p /mnt/talsql/pochta</div>
+                    </div>
+                </div>
+                <p>Настройте fstab для автоматического монтирования сетевых папок по запросу</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                        <div class="cmd cmd-root">vim /root/.cifsmnt</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">username=administrator</div>
+                        <div class="vim-line vim-string">password=mir9Ckflrbq</div>
+                        <div class="vim-line vim-string">domain=mydomain</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/fstab</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">//192.168.205.4/strah /mnt/talsql/strah cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                        <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                        <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,nofail 0 0</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">reboot</div>
+                    </div>
+                </div>
+                <p>Дайте сетевой доступ через Wine. Для этого создайте папки в <code>~/.talsql/dosdevices/unc</code> согласно сетевым путям.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">mkdir -p ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                        <div class="cmd cmd-user">ln -s /mnt/talsql/strah ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                        <div class="cmd cmd-user">ln -s /mnt/talsql/out ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                        <div class="cmd cmd-user">ln -s /mnt/talsql/pochta ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                    </div>
+                </div>
+            </section>
+            <section id="talisman-sql-install-talsql">
+                <h2>Установка Талисмана SQL</h2>
+                <p>Установить Талисман SQL</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine dist/Reinstall_Tal3.1.52.exe</div>
+                    </div>
+                </div>
+                <p>Скопируйте файлы из out в TalSQL и скопируйте библиотеки midas.dll, gds32.dll и fbclient.dll в system32</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">cd ~/.talsql/drive_c/Talisman_SQL/Acenter/TalSQL/</div>
+                        <div class="cmd cmd-user">yes | cp -rf /mnt/talsql/out/* ./</div>
+                        <div class="cmd cmd-user">cp -iv midas.dll gds32.dll fbclient.dll ~/.talsql/drive_c/windows/system32/</div>
+                    </div>
+                </div>
+                <p>Если ПК не сервер, то можно удалить Firebird</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine uninstaller</div>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/talisman-sql/img-talsql-1.png" alt="Firebird">
+            </section>
+            <section id="designfr">
+                <h2>Установка designfr</h2>
+                <p>Установите designfr, чтобы открывались сохраненные печатные формы</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine dist/TalSQL/designfr.exe</div>
+                    </div>
+                </div>
+                <p>Перезагрузите ПК</p>
+            </section>
+            <section id="talisman-sql-xfce">
+                <h2>Проблема: дочерние окна открываются за главным окном</h2>
+                <p>Проблема наблюдается на MATE 1.26.1
+                _NET_ACTIVE_WINDOW message with a timestamp of 0
+                Приложение пытается активировать своё окно через стандартный X11-протокол, но не передаёт корректный таймстамп (временную метку последнего пользовательского события — клика, нажатия клавиши). По стандарту EWMH таймстамп не может быть 0.
+                meta_window_activate called by a pager with a 0 timestamp
+                Marco (как и его «родитель» Mutter из GNOME) игнорирует такие запросы — это защита от «фокус-хищений» (когда вредоносное приложение могло бы принудительно перехватывать фокус ввода).
+                Из-за игнорирования запроса активации всплывающее окно (диалог загрузки, файловый менеджер) не поднимается поверх родительского окна — остаётся в фоне.
+
+                Решение:
+                Перейти на другой окружение. Например Xfce4. Или если требуется оставить окружение MATE, то можно установить только оконный менеджер Xfwm4 без установки окружения Xfce4.</p>
+                <p>Вариант 1. Установка окружения Xfce4</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                        <div class="cmd cmd-root">apt-get install xfce4-full</div>
+                    </div>
+                </div>
+                <p>Выберите сессию XFCE при входе: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
+                <!-- Картинка -->
+                <img src="img/xfce4/img-xfce4-1.png" alt="Сессия Xfce">
+                <p>Вариант 2. Установка только оконного менеджера Xfwm4</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Установка</div>
+                        <div class="cmd cmd-user">su -</div>
+                        <div class="cmd cmd-root">apt-get install xfwm4</div>
+                        <div class="cmd-comment"># Тест</div>
+                        <div class="cmd cmd-root">killall marco</div>
+                        <div class="cmd cmd-root">xfwm4 --replace &</div>
+                        <div class="cmd-comment"># Постоянно: через  ~/.config/autostart/ Создание ярлыка для автозапуска Xfwm4</div>
+                        <div class="cmd cmd-root">logout</div>
+                        <div class="cmd cmd-user">mkdir -p ~/.config/autostart</div>
+                        <div class="cmd cmd-user">cat > ~/.config/autostart/xfwm4-replace.desktop << 'EOF'</div>
+                        <div class="cmd cmd-serial">[Desktop Entry]</div>
+                        <div class="cmd cmd-serial">Type=Application</div>
+                        <div class="cmd cmd-serial">Name=Xfwm4 Replace</div>
+                        <div class="cmd cmd-serial">Comment=Replace Marco with Xfwm4 window manager</div>
+                        <div class="cmd cmd-serial">Exec=xfwm4 --replace</div>
+                        <div class="cmd cmd-serial">OnlyShowIn=MATE;</div>
+                        <div class="cmd cmd-serial">X-MATE-Autostart-Phase=WindowManager</div>
+                        <div class="cmd cmd-serial">X-MATE-AutoRestart=false</div>
+                        <div class="cmd cmd-serial">X-MATE-Autostart-enabled=true</div>
+                        <div class="cmd cmd-serial">Hidden=false</div>
+                        <div class="cmd cmd-serial">EOF</div>
+                    </div>
+                </div>
+                <p>Необязательно. Смена темы.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Совет: для лучшей интеграции с MATE установите темы:</div>
+                        <div class="cmd cmd-user">sudo apt-get install gtk-chtheme</div>
+                        <div class="cmd-comment"># выбрать тему, совместимую с XFCE/MATE</div>
+                        <div class="cmd cmd-user">gtk-chtheme</div>
+                        <div class="cmd-comment"># Важные предупреждения</div>
+                        <div class="cmd-comment"># Резервная копия настроек:</div>
+                        <div class="cmd cmd-user">cp -r ~/.config/mate/marco ~/.config/mate/marco.backup</div>
+                    </div>
+                </div> 
+            </section>
+            <section id="talisman-sql-richedit">
+                <h2>Проблема: в печатной форме не отображается заголовок</h2>
+                <p>Проблема в текстовом поле RichEdit. Для отображения текста этого поля в Wine требуются дополнительные библиотеки.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql winetricks riched20 riched30 vb6run gdiplus msftedit</div>
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql winecfg</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Библиотеки - Порядок загрузки для данных библиотек (сторонняя, встроенная)</p>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/talisman-sql/img-talsql-2.png" alt="Настройка Wine">
+            </section>
         </section>
     </main>
 
