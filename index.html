@@ -84,6 +84,12 @@
                     <li><a href="#tal2.0-local">Вариант 2. Только локальные базы</a></li>
                 </ul>
             </li>
+            <li><a href="#printer">Принтер</a>
+                <ul>
+                    <li><a href="#printer-driver">Установка драйверов</a></li>
+                    <li><a href="#printer-connect">Подключение к сетевому принтеру</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -289,7 +295,7 @@
         <section id="update-kernel">
             <h1>Обновление Альт СП релиз 10 до версии 10.2</h1>
             <h2 id="auto-update-kernel">Автоматическое обновление</h2>
-            <p>Для простоты обновления был написан bash скрипт  update-kernel_10.2.sh. Данный скрипт выполняет все действия, которые описаны в нижестоящих главах, а именно: переход на ветку c10f2, обновление ядра и проверка с фиксацией. Путь до скрипта: <code>distr/update_kernel/update_kernel_10.2.sh</code></p>
+            <p>Для простоты обновления был написан bash скрипт  update-kernel_10.2.sh. Данный скрипт выполняет все действия, которые описаны в нижестоящих главах, а именно: переход на ветку c10f2, обновление ядра и проверка с фиксацией. Путь до скрипта: <code>dist/update_kernel/update_kernel_10.2.sh</code></p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1686,6 +1692,86 @@
                     </div>
                 </div>
             </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="printer">
+            <h1>Принтер</h1>
+            <section id="printer-driver">
+                <h2>Установка драйверов</h2>
+                <p>Canon</p>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Перед добавление принтера установите драйвера, если драйвера распространяются через rpm</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su –</div>
+                        <div class="cmd cmd-root">cd /home/user/dist/Driver/CanonURF2</div>
+                        <div class="cmd-comment"># Т.к. Canon UFRII нет под АльтЛинукс, придется переупаковывать через epm.</div>
+                        <div class="cmd-comment">Скачайте драйвера cnrdrvcups-ufr2-uk-6.20-1.20.x86_64.rpm с сайта производителя и переупакуйте</div>
+                        <div class="cmd cmd-root">epm repack ./cnrdrvcups-ufr2-uk-6.20-1.20.x86_64.rpm</div>
+                        <div class="cmd-comment"># Данный пакет уже переупакован</div>
+                        <div class="cmd-comment"># см. dist/Driver/CanonURG2/cnrdrvcups-ufr2-uk-6.20-epm1.repacked.2.2.x86_64.rpm</div>
+                        <div class="cmd cmd-root">apt-get install ./cnrdrvcups-ufr2-uk-6.20-epm1.repacked.2.2.x86_64.rpm</div>
+                        <div class="cmd-comment"># Проверка: пакет установлен?</div>
+                        <div class="cmd cmd-root">rpm -qa | grepcnrdrvcups</div>
+                        <div class="cmd-comment"># Перезапуск cups</div>
+                        <div class="cmd cmd-root">systemctl restart cups</div>
+                    </div>
+                </div>
+                <p>HP</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install hplip</div>
+                    </div>
+                </div>
+                <p>Kyocera</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div  class="cmd cmd-root">apt-get install dist/Driver/KyoceraUD/kyodialog-9.4-epm1.repacked.1.x86_64.rpm</div>
+                        <div class="cmd-comment"># Так же в dist/Driver/KyoceraDriver находятся PPD драйвера</div>
+                    </div>
+                </div>
+            </section>
+            <seciont id="printer-connect">
+                <h2>Подключение к сетевому принтеру</h2>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">system-config-printer</div>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/printer/img-printer-1.png" alt="Сетевое подключение принтера">
+                <img src="img/printer/img-printer-2.png" alt="Сетевое подключение принтера">
+                <img src="img/printer/img-printer-3.png" alt="Сетевое подключение принтера">
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Перечень драйверов:</p>
+                        <p class="alert-text">Название принтера - Название драйвера</p>
+                        <p class="alert-text">HP LaserJet MFP M426fdn - LaserJet Pro MFP M426-M427</p>
+                        <p class="alert-text">Kyocera ECOSYS M5526cdn - KyoceraECOSYSM5526cdn.PPD</p>
+                        <p class="alert-text">Canon LBP223 - LBP233</p>
+                    </div>
+                </div>
+                <img src="img/printer/img-printer-4.png" alt="Сетевое подключение принтера">
+                <img src="img/printer/img-printer-5.png" alt="Сетевое подключение принтера">
+                <p>Итого</p>
+                <img src="img/printer/img-printer-6.png" alt="Сетевое подключение принтера">
+            </seciont>
         </section>
     </main>
 
