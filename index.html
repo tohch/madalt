@@ -57,7 +57,7 @@
             <li><a href="#daemon">Создание демона</a></li>
             <li><a href="#rpm">rpm - управление пакетами</a></li>
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
-            <li><a href="#wine">wine</a></li>
+            <li><a href="#wine">Wine</a></li>
             <li><a href="#vim">Vim</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
@@ -90,6 +90,8 @@
                     <li><a href="#printer-connect">Подключение к сетевому принтеру</a></li>
                 </ul>
             </li>
+            <li><a href="#scan">Сканер</a></li>
+            <li><a href="#myoffice">МойОфис</a></li>
         </ul>
     </nav>
 
@@ -978,7 +980,7 @@
 
         <!-- Глава -->
         <section id="wine">
-            <h1>wine</h1>
+            <h1>Wine</h1>
             <p>Установка</p>
             <!-- Команда -->
             <div class="code-wrapper">
@@ -1712,7 +1714,7 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">su –</div>
-                        <div class="cmd cmd-root">cd /home/user/dist/Driver/CanonURF2</div>
+                        <div class="cmd cmd-root">cd ./dist/Driver/CanonURF2</div>
                         <div class="cmd-comment"># Т.к. Canon UFRII нет под АльтЛинукс, придется переупаковывать через epm.</div>
                         <div class="cmd-comment">Скачайте драйвера cnrdrvcups-ufr2-uk-6.20-1.20.x86_64.rpm с сайта производителя и переупакуйте</div>
                         <div class="cmd cmd-root">epm repack ./cnrdrvcups-ufr2-uk-6.20-1.20.x86_64.rpm</div>
@@ -1738,7 +1740,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div  class="cmd cmd-root">apt-get install dist/Driver/KyoceraUD/kyodialog-9.4-epm1.repacked.1.x86_64.rpm</div>
+                        <div  class="cmd cmd-root">apt-get install ./dist/Driver/KyoceraUD/kyodialog-9.4-epm1.repacked.1.x86_64.rpm</div>
                         <div class="cmd-comment"># Так же в dist/Driver/KyoceraDriver находятся PPD драйвера</div>
                     </div>
                 </div>
@@ -1772,6 +1774,82 @@
                 <p>Итого</p>
                 <img src="img/printer/img-printer-6.png" alt="Сетевое подключение принтера">
             </seciont>
+        </section>
+
+        <!-- Глава -->
+        <section id="scan">
+            <h1>Сканер</h1>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get install gscan2pdf</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="myoffice">
+            <h1>МойОфис</h1>
+            <p>Установка</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get install ./dist/МойОфис/Linux/myoffice-standard-documents2.8.0-x86_64.rpm</div>
+                </div>
+            </div>
+            <!-- Важно -->
+            <div class="alert alert-important">
+                <div class="alert-content">
+                    <div class="alert-title">Важно</div>
+                    <p class="alert-text">Исправление интерфейса. Если интерфейс отображается неправильно – окна панели наезжают друг на друга, 
+                        но текст в них отображается нормально. Это происходит, потому что МойОфис неправильно выполняет масштабирования. 
+                        Чаще всего это происходит на видеокартах Intel, так как для них используется драйвер i915.</p>
+                </div>
+            </div>
+            <p>Исправление масштабирования для всех пользователей.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /usr/share/applications/myoffice-spreadsheet.desktop</div>
+                    <div class="vim-comment"># (для ввода нажать i) меняем строку Exec=myoffice-spreadsheet %u на</div>
+                    <div class="vim-line vim-string">Exec=env QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=1.25 myoffice-spreadsheet</div>
+                    <div class="vim-comment"># сохраняем и выходим (нажать esс, и команда :wq)</div>
+                    <div class="cmd cmd-root">vim /usr/share/applications/myoffice-text.desktop</div>
+                    <div class="vim-comment"># меняем строку Exec=myoffice-text %u на</div>
+                    <div class="vim-line vim-string">Exec=env QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=1.25 myoffice-text</div>
+                    <div class="vim-comment"># сохраняем и выходим (нажать esс, и команда :wq)</div>
+                </div>
+            </div>
+            <p>Или для конкретного пользователя.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">cp /usr/share/applications/myoffice-spreadsheet.desktop ~/.local/share/applications/</div>
+                    <div class="cmd cmd-user">cp /usr/share/applications/myoffice-text.desktop ~/.local/share/applications/</div>
+                    <div class="cmd cmd-user">vim ~/.local/share/applications/myoffice-spreadsheet.desktop</div>
+                    <div class="vim-comment"># (для ввода нажать i) меняем строку Exec=myoffice-spreadsheet %u на</div>
+                    <div class="vim-line vim-string">Exec=env QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=1.25 myoffice-spreadsheet</div>
+                    <div class="vim-comment"># сохраняем и выходим (нажать esс, и команда :wq)</div>
+                    <div class="cmd cmd-user">vim ~/.local/share/applications/myoffice-text.desktop</div>
+                    <div class="vim-comment"># меняем строку Exec=myoffice-text %u на</div>
+                    <div class="vim-line vim-string">Exec=env QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=1.25 myoffice-text</div>
+                    <div class="vim-comment"># сохраняем и выходим (нажать esс, и команда :wq)</div>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Если ярлык был создан на рабочем столе, то его надо удалить и создать заново, перетаскиванием иконки с меню на рабочей стол.</p>
+                </div>
+            </div>
+            <p>Теперь у пользователя будет запускаться МойОфис таблицы и текст с масштабированием 1.25, что растянет интерфейс до нормального. 
+                Если надо на всех пользователей так сделать, то редактировать файл .desktop надо в системной папке /user/share/applications, но этого не рекомендуют делать.</p>
         </section>
     </main>
 
