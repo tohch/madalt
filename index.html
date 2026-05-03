@@ -102,6 +102,8 @@
                     <li><a href="#cryptopro5-tokenandcer">Привязать и положить открытый сертификат в контейнер</a></li>
                 </ul>
             </li>
+            <li><a href="#sudo">sudo</a></li>
+            <li><a href="#format-flash">Форматирование флешки</a></li>
         </ul>
     </nav>
 
@@ -2037,6 +2039,52 @@
                     </div>
                 </div>
             </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="sudo">
+            <h1>sudo</h1>
+            <p>user - это имя пользователя</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install sudo</div>
+                    <div class="cmd-comment"># создать группу sudo</div>
+                    <div class="cmd cmd-root">groupadd sudo</div>
+                    <div class="cmd-comment"># добавить user в группу sudo</div>
+                    <div class="cmd cmd-root">usermod -aG sudo user</div>
+                    <div class="cmd cmd-root">visudo</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-comment"># расскомментировать Доступ группе sudo и группе wheel</div>
+                    <div class="vim-line vim-string">User_Alias WHEEL_USERS = %wheel</div>
+                    <div class="vim-line vim-string">User_Alias SUDO_USERS = %sudo</div>
+                    <div class="vim-line vim-string">WHEEL_USERS ALL(ALL:ALL) ALL</div>
+                    <div class="vim-line vim-string">SUDO_USERS ALL=(ALL:ALL) ALL</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="format-flash">
+            <h1>Форматирование флешки</h1>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-root">lsblk</div>
+                    <div class="cmd cmd-root">umount /dev/sdb4</div>
+                    <div class="cmd cmd-root">mkfs.ntfs /dev/sdb4</div>
+                </div>
+            </div>
         </section>
     </main>
 
