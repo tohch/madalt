@@ -1924,7 +1924,7 @@
             const codeBlock = btn.nextElementSibling;
             const commands = Array.from(codeBlock.querySelectorAll('.cmd, .config-line, .vim-line'))
                 .map(el => el.textContent.trim())
-                .filter(text => text)
+                .filter(text => text && !text.startsWith('#'))
                 .join('\n') + '\n';
             
             // Сохраняем оригинальный текст в data-атрибут (только при первом клике)
