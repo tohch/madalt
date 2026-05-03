@@ -93,6 +93,15 @@
             <li><a href="#scan">Сканер</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
             <li><a href="#msoffice2007">Microsoft Office 2007</a></li>
+            <li><a href="#sh">Создание sh скриптов</a></li>
+            <li><a href="#cryptopro5">КриптоПро 5.0</a>
+                <ul>
+                    <li><a href="#cryptopro5-install">Установка КриптоПро 5.0</a></li>
+                    <li><a href="#cryptopro5-opencer">Установка открытого сертификата</a></li>
+                    <li><a href="#cryptopro5-cer">Установка корневого сертификата</a></li>
+                    <li><a href="#cryptopro5-tokenandcer">Привязать и положить открытый сертификат в контейнер</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -1852,6 +1861,7 @@
             <p>Теперь у пользователя будет запускаться МойОфис таблицы и текст с масштабированием 1.25, что растянет интерфейс до нормального. 
                 Если надо на всех пользователей так сделать, то редактировать файл .desktop надо в системной папке /user/share/applications, но этого не рекомендуют делать.</p>
         </section>
+
         <!-- Глава -->
         <section id="msoffice2007">
             <h1>Microsoft Office 2007</h1>
@@ -1916,6 +1926,117 @@
                     <div class="config-line"><span class="config-value">Запомнить это приложение для файлов типа “Документ Word 2007” - Открыть</span></div>
                 </div>
             </div>
+        </section>
+                
+        <!-- Глава -->
+        <section id="sh">
+            <h1>Создание sh скриптов</h1>
+            <p>Создать файл с расширения sh (HelloWorld.sh). Начинаться он должен с #!/bin/bash</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">#!/bin/bash</div>
+                    <div class="vim-line vim-string">echo "Hello, $USER!"</div>
+                    <div class="vim-line vim-string">echo "Today is $(date)"</div>
+                </div>
+            </div>
+            <p>Сделать исполняемым, дав права доступа (бит исполнения x)</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod +x HellowWorld.sh</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="cryptopro5">
+            <h1>КриптоПро 5.0</h1>
+            <p>Страница <a href="https://cryptopro.ru/products/csp/downloads#latest_csp50">КриптоПро 5.0</a></p>
+            <!-- Глава -->
+            <section id="cryptopro5-install">
+                <h2>Установка КриптоПро 5.0</h2>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Установить дополнительные библиотеки</div>
+                        <div class="cmd cmd-root">apt-get install cryptopro-preinstall</div>
+                        <div class="cmd-comment"># Установить пакеты для работы с токенами</div>
+                        <div class="cmd cmd-root">apt-get install opensc newt52</div>
+                        <div class="cmd-comment"># Установка КриптоПро 5</div>
+                        <div class="cmd cmd-root">./dist/CryptoPro/CryptoPro5/linux-amd64/install_gui.sh</div>
+                    </div>
+                </div>
+                <!-- Внимание -->
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Выберите все пакеты для установки, кроме lsb-cprocsp-kc2</p>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/cryptopro5/img-cryptopro5-1.png" alt="Установка КриптоПро 5.0">
+            </section>
+            <section id="cryptopro5-opencer">
+                <h2>Установка открытого сертификата</h2>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Откройте «Инструменты КриптоПро»;</p>
+                        <p class="alert-text">Выберите вкладку «Сертификаты»;</p>
+                        <p class="alert-text">Нажмите «Показать расширенные»;</p>
+                        <p class="alert-text">Отметьте галкой «Отключить автовыбор хранилища (использовать текущее)».</p>
+                        <p class="alert-text">Если галку не ставить, «КриптоПро» автоматически определит хранилище для сертификатов. Личные сертификаты попадут в хранилище «Другие пользователи»;</p>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/cryptopro5/img-cryptopro5-2.png" alt="Установка открытого сертификата">
+                <p>Выберите необходимое хранилище сертификатов из выпадающего меню;<br>
+                Нажмите «Установить сертификаты»;</p>
+                <!-- Картинка -->
+                <img src="img/cryptopro5/img-cryptopro5-3.png" alt="Установка открытого сертификата">
+                <p>Выберите личный сертификат в месте хранения;<br>
+                Нажмите «Открыть»</p>
+                <!-- Картинка -->
+                <img src="img/cryptopro5/img-cryptopro5-4.png" alt="Установка открытого сертификата">
+                <p>После закрытия окна на вкладке отобразится строка с установленным сертификатом.<br>
+                Проверить наличие сертификата можно в «КриптоПро»:<br>
+                Откройте «Инструменты КриптоПро»;<br>
+                Выберите вкладку «Сертификаты»;<br>
+                Выберите хранилище «Личное» из выпадающего меню.</p>
+                <!-- Картинка -->
+                <img src="img/cryptopro5/img-cryptopro5-5.png" alt="Установка открытого сертификата">
+            </section>
+            <section id="cryptopro5-cer">
+                <h2>Установка корневого сертификата</h2>
+                <p>Откройте «Инструменты КриптоПро»;<br>
+                Нажмите «Показать расширенные»;</p>
+                <!-- Картинка -->
+                <img src="img/cryptopro5/img-cryptopro5-6.png" alt="Установка корневого сертификата">
+                <p>Отметьте галкой «Отключить автовыбор хранилища (использовать текущее)»;<br>
+                В выпадающем меню выберите «Доверенные корневые центры сертификации»</p>
+                <img src="img/cryptopro5/img-cryptopro5-7.png" alt="Установка корневого сертификата">
+                <p>Нажмите «Установить сертификаты»;<br>
+                В открывшемся меню найдите файл сертификата центра сертификации;<br>
+                Нажмите «Открыть»;<br>
+                Может появиться сообщение-предупреждение о том, что установка корневых сертификатов несет риск безопасности, нажмите «ОК»;<br>
+                Внизу окна появится сообщение «Установка завершена». Если его развернуть, появится информация о совершенном действии</p>
+                <img src="img/cryptopro5/img-cryptopro5-8.png" alt="Установка корневого сертификата">
+            </section>
+            <section id="cryptopro5-tokenandcer">
+                <h2>Привязать и положить открытый сертификат в контейнер</h2>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">/opt/cprocsp/bin/amd64/certmgr -install -ask-container -to-container -file 'Каданцев.cer'</div>
+                    </div>
+                </div>
+            </section>
         </section>
     </main>
 
