@@ -92,6 +92,7 @@
             </li>
             <li><a href="#scan">Сканер</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
+            <li><a href="#msoffice2007">Microsoft Office 2007</a></li>
         </ul>
     </nav>
 
@@ -1148,9 +1149,9 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="vim-command vim-string">[global]</div>
-                    <div class="vim-command vim-string">    client min protocol = NT1</div>
-                    <div class="vim-command vim-string">    client max protocol = SMB3</div>
+                    <div class="vim-line vim-string">[global]</div>
+                    <div class="vim-line vim-string">    client min protocol = NT1</div>
+                    <div class="vim-line vim-string">    client max protocol = SMB3</div>
                 </div>
             </div>
             <!-- Команды -->
@@ -1713,7 +1714,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">su –</div>
+                        <div class="cmd cmd-user">su -</div>
                         <div class="cmd cmd-root">cd ./dist/Driver/CanonURF2</div>
                         <div class="cmd-comment"># Т.к. Canon UFRII нет под АльтЛинукс, придется переупаковывать через epm.</div>
                         <div class="cmd-comment">Скачайте драйвера cnrdrvcups-ufr2-uk-6.20-1.20.x86_64.rpm с сайта производителя и переупакуйте</div>
@@ -1804,7 +1805,7 @@
             <div class="alert alert-important">
                 <div class="alert-content">
                     <div class="alert-title">Важно</div>
-                    <p class="alert-text">Исправление интерфейса. Если интерфейс отображается неправильно – окна панели наезжают друг на друга, 
+                    <p class="alert-text">Исправление интерфейса. Если интерфейс отображается неправильно - окна панели наезжают друг на друга, 
                         но текст в них отображается нормально. Это происходит, потому что МойОфис неправильно выполняет масштабирования. 
                         Чаще всего это происходит на видеокартах Intel, так как для них используется драйвер i915.</p>
                 </div>
@@ -1851,6 +1852,71 @@
             <p>Теперь у пользователя будет запускаться МойОфис таблицы и текст с масштабированием 1.25, что растянет интерфейс до нормального. 
                 Если надо на всех пользователей так сделать, то редактировать файл .desktop надо в системной папке /user/share/applications, но этого не рекомендуют делать.</p>
         </section>
+        <!-- Глава -->
+        <section id="msoffice2007">
+            <h1>Microsoft Office 2007</h1>
+            <p>Установите <a href="#wine">Wine</a>.</p>
+            <p>Установите msoffice2007.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">cd ~/dist/office2007</div>
+                    <div class="cmd cmd-user">wine ./SETUP.EXE</div>
+                    <div class="cmd cmd-user">vim ./excel.sh</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">#!/bin/sh</div>
+                    <div class="vim-line vim-string">QUICKPARLOCATION="C:\Program Files (x86)\Microsoft Office\Office12\EXCEL.EXE"</div>
+                    <div class="vim-line vim-string">PARAM=$(winepath -w "$1")</div>
+                    <div class="vim-line vim-string">echo "$PARAM"</div>
+                    <div class="vim-line vim-string">wine "$QUICKPARLOCATION" "$PARAM"</div>
+                    <div class="vim-line vim-string">exit 0</div>
+                    <div class="vim-comment"># esc</div>
+                    <div class="vim-comment"># :wq</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod +x ./excel.sh</div>
+                    <div class="cmd cmd-user">vim ./word.sh</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">#!/bin/sh</div>
+                    <div class="vim-line vim-string">QUICKPARLOCATION="C:\Program Files (x86)\Microsoft Office\Office12\WINWORD.EXE"</div>
+                    <div class="vim-line vim-string">PARAM=$(winepath -w "$1")</div>
+                    <div class="vim-line vim-string">echo "$PARAM"</div>
+                    <div class="vim-line vim-string">wine "$QUICKPARLOCATION" "$PARAM"</div>
+                    <div class="vim-line vim-string">exit 0</div>
+                    <div class="vim-comment"># esc</div>
+                    <div class="vim-comment"># :wq</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod +x ./word.sh</div>
+                </div>
+            </div>
+            <p>Создание ассоциации по умолчанию для файлов с расширение .doc .docx .xls .xlsx</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="config-line"><span class="config-value">Файл.docx - ПКМ – Открыть с помощью – Другое приложение... – </span></div>
+                    <div class="config-line"><span class="config-value">Использовать собственную команду – Просмотреть... – ‘home/user/distr/office2007/word.sh’ –</span></div>
+                    <div class="config-line"><span class="config-value">Запомнить это приложение для файлов типа “Документ Word 2007” - Открыть</span></div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -1858,8 +1924,8 @@
             const codeBlock = btn.nextElementSibling;
             const commands = Array.from(codeBlock.querySelectorAll('.cmd, .config-line, .vim-line'))
                 .map(el => el.textContent.trim())
-                .filter(text => text && !text.startsWith('#'))
-                .join('\n');
+                .filter(text => text)
+                .join('\n') + '\n';
             
             // Сохраняем оригинальный текст в data-атрибут (только при первом клике)
             if (!btn.dataset.original) {
