@@ -107,6 +107,8 @@
             <li><a href="#tar-get-os">Создание образа системы Альт Линукс</a></li>
             <li><a href="#tar-set-os-legacy">Восстановление системы Альт Линукс из образа (Legacy(BIOS))</a></li>
             <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
+            <li><a href="#assistent">Ассистент</a></li>
+            <li><a href="#rms">RMS</a></li>
         </ul>
     </nav>
 
@@ -251,6 +253,11 @@
                         <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                         <div class="code-block">
                             <div class="cmd cmd-user">su -</div>
+                        </div>
+                    </div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
                             <div class="cmd cmd-root">vim /etc/fstab</div>
                         </div>
                     </div>
@@ -280,7 +287,6 @@
                     <div class="code-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                         <div class="code-block">
-                            <div class="cmd cmd-user">su -</div>
                             <div class="cmd cmd-root">integalert fix</div>
                         </div>
                     </div>
@@ -295,7 +301,13 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-user">su -</div>          
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd-comment"># Добавление нового пользователя user1</div>
                     <div class="cmd cmd-root">useradd user1</div>
                     <div class="cmd-comment"># Создать пароль для пользователя user1</div>
@@ -344,7 +356,13 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
+                    <div class="cmd cmd-user">su -</div>     
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">vim /etc/fstab</div>       
                 </div>
             </div>
@@ -381,7 +399,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>      
                 </div>
             </div>
@@ -476,7 +493,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">apt-get update</div>
                     <div class="cmd cmd-root">apt-get dist-upgrade</div>
                     <div class="cmd cmd-root">update-kernel</div>
@@ -505,12 +521,24 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">uname -r</div>
                     <div class="cmd-comment"># 6.1.112-un-def-alt0.c10f.1</div>
                     <div class="cmd cmd-root">update-kernel -l</div>
                     <div class="cmd-comment"># * (21 d) kernel-image-6.12-6.12.65-alt0.c10f.2</div>
                     <div class="cmd cmd-root">update-kernel -t 6.12</div>
                     <div class="cmd cmd-root">reboot</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-user">uname -r</div>
                     <div class="cmd-comment"># 6.12.65-6.12-alt0.c10f.2</div>
                 </div>
@@ -521,6 +549,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">remove-old-kernels</div>
                     <div class="cmd cmd-root">apt-get clean</div>
                     <div class="cmd cmd-root">rm -f /etc/rpm/macros.d/priority_distbranch</div>
@@ -531,7 +565,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">integalert fix</div>
                 </div>
             </div>
@@ -563,6 +596,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">apt-get update</div>
                     <div class="cmd cmd-root">apt-get install theme-mate-windows</div>
                     <div class="cmd cmd-root">reboot</div>
@@ -582,6 +621,12 @@
                     <div class="cmd cmd-user">dconf reset -f /</div>
                     <div class="cmd-comment"># Далее можно (НЕ ОБЯЗАТЕЛЬНО) установить тему windows 10</div>
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">apt-get install gtk-theme-windows-10</div>
                     <div class="cmd-comment"># И после этого выбрать ее в темах оформления</div>
                 </div>
@@ -604,7 +649,14 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">apt-get install xfce4-full</div>
+                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
             <p>Выберите сессию Xfce при входе: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
@@ -644,6 +696,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd-comment"># Посмотреть список подключенных репозиториев</div>
                     <div class="cmd cmd-root">apt-repo list</div>
                     <div class="cmd-comment"># Удалить репозиторий</div>
@@ -660,7 +718,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">apt-repo list</div>
                     <div class="cmd cmd-root">apt-repo add <имя_профиля></div>
                     <div class="cmd-comment"># Ручная установка репозитория</div>
@@ -1002,11 +1059,23 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">apt-get update</div>
                     <div class="cmd cmd-root">apt-get install i586-wine</div>
                     <div class="cmd cmd-root">apt-get install winetricks</div>
                     <div class="cmd cmd-root">apt-get install wine-mono-8.1.0</div>
                     <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-user">wineboot</div>
                     <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
                     <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
@@ -1069,6 +1138,13 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">mkdir /mnt/talsql/out</div>
                     <div class="cmd cmd-root">mkdir /mnt/talsql/pochta</div>
                     <div class="cmd cmd-root">mkdir /home/.wine/dosdevices/unc/192.168.205.4</div>
@@ -1088,7 +1164,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /root/.cifsmnt</div>
                 </div>
             </div>
@@ -1122,7 +1197,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /etc/fstab</div>
                 </div>
             </div>
@@ -1156,6 +1230,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">vim /etc/samba/smb.conf</div>
                 </div>
             </div>
@@ -1190,7 +1270,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /root/.usermnt</div>
                 </div>
             </div>
@@ -1223,7 +1302,6 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">vim /etc/fstab</div>
                 </div>
             </div>
@@ -1241,6 +1319,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">vim /etc/fstab</div>
                 </div>
             </div>
@@ -1272,11 +1356,23 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd-comment"># Подключение SSHFS в Linux</div>
                     <div class="cmd-comment"># Установка</div>
-                    <div class="cmd cmd-user">su -</div>
                     <div class="cmd cmd-root">apt-get install sshfs</div>
                     <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd-comment"># Монтирование SSHFS выполняется с помощью одноимённой команды. Её синтаксис такой:</div>
                     <div class="cmd cmd-user">sshfs опции имя_пользователя@адрес:/путь /точка/монтирования</div>
                     <div class="cmd cmd-user">sshfs user_buh@192.168.218.4:/D:/Talisman_SQL  ~/test</div>
@@ -1304,7 +1400,13 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">su-</div>
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
                         <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>
                     </div>
                 </div>
@@ -1327,7 +1429,6 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
                         <div class="cmd cmd-root">apt-get update</div>
                         <div class="cmd cmd-root">apt-get install i586-wine</div>
                         <div class="cmd cmd-root">apt-get install winetricks</div>
@@ -1371,6 +1472,13 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
                         <div class="cmd cmd-root">mkdir -p /mnt/talsql/strah</div>
                         <div class="cmd cmd-root">mkdir -p /mnt/talsql/out</div>
                         <div class="cmd cmd-root">mkdir -p /mnt/talsql/pochta</div>
@@ -1381,7 +1489,6 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
                         <div class="cmd cmd-root">vim /root/.cifsmnt</div>
                     </div>
                 </div>
@@ -1489,6 +1596,12 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
                         <div class="cmd cmd-root">apt-get install xfce4-full</div>
                     </div>
                 </div>
@@ -1500,14 +1613,26 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd-comment"># Установка</div>
                         <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Установка</div>
                         <div class="cmd cmd-root">apt-get install xfwm4</div>
                         <div class="cmd-comment"># Тест</div>
                         <div class="cmd cmd-root">killall marco</div>
                         <div class="cmd cmd-root">xfwm4 --replace &</div>
-                        <div class="cmd-comment"># Постоянно: через  ~/.config/autostart/ Создание ярлыка для автозапуска Xfwm4</div>
                         <div class="cmd cmd-root">logout</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Постоянно: через  ~/.config/autostart/ Создание ярлыка для автозапуска Xfwm4</div>
                         <div class="cmd cmd-user">mkdir -p ~/.config/autostart</div>
                         <div class="cmd cmd-user">cat > ~/.config/autostart/xfwm4-replace.desktop << 'EOF'</div>
                         <div class="cmd cmd-serial">[Desktop Entry]</div>
@@ -1577,6 +1702,12 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
                         <div class="cmd cmd-root">apt-get update</div>
                         <div class="cmd cmd-root">apt-cache search wine</div>
                         <div class="cmd cmd-root">apt-get install i586-wine</div>
@@ -1684,17 +1815,23 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                    <div class="cmd cmd-root">ip link show</div>
-                    <div class="cmd cmd-root">nmcli connection add type dummy \</div>
-                    <div class="cmd cmd-serial">ifname veth0 \</div>
-                    <div class="cmd cmd-serial">connection.id "veth0" \</div>
-                    <div class="cmd cmd-serial">ethernet.cloned-mac-address 00:C0:26:AB:F7:92 \</div>
-                    <div class="cmd cmd-serial">ipv4.method manual \</div>
-                    <div class="cmd cmd-serial">ipv4.addresses 192.168.10.100/24</div>
-                    <div class="cmd cmd-root">nmcli connection up "veth0"</div>
-                    <div class="cmd cmd-root">nmcli device status</div>
-                    <div class="cmd cmd-root">ip addr show veth0</div>
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ip link show</div>
+                        <div class="cmd cmd-root">nmcli connection add type dummy \</div>
+                        <div class="cmd cmd-serial">ifname veth0 \</div>
+                        <div class="cmd cmd-serial">connection.id "veth0" \</div>
+                        <div class="cmd cmd-serial">ethernet.cloned-mac-address 00:C0:26:AB:F7:92 \</div>
+                        <div class="cmd cmd-serial">ipv4.method manual \</div>
+                        <div class="cmd cmd-serial">ipv4.addresses 192.168.10.100/24</div>
+                        <div class="cmd cmd-root">nmcli connection up "veth0"</div>
+                        <div class="cmd cmd-root">nmcli device status</div>
+                        <div class="cmd cmd-root">ip addr show veth0</div>
                     </div>
                 </div>
                 <!-- Подсказка -->
@@ -1729,6 +1866,12 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
                         <div class="cmd cmd-root">cd ./dist/Driver/CanonURF2</div>
                         <div class="cmd-comment"># Т.к. Canon UFRII нет под АльтЛинукс, придется переупаковывать через epm.</div>
                         <div class="cmd-comment">Скачайте драйвера cnrdrvcups-ufr2-uk-6.20-1.20.x86_64.rpm с сайта производителя и переупакуйте</div>
@@ -1812,6 +1955,11 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">apt-get install ./dist/МойОфис/Linux/myoffice-standard-documents2.8.0-x86_64.rpm</div>
                 </div>
             </div>
@@ -2053,6 +2201,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">apt-get update</div>
                     <div class="cmd cmd-root">apt-get install sudo</div>
                     <div class="cmd-comment"># создать группу sudo</div>
@@ -2083,6 +2237,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">lsblk</div>
                     <div class="cmd cmd-root">umount /dev/sdb4</div>
                     <div class="cmd cmd-root">mkfs.ntfs /dev/sdb4</div>
@@ -2239,6 +2399,12 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">ip link show</div>
                     <div class="cmd cmd-root">cd /etc/net/ifaces/</div>
                     <div class="cmd cmd-root">ls</div>
@@ -2517,6 +2683,65 @@
                     <div class="cmd cmd-root">ssh-keygen -A</div>
                 </div>
             </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="assistent">
+            <h1>Ассистент</h1>
+            <p>Установка удаленного доступа</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install eepm</div>
+                    <div class="cmd cmd-root">epm play assistant</div>
+                    <div class="cmd cmd-root">epm ei</div>
+                    <div class="cmd cmd-root">apt-get install fontconfig-disable-type1-font-for-assistant</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="rms">
+            <h1>RMS</h1>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get install ./dist/rms-agent-1.0.0-19.x86_64.rpm</div>
+                    <div class="cmd cmd-root">apt-get install -y libx11-xcb1 libxfixes3 libxtst6 libxcb-shm0 libxdamage1 libgtkglext1 libx11-6 libxcb-xinerama0 libxcb1 xdg-utils</div>
+                    <div class="cmd cmd-root">logout</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">rms-agent</div>
+                </div>
+            </div>
+            <p>Чтобы отключить доступ через интернет, надо создать несуществующий сервер и выбрать его:</p>
+            <!-- Картинка -->
+            <img src="img/rms/img-rms-1.png" alt="RMS">
+            <!-- Картинка -->
+            <img src="img/rms/img-rms-2.png" alt="RMS">
+            <!-- Картинка -->
+            <img src="img/rms/img-rms-3.png" alt="RMS">
         </section>
     </main>
 
