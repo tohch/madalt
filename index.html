@@ -109,6 +109,24 @@
             <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
             <li><a href="#assistent">Ассистент</a></li>
             <li><a href="#rms">RMS</a></li>
+            <li><a href="#rdp">RDP</a></li>
+            <li><a href="#autorun">Автозапуск приложений</a></li>
+            <li><a href="#timesnewroman">Установка шрифта TimesNewRoman</a></li>
+            <li><a href="#yandexbrowser">Яндекс браузер</a></li>
+            <li><a href="#chromium">Chromium-Gost</a>
+                <ul>
+                    <li><a href="#chromium-rep">Установка из Установка из репозитория</a></li>
+                    <li><a href="#chromium-rpm">Установка из rpm</a></li>
+                    <li><a href="#chromium-epm">Установка из eepm</a></li>
+                </ul>
+            </li>
+            <li><a href="#plagin-cryptopro">Плагин КриптоПро</a></li>
+            <li><a href="#gosuslugi">Госуслуги</a>
+                <ul>
+                    <li><a href="#gosuslugi-gosplagin">Госплагин</a></li>
+                    <li><a href="#gosuslugi-plagin-gosuslugi">Расширение для плагина Госуслуги</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -1082,6 +1100,35 @@
                     <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
                     <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
                     <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p>Основные команды.</p>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">В самом wine не работать под root, только под пользователем/</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Настройка</div>
+                    <div class="cmd cmd-user">winecfg</div>
+                    <div class="cmd-comment"># путь ~/.wine</div>
+                    <div class="cmd-comment"># чтобы удалить префикс wine</div>
+                    <div class="cmd cmd-user">rm ~/.wine</div>
+                    <div class="cmd-comment"># Установка явно х32 префикса</div>
+                    <div class="cmd cmd-user">WINEARCH=win32 winecfg</div>
+                    <div class="cmd-comment"># Создание именного префикса. Префикс создается при выполнении любой команды wine, не обязательно winecfg</div>
+                    <div class="cmd cmd-user">WINEPREFIX=/home/user/winemy</div>
+                    <div class="cmd-comment"># Можно объединить с указание разрядности</div>
+                    <div class="cmd cmd-user">WINEARCH=win32 WINEPREFIX=/home/user/winemy32 winecfg</div>
+                    <div class="cmd-comment"># Установка framework</div>
+                    <div class="cmd cmd-user">winetricks dotnet35sp1</div>
+                    <div class="cmd-comment"># тихая установка -q</div>
+                    <div class="cmd cmd-user"> winetricks -q dotnet35sp1</div>
                 </div>
             </div>
         </section>
@@ -2742,6 +2789,261 @@
             <img src="img/rms/img-rms-2.png" alt="RMS">
             <!-- Картинка -->
             <img src="img/rms/img-rms-3.png" alt="RMS">
+        </section>
+
+        <!-- Глава -->
+        <section id="rdp">
+            <h1>RPD</h1>
+            <p>RDP клиент</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install remmina</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="autorun">
+            <h1>Автозапуск приложений</h1>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Система -> Параметры -> Персональные -> Запускаемые приложения</p>
+                    <p class="alert-text">Чтобы посмотреть путь до приложений используйте which, к примеру:</p>
+                    <p class="alert-text"><code> which rms-agent</code></p>
+                </div>
+            </div>
+            <p>Автозапуск в окружении Xfce</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">xfce4-session-settings</div>
+                </div>
+            </div>
+            <!-- Картинка -->
+            <img src="img/autorun/img-autorun-1.png" alt="Автозапуск">
+            <img src="img/autorun/img-autorun-2.png" alt="Автозапуск">
+        </section>
+
+        <!-- Глава -->
+        <section id="timesnewroman">
+            <h1>Установка шрифта TimesNewRoman</h1>
+            <p>Для системы</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get install fonts-ttf-ms</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <p>Для Wine</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">winetricks corefonts</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="yandexbrowser">
+            <h1>Яндекс браузер</h1>
+            <p>Установка</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install yandex-browser-stable</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="chromium">
+            <h1>Chromium-Gost</h1>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Главная страница Cromium-gost: <a href="https://cryptopro.ru/products/chromium-gost">https://cryptopro.ru/products/chromium-gost</a></p>
+                    <p class="alert-text">Прямая ссылка Chromium-gost: <a href="https://release-assets.githubusercontent.com/github-production-release-asset/80726665/45918557-b4bd-403b-ad6f-aae9ec478b25?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-04-06T08%3A25%3A20Z&rscd=attachment%3B+filename%3Dchromium-gost-146.0.7680.177-linux-amd64.rpm&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-04-06T07%3A25%3A08Z&ske=2026-04-06T08%3A25%3A20Z&sks=b&skv=2018-11-09&sig=4ilnI%2FJgZTeyuYJJmNWy14rez02Cq%2FHSPRNlskxckP0%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3NTQ2NDg5OCwibmJmIjoxNzc1NDYxMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.G3no9qowDROqcw2SvQh1TlC9OozHMAXwf8ZFp6v2KcM&response-content-disposition=attachment%3B%20filename%3Dchromium-gost-146.0.7680.177-linux-amd64.rpm&response-content-type=application%2Foctet-stream">chromium-gost-146.0.7680.177-linux-amd64.rpm</a></p>
+                </div>
+            </div>
+            <!-- Глава -->
+            <section id="chromium-rep">
+                <h2>Установка из репозитория</h2>
+                <p>Плюсы: обновляется при apt-get dist-upgrade<br>
+                Минусы: поставляется без плагинов, придется вручную устанавливать <a href="#plagin-cryptopro">Плагин КриптоПро</a> и <a href="#gosuslugi">Госплагин</a>.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install chromium-gost</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="chromium-rpm">
+                <h2>Установка из rpm</h2>
+                <p>Плюсы: плагины уже встроены.<br>
+                Минусы: обновлять вручную</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">cd ~/Загрузки</div>
+                        <div class="cmd cmd-user">wget -O chromium-gost.rpm https://release-assets.githubusercontent.com/github-production-release-asset/80726665/45918557-b4bd-403b-ad6f-aae9ec478b25?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-04-06T08%3A25%3A20Z&rscd=attachment%3B+filename%3Dchromium-gost-146.0.7680.177-linux-amd64.rpm&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-04-06T07%3A25%3A08Z&ske=2026-04-06T08%3A25%3A20Z&sks=b&skv=2018-11-09&sig=4ilnI%2FJgZTeyuYJJmNWy14rez02Cq%2FHSPRNlskxckP0%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3NTQ2NDg5OCwibmJmIjoxNzc1NDYxMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.G3no9qowDROqcw2SvQh1TlC9OozHMAXwf8ZFp6v2KcM&response-content-disposition=attachment%3B%20filename%3Dchromium-gost-146.0.7680.177-linux-amd64.rpm&response-content-type=application%2Foctet-stream</div>
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">cd /home/user1/Загрузки</div>
+                        <div class="cmd cmd-root">chmod +x chromium-gost.rpm</div>
+                        <div class="cmd cmd-root">apt-get install chromium-gost.rpm</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Глава -->
+            <section id="chromium-epm">
+                <h2>Установка из eepm</h2>
+                <p>Минусы: этот метод установки не работает(</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install eepm</div>
+                        <div class="cmd cmd-root">epm play chromium-gost</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="plagin-cryptopro">
+            <h1>Плагин КриптоПро</h1>
+            <p><a href="https://support.cryptopro.ru/index.php?/Knowledgebase/Article/View/467#chrome">Инструкция</a></p>
+            <p>1. Установить Extension for CAdEs Browser Plugin: <a href="https://chromewebstore.google.com/detail/extension-for-cades-brows/pfhgbfnnjiafkhfdkmpiflachepdcjod">интернет-магазин chrome</a></p>
+            <!-- Картинка -->
+            <img src="img/plagin-cryptopro/img-plagin-cryptopro-1.png" alt="Плагин КриптоПро">
+            <img src="img/plagin-cryptopro/img-plagin-cryptopro-2.png" alt="Плагин КриптоПро">
+            <p>2. Установить Плагин CryptoPro Extension for Cades BrowserPlogin<br>
+            Скачать Плагин CryptoPro Extension for Cades BrowserPlogin: <a href="https://www.cryptopro.ru/sites/default/files/products/cades/extensions/iifchhfnnmpdbibifmljnfjhpififfog_main.crx">Для версии 138.XXX и ниже</a> <br>
+            Перейти в chromiu-gost: chrome://extensions/<br>
+            Включить режим разработчика<br>
+            Загрузить распакованное расширение: iifchhfnnmpdbibifmljnfjhpififfog_main.crx</p>
+            <img src="img/plagin-cryptopro/img-plagin-cryptopro-3.png" alt="Плагин КриптоПро">
+            <img src="img/plagin-cryptopro/img-plagin-cryptopro-4.png" alt="Плагин КриптоПро">
+            <p>Отключить Режим разработчика</p>
+            <img src="img/plagin-cryptopro/img-plagin-cryptopro-5.png" alt="Плагин КриптоПро">
+        </section>
+
+        <!-- Глава -->
+        <section id="gosuslugi">
+            <h1>Госуслуги</h1>
+            <!-- Глава -->
+            <section id="gosuslugi-gosplagin">
+                <h2>Госплагин</h2>
+                
+            </section>
+            <!-- Глава -->
+            <section id="gosuslugi-plagin-gosuslugi">
+                <h2>Расширение для плагина Госуслуги</h2>
+                <a href="https://dev.rutoken.ru/pages/viewpage.action?pageId=78479384">Источник</a>
+                <!-- Внимание -->
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Отключить Госплагин, если он установлен!</p>
+                        <!-- Картинка -->
+                    </div>
+                </div>
+                <img src="img/gosuslugi/img-gosuslugi-1.png" alt="Госуслуги">
+                <p>Установить пакеты для работы с токенами и смарт-картами</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install opensc newt52</div>
+                    </div>
+                </div>
+                <p>Скачать и установить плагин <a href="https://ds-plugin.gosuslugi.ru/plugin/upload/Index.spr">https://ds-plugin.gosuslugi.ru/plugin/upload/Index.spr</a></p>
+                <img src="img/gosuslugi/img-gosuslugi-2.png" alt="Госуслуги">
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">wget https://ds-plugin.gosuslugi.ru/plugin/upload/assets/distrib/IFCPlugin-x86_64.rpm</div>
+                        <div class="cmd cmd-root">chmod +x ./IFCPlugin-x86_64.rpm</div>
+                        <div class="cmd cmd-root">apt-get install ./IFCPlugin-x86_64.rpm</div>
+                    </div>
+                </div>
+                <p>Установить браузерное расширение <a href="https://ds-plugin.gosuslugi.ru/plugin/upload/Index.spr">https://ds-plugin.gosuslugi.ru/plugin/upload/Index.spr</a></p>
+                <img src="img/gosuslugi/img-gosuslugi-3.png" alt="Госуслуги">
+                <img src="img/gosuslugi/img-gosuslugi-4.png" alt="Госуслуги">
+                <p>Настройка плагина Госуслуги<br>
+                Для корректной работы плагина после установки необходимо выполнить дополнительные действия: <br>
+                - Настроить конфигурационный файл. Чтобы не вносить изменения в него вручную, можно использовать готовый файл, предоставляемый КриптоПро.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">wget https://www.cryptopro.ru/sites/default/files/public/faq/ifcx64.cfg -O /etc/ifc.cfg</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Скаченный конфигурационный файл находится в dist/gosuslugi/ifcx64.cfg</p>
+                    </div>
+                </div>
+                <p>- Создать символическую ссылку на файл ru.rtlabs.ifcplugin.jso для браузеров Google Chrome, Chromium-Gost и Яндекс.Браузер.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Cromium-Gost</div>
+                        <div class="cmd cmd-root">mkdir /etc/chromium/native-messaging-hosts</div>
+                        <div class="cmd cmd-root">ln -s /etc/opt/chrome/native-messaging-hosts/ru.rtlabs.ifcplugin.json /etc/chromium/native-messaging-hosts/</div>
+                    </div>
+                </div>
+                <p>- Установить криптопровайдер<br>
+                См. раздел <a href="#cryptopro5">КриптоПро 5.0</a></p>
+            </section>
         </section>
     </main>
 
