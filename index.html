@@ -104,8 +104,9 @@
             </li>
             <li><a href="#sudo">sudo</a></li>
             <li><a href="#format-flash">Форматирование флешки</a></li>
-            <li><a href="#tar-get-os">Создание образа системы</a></li>
-            <li><a href="#tar-set-os-legacy">Восстановление образа системы Legacy(BIOS)</a></li>
+            <li><a href="#tar-get-os">Создание образа системы Альт Линукс</a></li>
+            <li><a href="#tar-set-os-legacy">Восстановление системы Альт Линукс из образа (Legacy(BIOS))</a></li>
+            <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
         </ul>
     </nav>
 
@@ -2091,7 +2092,7 @@
 
         <!-- Глава -->
         <section id="tar-get-os">
-            <h1>Создание образа системы</h1>
+            <h1>Создание образа системы Альт Линукс</h1>
             <p>Загрузитесь с LiveCD. Допустим что флешка это sdb, а диск с ОС это sda</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -2110,7 +2111,7 @@
 
         <!-- Глава -->
         <section id="tar-set-os-legacy">
-            <h1>Восстановление образа системы Legacy(BIOS)</h1>
+            <h1>Восстановление системы Альт Линукс из образа (Legacy(BIOS))</h1>
             <p>Загрузитесь с LiveCD. Допустим что флешка это sdb, а диск с ОС это sda</p>
             <p>Создайте разделы</p>
             <!-- Команды -->
@@ -2272,6 +2273,220 @@
                 </div>
             </div>
             <p>Далее по желанию.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">find / -type f -exec chmod u+rw {} \;</div>
+                    <div class="cmd cmd-root">find / -type d -exec chmod u+rwx {} \;</div>
+                    <div class="cmd cmd-root">dracut --force</div>
+                </div>
+            </div>
+            <p>Посмотреть зависимости, которые замедляют загрузку</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">journalctl -b</div>
+                    <div class="cmd cmd-root">systemd-analyze critical-chain</div>
+                    <div class="cmd cmd-root">systemd-analyze</div>
+                    <div class="cmd cmd-root">systemd-analyze blame</div>
+                    <div class="cmd cmd-root">systemd-analyze plot > boot.svg</div>
+                    <div class="cmd cmd-root">blkid</div>
+                </div>
+            </div>
+            <p>Возможно надо? Создание уникальных ключей SSH.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">ssh-keygen -A</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="tar-set-os-uefi">
+            <h1>Восстановление системы Альт Линукс из образа (UEFI)</h1>
+            <p>Загрузится с LiveCD. Допусти что флешка это sdb, а диск с ОС это sda</p>
+            <p>Создать разделы</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">lsblk</div>
+                    <div class="cmd cmd-root">fdisk /dev/sda</div>
+                    <div class="cmd-comment">   # создать новую таблицу разделов</div>
+                    <div class="cmd cmd-serial">g</div>
+                    <div class="cmd-comment"># создать новый раздел</div>
+                    <div class="cmd cmd-serial">n</div>
+                    <div class="cmd-comment"># Выберите тип раздела: первичный</div>
+                    <div class="cmd-comment"># Номер раздела: 1 или по умолчание</div>
+                    <div class="cmd cmd-serial">1</div>
+                    <div class="cmd-comment"># Начальный сектор: нажмите Enter для использования значения по умолчанию</div>
+                    <div class="cmd cmd-serial"> </div>
+                    <div class="cmd-comment">   # Размер раздела</div>
+                    <div class="cmd cmd-serial">+512M</div>
+                    <div class="cmd-comment">   # Измените тип раздела на EFI</div>
+                    <div class="cmd-comment">   # Выберите тип раздела</div>
+                    <div class="cmd cmd-serial">t</div>
+                    <div class="cmd cmd-serial">1</div>
+                    <div class="cmd-comment">   # EFIsystem</div>
+                    <div class="cmd cmd-serial">EFISystem</div>
+                    <div class="cmd-comment"># создать разделы под swap и корень /</div>
+                    <div class="cmd cmd-serial">n</div>
+                    <div class="cmd cmd-serial">+8G</div>
+                    <div class="cmd cmd-serial">n</div>
+                    <div class="cmd cmd-serial"></div>
+                    <div class="cmd cmd-serial">+248G</div>
+                    <div class="cmd-comment"># Сохранить таблицу</div>
+                    <div class="cmd cmd-serial">w</div>
+                    <div class="cmd cmd-root">mkfs.vfat -F32 /dev/sda1</div>
+                    <div class="cmd cmd-root">mkswap /dev/sda2</div>
+                    <div class="cmd cmd-root">swapon /dev/sda2</div>
+                    <div class="cmd cmd-root">mkfs.ext4 /dev/sda3</div>
+                </div>
+            </div>
+            <p>Восстановить из архива ОС.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">lsblk</div>
+                    <div class="cmd cmd-root">mkdir /mnt/img</div>
+                    <div class="cmd cmd-root">mkdir /mnt/alt</div>
+                    <div class="cmd cmd-root">mount /dev/sda3 /mnt/alt</div>
+                    <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
+                    <div class="cmd cmd-root">tar -xvpzf /mnt/img/backup.tar.gz -C /mnt/alt</div>
+                </div>
+            </div>
+            <p>Восстановление GRUB для UEFI</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mkdir -p /mnt/alt/boot/efi</div>
+                    <div class="cmd cmd-root">mount /dev/sda1 /mnt/alt/boot/efi</div>
+                    <div class="cmd cmd-root">mount --bind /dev /mnt/alt/dev</div>
+                    <div class="cmd cmd-root">mount --bind /proc /mnt/alt/proc</div>
+                    <div class="cmd cmd-root">mount --bind /sys /mnt/alt/sys</div>
+                    <div class="cmd cmd-root">chroot /mnt/alt</div>
+                    <div class="cmd cmd-root">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable</div>
+                    <div class="cmd cmd-root">update-grub</div>
+                </div>
+            </div>
+            <p>Проверка fstab, если там указан UUID диска, то заменить на новый. Или переписать на использование метки sdXn</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">blkid</div>
+                    <div class="cmd cmd-root">vim /etc/fstab</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">/dev/sda3   /      ext4   defaults     0   1</div>
+                    <div class="vim-line vim-string">/dev/sda2   none   swap   sw           0   0</div>
+                    <div class="vim-line vim-string">/dev/sda1   /boot/efi  vfatumask=0077  0   1</div>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Или заменить /dev/sdaN на UUID=номер_устройства</p>
+                    <p class="alert-text">Пример: <code>UUID=98765432-1234-5678-9abc-def123456789  /  ext4  defaults  0  1</code></p>
+                </div>
+            </div>
+            <p>Привязка к новому "железу" и установка загрузчика</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">for kver in $(ls /lib/modules/); do</div>
+                    <div class="cmd cmd-serial">make-initrd -k "$kver"</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p>Обновить uuid swap.</p>
+            <p>Заменить старый uuid 22611df3-cdcd-41a7-b4c1-1e89eaafecba на новый c32da5f2-8d1b-40e5-8b7a-593bbb84926d. Иначе будет задержка в загрузке ОС (примерно на 3 минуты).</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">blkid</div>
+                    <div class="cmd cmd-root">vim /etc/default/grub</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">GRUB_CMDLINE_LINUX_DEFAULT=' quiet resume=/dev/disk/by-uuid/<span class="mark">c32da5f2-8d1b-40e5-8b7a-593bbb84926d</span> panic=30 splash init_on_free=1'</div>
+                </div>
+            </div>
+            <p>Изменить имя компьютера</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">hostname buh-newname</div>
+                    <div class="cmd cmd-root"> vim /etc/hostname</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">buh-newname</div>
+                </div>
+            </div>
+            <p>Настройка сети.</p>
+            <p>Загрузиться с перенесенной ОС.</p>
+            <p>Проверьте конфигурацию сети в /etc/network/interfaces или через NetworkManager.</p>
+            <p>Если система была перенесена на новое оборудование, возможно, потребуется обновить сетевые настройки (например, MAC-адреса)</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">ip link show</div>
+                    <div class="cmd cmd-root">cd /etc/net/ifaces/</div>
+                    <div class="cmd cmd-root">ls</div>
+                    <div class="cmd cmd-root">mv enp1s0 enp0s3</div>
+                    <div class="cmd cmd-root">systemctl restart NetworkManager</div>
+                </div>
+            </div>
+            <p>Еще раз пересобрать GRUB</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable</div>
+                    <div class="cmd cmd-root">update-grub</div>
+                </div>
+            </div>
+            <p>Пересобрать initramfs</p>
+            <p>Если были изменены устройства хранения данных или их UUID, рекомендуется пересобрать initramfs</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get install dracut</div>
+                    <div class="cmd cmd-root">dracut --force</div>
+                </div>
+            </div>
+            <p>Перегенерация контрольных сумм</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">integalert fix</div>
+                </div>
+            </div>
+            <p>Далее по желанию.</p> 
+            <p>Проверка прав</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
