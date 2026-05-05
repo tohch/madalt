@@ -59,11 +59,6 @@
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
             <li><a href="#wine">Wine</a></li>
             <li><a href="#vim">Vim</a></li>
-            <li><a href="#smb">Samba</a>
-                <ul>
-                    <li><a href="#smb-netbios">NetBIOS имена</a></li>
-                </ul>
-            </li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
                     <li><a href="#requir-mout">Монтированние по запросу к сетевому ресурсу</a></li>
@@ -132,6 +127,28 @@
                 <ul>
                     <li><a href="#gosuslugi-gosplagin">Госплагин</a></li>
                     <li><a href="#gosuslugi-plagin-gosuslugi">Расширение для плагина Госуслуги</a></li>
+                </ul>
+            </li>
+            <li><a href="#virtualbox">VirtualBox</a></li>
+            <li><a href="#kvm">KVM</a>
+                <ul>
+                    <li><a href="#kvm-install">Установка</a></li>
+                    <li><a href="#kvm-share">Настройка общей папки между хостом и гостевой ВМ</a></li>
+                </ul>
+            </li>
+            <li><a href="#bridge">Сетевой мост</a></li>
+            <li><a href="#catharsis">Катарсис</a></li>
+            <li><a href="#notify-listener">NotifyListener - уведомление о создании файлов</a></li>
+            <li><a href="#lan-chat">Локальный чат</a>
+                <ul>
+                    <li><a href="#lan-messenger">LAN Messenger</a></li>
+                </ul>
+            </li>
+            <li><a href="#drweb">Dr.Web</a>
+                <ul>
+                    <li><a href="#drweb-run">Установка через пакет</a></li>
+                    <li><a href="#drweb-rep">Установка через репозиторий</a></li>
+                    <li><a href="#drweb-guard">Настройка исключений для SpIDer Guard</a></li>
                 </ul>
             </li>
         </ul>
@@ -1183,58 +1200,6 @@
                     <div class="vim-line vim-string"><span class="vim-command">«_dw</span> - удалить от курсора до конца слова без копирования в буфер</div>
                 </div>
             </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="smb">
-            <h1>Samba</h1>
-            <!-- Глава -->
-            <section id="smb-netbios">
-                <h2>NetBIOS имена</h2>
-                <p>Чтобы отображалось netbios имя в сети samba дайте имя в smb.conf "<code>netbios name = adm-1</code>"</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">vim /etc/samba/smb.conf</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="vim-line vim-string">[global]</div>
-                        <div class="vim-line vim-string">        client min protocol = NT1</div>
-                        <div class="vim-line vim-string">        client max protocol = SMB3</div>
-                        <div class="vim-line vim-string">        workgroup = SAMBA</div>
-                        <div class="vim-line vim-string">        <span class="mark">netbios name = mat-3</span></div>
-                        <div class="vim-line vim-string">        security = user</div>
-                        <div class="vim-line vim-string">        passdb backend = tdbsam</div>
-                        <div class="vim-line vim-string">        printing = cups</div>
-                        <div class="vim-line vim-string">        printcap name = cups</div>
-                        <div class="vim-line vim-string">        load printers = yes</div>
-                        <div class="vim-line vim-string">        cups options = raw</div>
-                        <div class="vim-line vim-string">        # Install samba-usershares package for support</div>
-                        <div class="vim-line vim-string">        include = /etc/samba/usershares.conf</div>
-                    </div>
-                </div>
-                <p>После изменений перезапустите службы:</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">systemctl restart smb nmb</div>
-                        <div class="cmd cmd-root">systemctl enable --now smb nmb</div>
-                    </div>
-                </div>
-            </section>
         </section>
 
         <!-- Глава -->
@@ -3143,7 +3108,7 @@
                     <div class="alert-content">
                         <div class="alert-title">Важно</div>
                         <p class="alert-text">"Расширение для плагина Госуслуги" Устарело!</p>
-                        <p class="alert-text">Используйте <a href="#gosuslugi-gosplagin">Госплагин</a>.</p>
+                        <p class="alert-text">Используйте <a href="#gosuslugi-gosplagin">Госплагин</a>!</p>
                     </div>
                 </div>
                 <!-- Внимание -->
@@ -3207,6 +3172,746 @@
                 </div>
                 <p>- Установить криптопровайдер<br>
                 См. раздел <a href="#cryptopro5">КриптоПро 5.0</a></p>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="virtualbox">
+            <h1>VirtualBox</h1>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Рекомендую использовать <a href="#kvm">KVM</a> вместо VirtualBox</p>
+                </div>
+            </div>
+            <!-- Важно -->
+            <div class="alert alert-important">
+                <div class="alert-content">
+                    <div class="alert-title">Важно</div>
+                    <p class="alert-text">После установки VirtualBox слетают драйвера на видеокарту и ломается логотип загрузки.</p>
+                </div>
+            </div>
+            <p>Установка</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># После обновления ядра перестает работать virtualbox, </div>
+                    <div class="cmd-comment"># т.к. под каждое ядро надо пересобирать ядро для виртуальных машин. </div>
+                    <div class="cmd-comment"># Проще переустановить виртуальную машину</div>
+                    <div class="cmd cmd-root">apt-get remove virtualbox-*</div>
+                    <div class="cmd-comment"># Установка</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">uname -r</div>
+                    <div class="cmd-comment"># 6.12.65-6.12-alt0.c10f.2</div>
+                    <div class="cmd cmd-root">apt-cache search kernel-modules-virtualbox</div>
+                    <div class="cmd-comment"># kernel-modules-virtualbox-6.12</div>
+                    <div class="cmd cmd-root">apt-get install kernel-modules-virtualbox-6.12</div>
+                    <div class="cmd cmd-root">apt-cache search kernel-headers</div>
+                    <div class="cmd-comment"># kernel-headers-6.12</div>
+                    <div class="cmd cmd-root">apt-get install kernel-headers-6.12</div>
+                    <div class="cmd cmd-root">apt-get install virtualbox</div>
+                    <div class="cmd-comment"># Вместо user указать имя пользователя под которым будет запускаться VirtualBox</div>
+                    <div class="cmd cmd-root">usermod -aG vboxusers user</div>
+                    <div class="cmd-comment"># Остановить KVM если он есть</div>
+                    <div class="cmd cmd-root">rmmod kvm_intel kvm_amd 2>/dev/null</div>
+                    <div class="cmd cmd-root">rmmod kvm</div>
+                    <div class="cmd-comment"># Постоянное отключение kvm:</div>
+                    <div class="cmd cmd-root">echo -e "blacklist kvm_amd\nblacklist kvm" | sudo tee /etc/modprobe.d/blacklist-kvm.conf</div>
+                    <div class="cmd-comment"># Возвращаем тему загрузки</div>
+                    <div class="cmd cmd-root">plymouth-set-default-theme -R bgrt-alt</div>
+                    <div class="cmd cmd-root">make-initrd</div>
+                    <div class="cmd cmd-root">grub-mkconfig -o /boot/grub/grub.cfg</div>
+                    <div class="cmd-comment"># Пересобрать ядро, чтобы восстановить драйвера на видеокарту</div>
+                    <div class="cmd cmd-root">update-kernel</div>
+                    <div class="cmd cmd-root">integalert fix</div>
+                    <div class="cmd cmd-root">reboot</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">VirtualBox</div>
+                    <div class="cmd-comment"># При создании виртуальной машины не указывать АльтЛинукс</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="kvm">
+            <h1>KVM</h1>
+            <section id="kvm-install">
+                <h2>Установка</h2>
+                <p><a href="https://www.altlinux.org/Libvirt_(Qemu%2BKVM%2BVirt-manager)">Источник</a></p>
+                <p>KVM (Kernel-based Virtual Machine) — программное решение, обеспечивающее виртуализацию в среде Linux на платформе x86, которая поддерживает аппаратную виртуализацию на базе Intel VT (Virtualization Technology) либо AMD SVM (Secure Virtual Machine).</p>
+                <p>Ниже представлена пошаговая инструкция по настройке виртуализации KVM/QEMU в ALT Linux с использованием libvirt и virt-manager:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd-comment"># Установка</div>
+                        <div class="cmd cmd-root">apt-get install libvirt libvirt-kvm libvirt-qemu</div>
+                        <div class="cmd-comment"># Для управления виртуализацией пользователь должен быть добавлен в группу vmusers:</div>
+                        <div class="cmd cmd-root">gpasswd -a имя_пользователя vmusers</div>
+                        <div class="cmd-comment"># Запустить службу</div>
+                        <div class="cmd cmd-root">systemctl enable --now libvirtd</div>
+                        <div class="cmd-comment"># Virt-manager - графическое управление</div>
+                        <div class="cmd cmd-root">apt-get install virt-manager</div>
+                        <div class="cmd cmd-root">logout</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">virt-manager</div>
+                    </div>
+                </div>
+                <!-- Внимание -->
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Сеть</p>
+                        <p class="alert-text">Важно обратить внимание, во избежание ошибки при запуске виртуальной машины "сеть «default» не активна" на настройку:</p>
+                        <p class="alert-text">После создания виртуальной машины в virt-manager Правка ⇾ Свойства подключения ⇾ Вкладка Виртуальные сети ⇾ На сети default поставить галочку "Автозапуск: При загрузке" ⇾ Применить.</p>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/kvm/img-kvm-1.png" alt="KVM">
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Для работы Талисмана 2.0 надо в настройках сети виртуальной машины указать Мост или Устройство macvtap</p>
+                        <p class="alert-text">Чтобы узнать название сетевого устройства наберите: <code>ip a</code></p>
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/kvm/img-kvm-2.png" alt="KVM">
+            </section>
+            <section id="kvm-share">
+                <h2>Настройка общей папки между хостом и гостевой ВМ</h2>
+                <p>Выключите ВМ → «Добавить оборудование» → «Файловая система»</p>
+                <!-- Картинка -->
+                <img src="img/kvm/img-kvm-3.png" alt="KVM">
+                <img src="img/kvm/img-kvm-4.png" alt="KVM">
+                <p>Монтирование в госте</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir -p /mnt/share</div>
+                        <div class="cmd cmd-root">mount -t virtiofs share /mnt/share</div>
+                    </div>
+                </div>
+                <p>Для авто-монитрования</p>
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir -p /mnt/share</div>
+                        <div class="cmd cmd-root">vim /etc/fstab</div>
+                    </div>
+                </div>
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">share /mnt/share virtiofs rw,relatime,_netdev 0 0</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="bridge">
+            <h1>Сетевой мост</h1>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mkdir /etc/net/ifaces/br0</div>
+                    <div class="cmd cmd-root">cp /etc/net/ifaces/enp1s0/* /etc/net/ifaces/br0/</div>
+                    <div class="cmd-comment"># из enp1s0 удалить всё кроме options</div>
+                    <div class="cmd cmd-root">rm -f /etc/net/ifaces/enp1s0/{i,r}*</div>
+                    <div class="cmd cmd-root">vim /etc/net/ifaces/br0/options</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string"><b>BOOTPROTO=dhcp</b></div>
+                    <div class="vim-line vim-string"><b>TYPE=bri</b></div>
+                    <div class="vim-line vim-string">NM_CONTROLLED=no</div>
+                    <div class="vim-line vim-string">DISABLED=no</div>
+                    <div class="vim-line vim-string">CONFIG_WIRELESS=no</div>
+                    <div class="vim-line vim-string">SYSTEMD_BOOTPROTO=dhcp4</div>
+                    <div class="vim-line vim-string"><b>CONFIG_IPV4=yes</b></div>
+                    <div class="vim-line vim-string"><b>HOST="enp1s0"</b></div>
+                    <div class="vim-line vim-string">SYSTEMD_CONTROLLED=no</div>
+                    <div class="vim-line vim-string">ONBOOT=yes</div>
+                    <div class="vim-line vim-string">CONFIG_IPV6=no</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/net/ifaces/enp1s0/options</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string"><b>BOOTPROTO=static</b></div>
+                    <div class="vim-line vim-string"><b>TYPE=eth</b></div>
+                    <div class="vim-line vim-string">NM_CONTROLLED=no</div>
+                    <div class="vim-line vim-string">DISABLED=no</div>
+                    <div class="vim-line vim-string">CONFIG_WIRELESS=no</div>
+                    <div class="vim-line vim-string">SYSTEMD_BOOTPROTO=dhcp4</div>
+                    <div class="vim-line vim-string"><b>CONFIG_IPV4=no</b></div>
+                    <div class="vim-line vim-string">SYSTEMD_CONTROLLED=no</div>
+                    <div class="vim-line vim-string">ONBOOT=yes</div>
+                    <div class="vim-line vim-string">CONFIG_IPV6=no</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">service network restart</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="catharsis">
+            <h1>Катарсис</h1>
+            <p>Установка</p>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Если будете использовать скрипты sh из distr, проверьте, что установлено sudo и пользователь добавлен в группу wheel. Как это сделать см. раздел <a href="#sudo">sudo</a>. Скрипты запускать sudo ./скрипт.sh</p>
+                </div>
+            </div>
+            <p>Установка wine.</p>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Есть скрипт для установки см. <code>dist/catharsis/Install_Environment.sh</code></p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get install -y i586-wine winetricks wine-gecko</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Создание префикса и установка компонентов</p>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Есть скрипт для установки компонентов см. <code>dist/catharsis/Install_PK_AltLinux.sh</code></p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.catharsis WINEARCH=win32 wineboot</div>
+                    <div class="cmd cmd-user">for pkg in \</div>
+                    <div class="cmd cmd-serial">dotnet48 corefonts \</div>
+                    <div class="cmd cmd-serial">win7 gdiplus glsl=disabled ddr=gdi corefonts; \</div>
+                    <div class="cmd cmd-serial">do</div>
+                    <div class="cmd cmd-serial">    WINEPREFIX=~/.catharsis winetricks -q "$pkg" || echo "== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p id="list-catharsis-groups">Распределение подразделений по установкам</p>
+            <ul>
+                <li>Группа Краснодар</li>
+                <ul>
+                    <li><code>http://192.168.23.51/spclient/SP.Client.application</code></li>
+                    <li>УСЗН в Западном округе города Краснодара</li>
+                    <li>УСЗН в Карасунском округе города Краснодара</li>
+                    <li>УСЗН в Прикубанском внутригор. округе города Краснодара</li>
+                    <li>УСЗН в Центральном округе г. Краснодара</li>
+                </ul>
+                <li>Группа Сочи</li>
+                <ul>
+                    <li><code>http://192.168.23.59/spclient/SP.Client.application</code></li>
+                    <li>УСЗН в Адлерском внутригор. районе города-курорта Сочи</li>
+                    <li>УСЗН в г. Новороссийске</li>
+                    <li>УСЗН в городе-курорте Анапа</li>
+                    <li>УСЗН в городе-курорте Геленджике</li>
+                    <li>УСЗН в Лазаревском внутригор. районе города-курорта Сочи</li>
+                    <li>УСЗН в Темрюкском районе</li>
+                    <li>УСЗН в Туапсинском районе</li>
+                    <li>УСЗН в Хостинском внутригор. районе города-курорта Сочи</li>
+                    <li>УСЗН в Центральном внутригор. районе города-курорта Сочи</li>
+                </ul>
+                <li>Группа 1</li>
+                <ul>
+                    <li><code>http://192.168.23.57/spclient/SP.Client.application</code></li>
+                    <li>УСЗН в Белоглинском районе</li>
+                    <li>УСЗН в Брюховецком районе</li>
+                    <li>УСЗН в Выселковском районе</li>
+                    <li>УСЗН в Динском районе</li>
+                    <li>УСЗН в Кореновском районе</li>
+                    <li>УСЗН в Крыловском районе</li>
+                    <li>УСЗН в Кущевском районе</li>
+                    <li>УСЗН в Новопокровском районе</li>
+                    <li>УСЗН в Павловском районе</li>
+                    <li>УСЗН в Тимашевском районе</li>
+                    <li>УСЗН в Тихорецком районе</li>
+                </ul>
+                <li>Группа 2</li>
+                <ul>
+                    <li><code>http://192.168.23.58/spclient/SP.Client.application</code></li>
+                    <li>УСЗН в Абинском районе</li>
+                    <li>УСЗН в Апшеронском районе</li>
+                    <li>УСЗН в городе Горячем Ключе</li>
+                    <li>УСЗН в Ейском районе</li>
+                    <li>УСЗН в Калининском районе</li>
+                    <li>УСЗН в Каневском районе</li>
+                    <li>УСЗН в Красноармейском районе</li>
+                    <li>УСЗН в Крымском районе</li>
+                    <li>УСЗН в Ленинградском районе</li>
+                    <li>УСЗН в Приморско-Ахтарском районе</li>
+                    <li>УСЗН в Северском районе</li>
+                    <li>УСЗН в Славянском районе</li>
+                    <li>УСЗН в Староминском районе</li>
+                    <li>УСЗН в Щербиновском районе</li>
+                </ul>
+                <li>Группа 3</li>
+                <ul>
+                    <li><code>http://192.168.23.56/spclient/SP.Client.application</code></li>
+                    <li>УСЗН в Белореченском районе</li>
+                    <li>УСЗН в г.Армавире</li>
+                    <li>УСЗН в Гулькевичском районе</li>
+                    <li>УСЗН в Кавказском районе</li>
+                    <li>УСЗН в Курганинском районе</li>
+                    <li>УСЗН в Лабинском районе</li>
+                    <li>УСЗН в Мостовском районе</li>
+                    <li>УСЗН в Новокубанском районе</li>
+                    <li>УСЗН в Отрадненском районе</li>
+                    <li>УСЗН в Тбилисском районе</li>
+                    <li>УСЗН в Успенском районе</li>
+                    <li>УСЗН в Усть-Лабинском районе</li>
+                </ul>
+            </ul>
+            <p>Скачивание и установка Катарсиса</p>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">При скачивании в атрибуте команды wget указывать ip своей группы (см. <a href="#list-catharsis-groups">Распределение подразделений по установкам</a>)</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">wget http://192.168.23.58/spclient/SP.Client.application</div>
+                    <div class="cmd cmd-user">WINEPREFIX=~/.catharsis wine SP.Client.application</div>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Если ярлык Катарсиса по каким-либо причинам не создался на рабочем столе, то создаем его руками.</p>
+                </div>
+            </div>
+            <!-- Важно -->
+            <div class="alert alert-important">
+                <div class="alert-content">
+                    <div class="alert-title">Важно</div>
+                    <p class="alert-text">По умолчанию создается ссылка без префикса (<code>Exec=wine...</code>), но т.к. мы указывали префикс catharsis, то надо прописать в env полный путь до префикса (например,  <code>Exec=env WINEPREFIX=/home/admin/.catharsis wine...</code>).</p>
+                    <p class="alert-text">Так же заменить <code>user1</code> на имя своей учетной записи.</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">$ cat > ~/'Рабочий стол'/'ПК Катарсис  Соцзащита группа районов 2.desktop' << 'EOF'</div>
+                    <div class="cmd cmd-serial">[Desktop Entry]</div>
+                    <div class="cmd cmd-serial">Comment=ПК Катарсис: Соцзащита группа районов 2</div>
+                    <div class="cmd cmd-serial"><b>Exec=env WINEPREFIX=/home/<span class="mark">user1</span>/.catharsis</b> wine start "C:\users\<span class="mark">user1</span>\AppData\Roaming\Katharsis\Клиент Катарсис Соцзащита группа районов 2.exe.wine.tmp\ПК Катарсис  Соцзащита группа районов 2.appref-ms"</div>
+                    <div class="cmd cmd-serial">Icon=/home/<span class="mark">user1</span>/.catharsis/dosdevices/c:/users/<span class="mark">user1</span>/AppData/Roaming/Katharsis/Клиент Катарсис Соцзащита группа районов 2.exe.wine.tmp/AppIcon.png</div>
+                    <div class="cmd cmd-serial">Name=ПК Катарсис: Соцзащита группа районов 2</div>
+                    <div class="cmd cmd-serial">StartupNotify=true</div>
+                    <div class="cmd cmd-serial">Terminal=false</div>
+                    <div class="cmd cmd-serial">Type=Application</div>
+                    <div class="cmd cmd-serial">EOF</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="notify-listener">
+            <h1>NotifyListener - уведомление о создании файлов</h1>
+            <h2>Клиентская часть</h2>
+            <p>Клиентская часть notify_listener слушает порт 5555 и выводит сообщения полученные по этому порту</p>
+            <p>Скопируйте notify_listener.py в директорию ~/bin</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">mkdir ~/bin</div>
+                    <div class="cmd cmd-user">cp ~/madalt/dist/MailMonitor/Client/Linux/notify_listener.py ~/bin</div>
+                    <div class="cmd cmd-user">chmod +x ~/bin/notify_listener.py</div>
+                </div>
+            </div>
+            <p>Создать демона для автозапуска</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/systemd/system/notify_listener.service</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Unit]</div>
+                    <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
+                    <div class="vim-line vim-string">After=network.target</div>
+                    <div class="vim-line vim-string">[Service]</div>
+                    <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/<span class="mark">user1</span>/bin/notify_listener.py</div>
+                    <div class="vim-line vim-string">WorkingDirectory=/home/<span class="mark">user1</span>/bin</div>
+                    <div class="vim-line vim-string">User=<span class="mark">user1</span></div>
+                    <div class="vim-line vim-string">Group=<span class="mark">user1</span></div>
+                    <div class="vim-line vim-string">Restart=always</div>
+                    <div class="vim-line vim-string">RestartSec=5</div>
+                    <div class="vim-line vim-string">StandardOutput=journal</div>
+                    <div class="vim-line vim-string">StandardError=journal</div>
+                    <div class="vim-line vim-string">[Install]</div>
+                    <div class="vim-line vim-string">WantedBy=multi-user.target</div>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Замените <code>user1</code> на имя своей учетной записи</p>
+                </div>
+            </div>
+            <p>Активировать и запустить сервис</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">systemctl daemon-reload</div>
+                    <div class="cmd cmd-root">systemctl enable notify_listener.service</div>
+                    <div class="cmd cmd-root">systemctl start notify_listener.service</div>
+                </div>
+            </div>
+            <p>Управление и логи</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Проверить статус:</div>
+                    <div class="cmd cmd-root">systemctl status notify_listener.service</div>
+                    <div class="cmd-comment"># Остановить:</div>
+                    <div class="cmd cmd-root">systemctl stop notify_listener.service</div>
+                    <div class="cmd-comment"># Перезапустить:</div>
+                    <div class="cmd cmd-root">systemctl restart notify_listener.service</div>
+                    <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
+                    <div class="cmd cmd-root">journalctl -u notify_listener.service -f</div>
+                </div>
+            </div>
+            <p>Журнал уведомлений.</p>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Работает только для оболочки XFCE</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get install xfce4-notifyd</div>
+                    <div class="cmd cmd-root">apt-get install xfce4-notification-plugin</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-string">Панель - ПКМ - Добавить новый элемент - Модуль оповещений</div>
+                    <div class="vim-string">Найстройка оповещений - Журналл - Записывать оповещения в журанл - всегда</div>
+                </div>
+            </div>
+            <h2>Серверная часть</h2>
+            <p>Серверная часть: пока реализована только для ОС Windows, данный сервер отслеживает указанные директории и сообщает о их изменения по порту 5555.<br>
+            Находится в <code>dist\MailMonitor\Server\Windows\MailMonitorServer\MailMonitor.exe</code><br>
+            Чтобы запустить его как сервис в ОС Windows, надо в cmd от пользователя администратор выполнить:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">C:\dist\nssm\nssm.exe install C:\distr\MailMonitor\MailMonitor.exe</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">Application:</div>
+                    <div class="vim-line vim-string">    Path: C:\dist\MailMonitor\MailMonitor.exe</div>
+                    <div class="vim-line vim-string">    Startup directory</div>
+                    <div class="vim-line vim-string">Details:</div>
+                    <div class="vim-line vim-string">    Display name: MailMonitorService</div>
+                    <div class="vim-line vim-string">Log on:</div>
+                    <div>    This account: admin1</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">C:\dist\nssm\nssm.exe start MailMonitorService</div>
+                    <div class="cmd cmd-root">C:\dist\nssm\nssm.exe status MailMonitorService</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="lan-chat">
+            <h1>Локальный чат</h1>
+            <!-- Глава -->
+            <section id="lan-messenger">
+                <h2>LAN Messenger</h2>
+                <p>Установка</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install lanmessenger</div>
+                        <div class="cmd cmd-root">exit</div>
+                    </div>
+                </div>
+                <p>Добавьте lan-messenger в атозапуск</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">xfce4-session-settings</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment">Команда:</div>
+                        <div class="config-line">lan-messenger</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Запуск LAN Messenger: win+r <code>lan-messenger</code></p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="drweb">
+            <h1>Dr.Web</h1>
+            <!-- Глава -->
+            <section id="drweb-run">
+                <h2>Установка через пакет</h2>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Если у вас дистрибутив ФСТЭК/ФСБ до устанавливать с поставляемого пакета, а не с репозитория.</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">cd ./dist/DrWeb</div>
+                        <div class="cmd cmd-root">chmod +x drweb-workstations_11.1.4-2307031224+fstek-4ud~linux_amd64.run</div>
+                        <div class="cmd cmd-root">./drweb-workstations_11.1.4-2307031224+fstek-4ud~linux_amd64.run</div>
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">reboot</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Если после установки антивируса команда apt-get update начинает ругаться на дубликат gpg-pubkey, это значит, что после установки Dr.Web в системе появилось два gpg-pubkey, и apt-get будет выдавать предупреждение. Для решения надо добавить разрешение на дублирование gpg ключей.</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/apt/apt.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-comment"># Добавить в</div>
+                        <div class="vim-line vim-string">Allow-Dupliced {</div>
+                        <div class="vim-line vim-string">        «^gpg-pubkey»;</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="drweb-rep">
+                <h2>Установка через репозиторий</h2>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">echo "rpm http://repo.drweb.com/drweb/altlinux 11.1/x86_64 drweb" > /etc/apt/sources.list.d/drweb-apt-rpm-x86_64.list</div>
+                        <div class="cmd cmd-root">apt-get update && apt-get install drweb-workstations</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="drweb-guard">
+                <h2>Настройка исключений для SpIDer Guard</h2>
+                <p>Для снижения нагрузки на ЦП добавьте исключения в сканер реального времени SpIDer Guard:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /tmp</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /var/tmp</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /var/lib/apt</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /var/cache/apt</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /var/log/journal</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a '/home/*/.cache'</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a '/home/*/.talsql'</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /run</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /dev/shm</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /mnt/tal</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /mnt/talsql</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxgui.excludedpath -a /mnt/tal</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxgui.excludedpath -a /mnt/talsql</div>
+                        <div class="cmd-comment"># Проверить настройки исключений</div>
+                        <div class="cmd cmd-root">drweb-ctl cfshow linuxspider.excludedpath</div>
+                        <div class="cmd cmd-root">drweb-ctl cfshow linuxgui.excludedpath</div>
+                        <div class="cmd cmd-root">drweb-ctl cfshow linuxfirewall.excludedproc</div>
+                        <divdiv class="cmd cmd-root">drweb-ctl reload</div>
+                    </div>
+                </div>
+                <!-- Важно -->
+                <div class="alert alert-important">
+                    <div class="alert-content">
+                        <div class="alert-title">Важно</div>
+                        <p class="alert-text">drweb-ctl cfshow linuxspider.excludedpath</p>
+                        <p class="alert-text">drweb-ctl cfshow linuxgui.excludedpath</p>
+                        <p class="alert-text">/proc /sys - должны быть и в исключениях проверки в реальном времени (linuxspider),</p>
+                        <p class="alert-text">и в исключениях проверки при ручном запуске сканирования (linuxgui).</p>
+                        <p class="alert-text">Эти два пути добавлены по умолчание. Если их нет, то добавьти:</p>
+                        <p class="alert-text"><code>drweb-ctl cfset linuxspider.excludedpath -a /proc</code></p>
+                        <p class="alert-text"><code>drweb-ctl cfset linuxgui.excludedpath -a /proc</code></p>
+                        <p class="alert-text"><code>drweb-ctl cfset linuxspider.excludedpath -a /sys</code></p>
+                        <p class="alert-text"><code>drweb-ctl cfset linuxgui.excludedpath -a /sys</code></p>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text"><code>drweb-ctl cfshow linuxfirewall.excludedproc</code></p>
+                        <p class="alert-text">Должно быть</p>
+                        <p class="alert-text">LinuxFirewall.ExcludedProc = /usr/sbin/NetworkManager</p>
+                        <p class="alert-text">Если нет, то добавить:</p>
+                        <p class="alert-text"><code>drweb-ctl cfset linuxfirewall.excludedproc /usr/sbin/NetworkManager</code></p>
+                    </div>
+                </div>
+                <p>Ввести лицензию</p>
+                <!-- Картинка -->
+                <img src="img/drweb/img-drweb-1.png" alt="Dr.Web">
             </section>
         </section>
     </main>
