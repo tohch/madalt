@@ -74,6 +74,7 @@
                     <li><a href="#talisman-sql-setting-share">Настройка сетевых папок</a></li>
                     <li><a href="#talisman-sql-install-talsql">Установка Талисмана SQL</a></li>
                     <li><a href="#designfr">Установка designfr</a></li>
+                    <li><a href="#talisman-sql-bde">Установка BDE</a></li>
                     <li><a href="#talisman-sql-xfce">Проблема: дочерние окна открываются за главным окном</a></li>
                     <li><a href="#talisman-sql-richedit">Проблема: в печатной форме не отображается заголовок</a></li>
                 </ul>
@@ -1590,7 +1591,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine dist/Reinstall_Tal3.1.52.exe</div>
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine ./dist/TalSQL/Reinstall_Tal3.1.52.exe</div>
                     </div>
                 </div>
                 <p>Скопируйте файлы из out в TalSQL и скопируйте библиотеки midas.dll, gds32.dll и fbclient.dll в system32</p>
@@ -1616,7 +1617,13 @@
             </section>
             <section id="designfr">
                 <h2>Установка designfr</h2>
-                <p>Установите designfr, чтобы открывались сохраненные печатные формы</p>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Designfr требуется для того, чтобы открывались сохраненные печатные форма</p>
+                    </div>
+                </div>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1624,16 +1631,33 @@
                         <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine dist/TalSQL/designfr.exe</div>
                     </div>
                 </div>
-                <p>Перезагрузите ПК</p>
             </section>
+            <section id="talisman-sql-bde">
+                <h2>Установка BDE</h2>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">BDE требуется для импорта питания из Талисмана 2.0</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">WINEPREFIX=~/.talsql wine ./dist/TalSQL/bdex64.exe</div>
+                    </div>
+                </div>
+            </section>
+            <p>Перезагрузите ПК</p>
             <section id="talisman-sql-xfce">
                 <h2>Проблема: дочерние окна открываются за главным окном</h2>
                 <p>Проблема наблюдается на MATE 1.26.1
                 _NET_ACTIVE_WINDOW message with a timestamp of 0
-                Приложение пытается активировать своё окно через стандартный X11-протокол, но не передаёт корректный таймстамп (временную метку последнего пользовательского события — клика, нажатия клавиши). По стандарту EWMH таймстамп не может быть 0.
+                Приложение пытается активировать своё окно через стандартный X11-протокол, но не передаёт корректный таймстамп (временную метку последнего пользовательского события - клика, нажатия клавиши). По стандарту EWMH таймстамп не может быть 0.
                 meta_window_activate called by a pager with a 0 timestamp
-                Marco (как и его «родитель» Mutter из GNOME) игнорирует такие запросы — это защита от «фокус-хищений» (когда вредоносное приложение могло бы принудительно перехватывать фокус ввода).
-                Из-за игнорирования запроса активации всплывающее окно (диалог загрузки, файловый менеджер) не поднимается поверх родительского окна — остаётся в фоне.
+                Marco (как и его «родитель» Mutter из GNOME) игнорирует такие запросы - это защита от «фокус-хищений» (когда вредоносное приложение могло бы принудительно перехватывать фокус ввода).
+                Из-за игнорирования запроса активации всплывающее окно (диалог загрузки, файловый менеджер) не поднимается поверх родительского окна - остаётся в фоне.
 
                 Решение:
                 Перейти на другой окружение. Например Xfce4. Или если требуется оставить окружение MATE, то можно установить только оконный менеджер Xfwm4 без установки окружения Xfce4.</p>
@@ -3029,6 +3053,7 @@
                 <div class="alert alert-warning">
                     <div class="alert-content">
                         <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Если требуется именно "Расширение для плагина Госуслуги":</p>
                         <p class="alert-text">Отключить Госплагин, если он установлен!</p>
                         <!-- Картинка -->
                     </div>
