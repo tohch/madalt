@@ -59,6 +59,11 @@
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
             <li><a href="#wine">Wine</a></li>
             <li><a href="#vim">Vim</a></li>
+            <li><a href="#smb">Samba</a>
+                <ul>
+                    <li><a href="#smb-netbios">NetBIOS имена</a></li>
+                </ul>
+            </li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
                     <li><a href="#requir-mout">Монтированние по запросу к сетевому ресурсу</a></li>
@@ -111,6 +116,7 @@
             <li><a href="#assistent">Ассистент</a></li>
             <li><a href="#rms">RMS</a></li>
             <li><a href="#rdp">RDP</a></li>
+            <li><a href="#ssh">ssh - удаленный доступ</a></li>
             <li><a href="#autorun">Автозапуск приложений</a></li>
             <li><a href="#timesnewroman">Установка шрифта TimesNewRoman</a></li>
             <li><a href="#yandexbrowser">Яндекс браузер</a></li>
@@ -1144,6 +1150,8 @@
                 <div class="code-block">
                     <div class="vim-line vim-string"><span class="vim-command">/</span> - поиск вниз</div>
                     <div class="vim-line vim-string"><span class="vim-command">?</span> - поиск вверх</div>
+                    <div class="vim-line vim-string"><span class="vim-command">n</span> - следующее вхождение (в том же направлении)</div>
+                    <div class="vim-line vim-string"><span class="vim-command">N</span> - следующее вхождение (в обратном направлении)</div>
                     <div class="vim-line vim-string"><span class="vim-command">de</span> - Удалить символы с текущего до конца слова, не включая пунктуация</div>
                     <div class="vim-line vim-string"><span class="vim-command">x</span> - удалить символ под курсором</div>
                     <div class="vim-line vim-string"><span class="vim-command">dd</span> - удалить строку</div>
@@ -1175,6 +1183,58 @@
                     <div class="vim-line vim-string"><span class="vim-command">«_dw</span> - удалить от курсора до конца слова без копирования в буфер</div>
                 </div>
             </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="smb">
+            <h1>Samba</h1>
+            <!-- Глава -->
+            <section id="smb-netbios">
+                <h2>NetBIOS имена</h2>
+                <p>Чтобы отображалось netbios имя в сети samba дайте имя в smb.conf "<code>netbios name = adm-1</code>"</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/samba/smb.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">[global]</div>
+                        <div class="vim-line vim-string">        client min protocol = NT1</div>
+                        <div class="vim-line vim-string">        client max protocol = SMB3</div>
+                        <div class="vim-line vim-string">        workgroup = SAMBA</div>
+                        <div class="vim-line vim-string">        <span class="mark">netbios name = mat-3</span></div>
+                        <div class="vim-line vim-string">        security = user</div>
+                        <div class="vim-line vim-string">        passdb backend = tdbsam</div>
+                        <div class="vim-line vim-string">        printing = cups</div>
+                        <div class="vim-line vim-string">        printcap name = cups</div>
+                        <div class="vim-line vim-string">        load printers = yes</div>
+                        <div class="vim-line vim-string">        cups options = raw</div>
+                        <div class="vim-line vim-string">        # Install samba-usershares package for support</div>
+                        <div class="vim-line vim-string">        include = /etc/samba/usershares.conf</div>
+                    </div>
+                </div>
+                <p>После изменений перезапустите службы:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl restart smb nmb</div>
+                        <div class="cmd cmd-root">systemctl enable --now smb nmb</div>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <!-- Глава -->
@@ -2832,6 +2892,43 @@
                 <div class="code-block">
                     <div class="cmd cmd-root">apt-get update</div>
                     <div class="cmd cmd-root">apt-get install remmina</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="ssh">
+            <h1>ssh - удаленный доступ</h1>
+            <p>SSH (Secure SHell - защищенная оболочка) — сетевой протокол прикладного уровня, предназначенный для безопасного удаленного доступа к UNIX-системам.</p>
+            <p>Установка сервера ssh</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># 1. Обновить список пакетов</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd-comment"># 2. Установить ГОСТ-версию OpenSSH (рекомендуется для госучреждений)</div>
+                    <div class="cmd cmd-root">apt-get install openssh-server-gostcrypto</div>
+                    <div class="cmd-comment"># 3. Включить и запустить службу</div>
+                    <div class="cmd cmd-root">systemctl enable sshd</div>
+                    <div class="cmd cmd-root">systemctl start sshd</div>
+                    <div class="cmd-comment"># 4. Проверить статус</div>
+                    <div class="cmd cmd-root">systemctl status sshd</div>
+                </div>
+            </div>
+            <p>Подключение по ssh. Удаленный пользователь должен входить в группу wheel и это не должен быть root.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">ssh -X user@192.168.50.199</div>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Атрибут -X нужен для запуска графических интерфейсов.</p>
                 </div>
             </div>
         </section>
