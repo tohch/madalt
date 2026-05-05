@@ -2977,12 +2977,54 @@
             <!-- Глава -->
             <section id="gosuslugi-gosplagin">
                 <h2>Госплагин</h2>
-                
+                <!-- Внимание -->
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Использовать только один плагин: <a href="#gosuslugi-gosplagin">Госплагин</a> или <a href="#gosuslugi-plagin-gosuslugi">Расширение для плагина Госуслуг</a>.</p>
+                        <p class="alert-text">Рекомендуется использовать <a href="#gosuslugi-gosplagin">Госплагин</a>!</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <p>Установите Госплагин</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Скачать Госплагин</div>
+                        <div class="cmd cmd-root">wget https://gu-st.ru/content/Gosplugin/Gosplugin_Alt-RedOS_Installer.rpm.zip</div>
+                        <div class="cmd-comment"># Разархивировать</div>
+                        <div class="cmd cmd-root">unzip Gosplugin_Alt-RedOS_Installer.rpm.zip</div>
+                        <div class="cmd-comment"># Сделать исполняемым</div>
+                        <div class="cmd cmd-root">chmod +x Gosplugin_Alt-RedOS_Installer.rpm.sh</div>
+                        <div class="cmd-comment"># Запустить скрипт</div>
+                        <div class="cmd cmd-root">./Gosplugin_Alt-RedOS_Installer.rpm.sh</div>
+                    </div>
+                </div>
+                <p>Установите расширение Госплагин для браузера:<br>
+                <a href="https://chromewebstore.google.com/detail/госплагин/jabjbhgjaidecageckilhonbggakppme?hl=ru">- Chromium-Gost или Яндекс Браузер</a><br>
+                <a href="https://addons.mozilla.org/ru/firefox/addon/%D0%B3%D0%BE%D1%81%D0%BF%D0%BB%D0%B0%D0%B3%D0%B8%D0%BD/">- FireFox</a></p>
+                <!-- Картинка -->
+                <img src="img/gosuslugi/img-gosuslugi-5.png" alt="Госплагин">
             </section>
             <!-- Глава -->
             <section id="gosuslugi-plagin-gosuslugi">
                 <h2>Расширение для плагина Госуслуги</h2>
                 <a href="https://dev.rutoken.ru/pages/viewpage.action?pageId=78479384">Источник</a>
+                <!-- Важно -->
+                <div class="alert alert-important">
+                    <div class="alert-content">
+                        <div class="alert-title">Важно</div>
+                        <p class="alert-text">"Расширение для плагина Госуслуги" Устарело!</p>
+                        <p class="alert-text">Используйте <a href="#gosuslugi-gosplagin">Госплагин</a>.</p>
+                    </div>
+                </div>
                 <!-- Внимание -->
                 <div class="alert alert-warning">
                     <div class="alert-content">
