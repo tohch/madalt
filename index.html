@@ -53,8 +53,12 @@
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#repo">Управление репозиториями</a></li>
             <li><a href="#rules">Права</a></li>
-            <li><a href="#sytemd">Система инициализации</a></li>
-            <li><a href="#daemon">Создание демона</a></li>
+            <li><a href="#sytemd">Система инициализации</a>
+                <ul>
+                    <li><a href="#systemd-info">systemd</a></li>
+                    <li><a href="#daemon">Создание демона</a></li>
+                </ul>
+            </li>
             <li><a href="#rpm">rpm - управление пакетами</a></li>
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
             <li><a href="#wine">Wine</a></li>
@@ -464,9 +468,9 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">apt-repo</div>
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get dist-upgrade</div>
+                    <div class="cmd cmd-root">apt-repo && \</div>
+                    <div class="cmd cmd-root">apt-get update && \</div>
+                    <div class="cmd cmd-root">apt-get dist-upgrade && \</div>
                     <div class="cmd cmd-root">apt-get clean</div>
                 </div>
             </div>
@@ -530,14 +534,21 @@
                     <div class="cmd cmd-root">mv /etc/osec/{integalert,integalert_fix,alterator-pipe.conf,run-osec,pipe.conf} /root/integalert.old/</div>
                 </div>
             </div>
-            <p>Обновите индексы для нового источника и систему, затем обновите ядро и перезагрузитесь. Убедиться, что ядро обновилось выполнив <code>uname -r</code> до <code>update-kernel</code> и после <code>reboot</code></p>
+            <p>Обновите индексы для нового источника и систему, затем обновите ядро. Убедиться, что ядро обновилось выполнив <code>uname -r</code> до <code>update-kernel</code> и после <code>reboot</code></p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get dist-upgrade</div>
+                    <div class="cmd cmd-root">apt-get update && \</div>
+                    <div class="cmd cmd-root">apt-get dist-upgrade && \</div>
                     <div class="cmd cmd-root">update-kernel</div>
+                </div>
+            </div>
+            <p>Перезагрузитесь</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">reboot</div>
                 </div>
             </div>
@@ -574,6 +585,12 @@
                     <div class="cmd cmd-root">update-kernel -l</div>
                     <div class="cmd-comment"># * (21 d) kernel-image-6.12-6.12.65-alt0.c10f.2</div>
                     <div class="cmd cmd-root">update-kernel -t 6.12</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">reboot</div>
                 </div>
             </div>
@@ -644,9 +661,9 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install theme-mate-windows</div>
-                    <div class="cmd cmd-root">reboot</div>
+                    <div class="cmd cmd-root">apt-get update && \</div>
+                    <div class="cmd cmd-root">apt-get install -y theme-mate-windows && \</div>
+                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
             <!-- Внимание -->
@@ -669,7 +686,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">apt-get install gtk-theme-windows-10</div>
+                    <div class="cmd cmd-root">apt-get install -y gtk-theme-windows-10</div>
                     <div class="cmd-comment"># И после этого выбрать ее в темах оформления</div>
                 </div>
             </div>
@@ -698,18 +715,30 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">apt-get install xfce4-full</div>
-                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
-            <p>Выберите сессию Xfce при входе: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
+            <p>Выйдите из сессии и при входе выберите сессию Xfce: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
             <img src="img/xfce4/img-xfce4-1.png" alt="Выберете сессию XFCE">
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Выход из текущей сессии mate</div>
+                    <div class="cmd cmd-root">mate-session-logout --logout</div>
+                </div>
+            </div>
             <p>Отключить звуковой сигнал встроенного динамика. Работает до перезагрузки. Чтобы работало постоянно, надо добавить в автозапуск (Сеансы и запуск) команду xset b off.</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">xfce4-session-settings</div>
-                    <div class="cmd cmd-user">xset b off</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="config-line">xset b off</div>
                 </div>
             </div>
             <img src="img/xfce4/img-xfce4-2.png" alt="Отключить звуковой сигнал">
@@ -863,8 +892,8 @@
         <!-- Глава -->
         <section id="sytemd">
             <h1>Система инициализации</h1>
+            <h2 id="systemd-info">systemd</h2>
             <p>Службы = Юнит</p>
-            <p>systemd</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -970,73 +999,72 @@
                     <div class="cmd cmd-root">chkconfig cups --add</div>
                 </div>
             </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="daemon">
-            <h1>Создание демона</h1>
-            <p>Создать файл сервис systemd</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">sudo vim /etc/systemd/system/notify_listener.service</div>
+            <!-- Глава -->
+            <section id="daemon">
+                <h2>Создание демона</h2>
+                <p>Создать файл сервис systemd</p>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">sudo vim /etc/systemd/system/notify_listener.service</div>
+                    </div>
                 </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">[Unit]</div>
-                    <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
-                    <div class="vim-line vim-string">After=network.target</div>
-                    <div class="vim-line vim-string">[Service]</div>
-                    <div class="vim-comment"># Путь к интерпретатору Python (или к виртуальному окружению)</div>
-                    <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/admin/bin/notify_listener.py</div>
-                    <div class="vim-comment"># Рабочая директория скрипта</div>
-                    <div class="vim-line vim-string">WorkingDirectory=/home/admin/bin</div>
-                    <div class="vim-comment"># Пользователь, от имени которого запускается (не рекомендуется root без нужды)</div>
-                    <div class="vim-line vim-string">User=admin</div>
-                    <div class="vim-line vim-string">Group=admin</div>
-                    <div class="vim-comment"># Автоматический перезапуск при падении</div>
-                    <div class="vim-line vim-string">Restart=always</div>
-                    <div class="vim-comment"># Ждать 5 секунд перед перезапуском</div>
-                    <div class="vim-line vim-string">RestartSec=5</div>
-                    <div class="vim-comment"># Стандартный вывод и ошибки писать в журнал systemd</div>
-                    <div class="vim-line vim-string">StandardOutput=journal</div>
-                    <div class="vim-line vim-string">StandardError=journal</div>
-                    <div class="vim-line vim-string">[Install]</div>
-                    <div class="vim-line vim-string">WantedBy=multi-user.target</div>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">[Unit]</div>
+                        <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
+                        <div class="vim-line vim-string">After=network.target</div>
+                        <div class="vim-line vim-string">[Service]</div>
+                        <div class="vim-comment"># Путь к интерпретатору Python (или к виртуальному окружению)</div>
+                        <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/admin/bin/notify_listener.py</div>
+                        <div class="vim-comment"># Рабочая директория скрипта</div>
+                        <div class="vim-line vim-string">WorkingDirectory=/home/admin/bin</div>
+                        <div class="vim-comment"># Пользователь, от имени которого запускается (не рекомендуется root без нужды)</div>
+                        <div class="vim-line vim-string">User=admin</div>
+                        <div class="vim-line vim-string">Group=admin</div>
+                        <div class="vim-comment"># Автоматический перезапуск при падении</div>
+                        <div class="vim-line vim-string">Restart=always</div>
+                        <div class="vim-comment"># Ждать 5 секунд перед перезапуском</div>
+                        <div class="vim-line vim-string">RestartSec=5</div>
+                        <div class="vim-comment"># Стандартный вывод и ошибки писать в журнал systemd</div>
+                        <div class="vim-line vim-string">StandardOutput=journal</div>
+                        <div class="vim-line vim-string">StandardError=journal</div>
+                        <div class="vim-line vim-string">[Install]</div>
+                        <div class="vim-line vim-string">WantedBy=multi-user.target</div>
+                    </div>
                 </div>
-            </div>
-            <p>Активировать и запустить сервис</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Перезагрузите конфигурацию systemd, чтобы он увидел новый файл:</div>
-                    <div class="cmd cmd-user">sudo systemctl daemon-reload</div>
-                    <div class="cmd-comment"># Включите автозагрузку при старте системы:</div>
-                    <div class="cmd cmd-user">sudo systemctl enable notify_listener.service</div>
-                    <div class="cmd-comment"># Запустите сервис прямо сейчас:</div>
-                    <div class="cmd cmd-user">sudo systemctl start notify_listener.service</div>
+                <p>Активировать и запустить сервис</p>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Перезагрузите конфигурацию systemd, чтобы он увидел новый файл:</div>
+                        <div class="cmd cmd-user">sudo systemctl daemon-reload</div>
+                        <div class="cmd-comment"># Включите автозагрузку при старте системы:</div>
+                        <div class="cmd cmd-user">sudo systemctl enable notify_listener.service</div>
+                        <div class="cmd-comment"># Запустите сервис прямо сейчас:</div>
+                        <div class="cmd cmd-user">sudo systemctl start notify_listener.service</div>
+                    </div>
                 </div>
-            </div>
-            <p>Управление и логи</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Проверить статус:</div>
-                    <div class="cmd cmd-user">sudo systemctl status notify_listener.service</div>
-                    <div class="cmd-comment"># Остановить:</div>
-                    <div class="cmd cmd-user">sudo systemctl stop notify_listener.service</div>
-                    <div class="cmd-comment"># Перезапустить:</div>
-                    <div class="cmd cmd-user">sudo systemctl restart notify_listener.service</div>
-                    <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
-                    <div class="cmd cmd-user">sudo journalctl -u notify_listener.service -f</div>
+                <p>Управление и логи</p>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Проверить статус:</div>
+                        <div class="cmd cmd-user">sudo systemctl status notify_listener.service</div>
+                        <div class="cmd-comment"># Остановить:</div>
+                        <div class="cmd cmd-user">sudo systemctl stop notify_listener.service</div>
+                        <div class="cmd-comment"># Перезапустить:</div>
+                        <div class="cmd cmd-user">sudo systemctl restart notify_listener.service</div>
+                        <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
+                        <div class="cmd cmd-user">sudo journalctl -u notify_listener.service -f</div>
+                    </div>
                 </div>
-            </div>
+            </section>
         </section>
 
         <!-- Глава -->
@@ -1107,18 +1135,26 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install i586-wine</div>
-                    <div class="cmd cmd-root">apt-get install winetricks</div>
-                    <div class="cmd cmd-root">apt-get install wine-mono-8.1.0</div>
+                    <div class="cmd cmd-root">apt-get update && \</div>
+                    <div class="cmd cmd-root">apt-get install i586-wine && \</div>
+                    <div class="cmd cmd-root">apt-get install winetricks && \</div>
+                    <div class="cmd cmd-root">apt-get install wine-mono-8.1.0 && \</div>
                     <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
+            <p>Создание префикса</p>
             <!-- Команда -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">wineboot</div>
+                </div>
+            </div>
+            <p>Установка дополнительных компонентов</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
                     <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
                     <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
@@ -1131,7 +1167,7 @@
             <div class="alert alert-warning">
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
-                    <p class="alert-text">В самом wine не работать под root, только под пользователем/</p>
+                    <p class="alert-text">В самом wine не работать под root, только под пользователем!</p>
                 </div>
             </div>
             <!-- Команды -->
@@ -1502,14 +1538,14 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">apt-get update</div>
-                        <div class="cmd cmd-root">apt-get install i586-wine</div>
-                        <div class="cmd cmd-root">apt-get install winetricks</div>
-                        <div class="cmd cmd-root">apt-get install wine-mono-8.1.0</div>
+                        <div class="cmd cmd-root">apt-get update && \</div>
+                        <div class="cmd cmd-root">apt-get install i586-wine && \</div>
+                        <div class="cmd cmd-root">apt-get install winetricks && \</div>
+                        <div class="cmd cmd-root">apt-get install wine-mono-8.1.0 && \</div>
                         <div class="cmd cmd-root">exit</div>
                     </div>
                 </div>
-                <p>Создайте префикс и установите дополнительные компоненты</p>
+                <p>Создайте префикс</p>
                 <!-- Внимание -->
                 <div class="alert alert-warning">
                     <div class="alert-content">
@@ -1522,6 +1558,13 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">WINEPREFIX=~/.talsql WINEARCH=win32 wineboot</div>
+                    </div>
+                </div>
+                <p>Установите дополнительные компоненты</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
                         <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
                         <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
                         <div class="cmd cmd-serial">vcrun2012 vcrun2013 win2k8 glsl=disabled ddr=gdi; do</div>
@@ -1590,11 +1633,15 @@
                         <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,nofail 0 0</div>
                     </div>
                 </div>
+                <p>Активируйте автомонтирования (можно просто сделать <code>reboot</code>)</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">reboot</div>
+                        <div class="cmd cmd-root">systemctl daemon-reload</div>
+                        <div class="cmd cmd-root">systemctl start mnt-talsql-strah.automount</div>
+                        <div class="cmd cmd-root">systemctl start mnt-talsql-out.automount</div>
+                        <div class="cmd cmd-root">systemctl start mnt-talsql-pochta.automount</div>
                     </div>
                 </div>
                 <p>Дайте сетевой доступ через Wine. Для этого создайте папки в <code>~/.talsql/dosdevices/unc</code> согласно сетевым путям.</p>
@@ -1624,9 +1671,9 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">cd ~/.talsql/drive_c/Talisman_SQL/Acenter/TalSQL/</div>
+                        <div class="cmd cmd-user">cd ~/.talsql/drive_c/Talisman_SQL/ACenter/TalSQL/</div>
                         <div class="cmd cmd-user">yes | cp -rf /mnt/talsql/out/* ./</div>
-                        <div class="cmd cmd-user">cp -iv midas.dll gds32.dll fbclient.dll ~/.talsql/drive_c/windows/system32/</div>
+                        <div class="cmd cmd-user">yes | cp -fv midas.dll gds32.dll fbclient.dll ~/.talsql/drive_c/windows/system32/</div>
                     </div>
                 </div>
                 <p>Если ПК не сервер, то можно удалить Firebird</p>
@@ -1701,9 +1748,17 @@
                         <div class="cmd cmd-root">apt-get install xfce4-full</div>
                     </div>
                 </div>
-                <p>Выберите сессию XFCE при входе: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
+                <p>Выйдите из сессии mate и выберите сессию XFCE при входе: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
                 <!-- Картинка -->
                 <img src="img/xfce4/img-xfce4-1.png" alt="Сессия Xfce">
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Выход из текущей сессии mate</div>
+                        <div class="cmd cmd-root">mate-session-logout --logout</div>
+                    </div>
+                </div>
                 <p>Вариант 2. Установка только оконного менеджера Xfwm4</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
@@ -1804,12 +1859,12 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">apt-get update</div>
-                        <div class="cmd cmd-root">apt-cache search wine</div>
-                        <div class="cmd cmd-root">apt-get install i586-wine</div>
-                        <div class="cmd cmd-root">apt-cache search wine</div>
-                        <div class="cmd cmd-root">apt-get install winetricks</div>
-                        <div class="cmd cmd-root">apt-get install wine-mono-8.1.0</div>
+                        <div class="cmd cmd-root">apt-get update && \</div>
+                        <div class="cmd cmd-root">apt-cache search wine && \</div>
+                        <div class="cmd cmd-root">apt-get install i586-wine && \</div>
+                        <div class="cmd cmd-root">apt-cache search wine && \</div>
+                        <div class="cmd cmd-root">apt-get install winetricks && \</div>
+                        <div class="cmd cmd-root">apt-get install wine-mono-8.1.0 && \</div>
                         <div class="cmd cmd-root">exit</div>
                     </div>
                 </div>
@@ -1817,8 +1872,8 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">WINEPREFIX=~/.tal WINEARCH=win32  winetricks -q winxp dotnet452</div>
-                        <div class="cmd cmd-user">mkdir ~/.tal/drive_c/tal_local</div>
+                        <div class="cmd cmd-user">WINEPREFIX=~/.tal WINEARCH=win32  winetricks -q winxp dotnet452 && \</div>
+                        <div class="cmd cmd-user">mkdir ~/.tal/drive_c/tal_local && \</div>
                         <div class="cmd cmd-user">WINEPREFIX=~/.tal wine ~/altlinux/dist/InstallBDE.exe</div>
                         <div class="cmd-comment"># Копировать базы в tal_local</div>
                     </div>
@@ -1837,12 +1892,12 @@
                     <div class="code-block">
                         <div class="vim-line vim-string">[Desktop Entry]</div>
                         <div class="vim-line vim-string">Name=BDEADMIN</div>
-                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/user/.tal" wine "C:\\Program Files\\Borland\\Common Files\\BDE\\BDEADMIN.EXE" ""</div>
+                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user</span>/.tal" wine "C:\\Program Files\\Borland\\Common Files\\BDE\\BDEADMIN.EXE" ""</div>
                         <div class="vim-line vim-string">Type=Application</div>
                         <div class="vim-line vim-string">StartupNotify=true</div>
-                        <div class="vim-line vim-string">Icon=/home/user/.tal/drive_c/5dll/bdeadmin.ico</div>
+                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user</span>/.tal/drive_c/5dll/bdeadmin.ico</div>
                         <div class="vim-line vim-string">StartupWMClass=BDEADMIN.EXE</div>
-                        <div class="vim-line vim-string">Path=/home/user/.tal/drive_c/Program Files/Borland/Common Files/BDE</div>
+                        <div class="vim-line vim-string">Path=/home/<span class="mark">user</span>/.tal/drive_c/Program Files/Borland/Common Files/BDE</div>
                     </div>
                 </div>
                 <!-- Команды -->
@@ -1859,12 +1914,12 @@
                     <div class="code-block">
                         <div class="vim-line vim-string">[Desktop Entry]</div>
                         <div class="vim-line vim-string">Name=Талисман 2.0</div>
-                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/user/.tal" wine "C:\\5dll\\tal2005.exe" ""</div>
+                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user</span>/.tal" wine "C:\\5dll\\tal2005.exe" ""</div>
                         <div class="vim-line vim-string">Type=Application</div>
                         <div class="vim-line vim-string">StartupNotify=true</div>
-                        <div class="vim-line vim-string">Icon=/home/user/.tal/drive_c/5dll/tal2005.ico</div>
+                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user</span>/.tal/drive_c/5dll/tal2005.ico</div>
                         <div class="vim-line vim-string">StartupWMClass=tal2005.exe</div>
-                        <div class="vim-line vim-string">Path=/home/user/.tal/drive_c/5dll</div>
+                        <div class="vim-line vim-string">Path=/home/<span class="mark">user</span>/.tal/drive_c/5dll</div>
                     </div>
                 </div>
                 <!-- Команды -->
@@ -3876,6 +3931,8 @@
                         <div class="cmd cmd-root">drweb-ctl cfset linuxspider.excludedpath -a /mnt/talsql</div>
                         <div class="cmd cmd-root">drweb-ctl cfset linuxgui.excludedpath -a /mnt/tal</div>
                         <div class="cmd cmd-root">drweb-ctl cfset linuxgui.excludedpath -a /mnt/talsql</div>
+                        <div class="cmd-comment"># Добавить в исключение lan-messenger</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxfirewall.excludedproc -a /usr/bin/lan-messenger</div>
                         <div class="cmd-comment"># Проверить настройки исключений</div>
                         <div class="cmd cmd-root">drweb-ctl cfshow linuxspider.excludedpath</div>
                         <div class="cmd cmd-root">drweb-ctl cfshow linuxgui.excludedpath</div>
@@ -3906,7 +3963,7 @@
                         <p class="alert-text">Должно быть</p>
                         <p class="alert-text">LinuxFirewall.ExcludedProc = /usr/sbin/NetworkManager</p>
                         <p class="alert-text">Если нет, то добавить:</p>
-                        <p class="alert-text"><code>drweb-ctl cfset linuxfirewall.excludedproc /usr/sbin/NetworkManager</code></p>
+                        <p class="alert-text"><code>drweb-ctl cfset linuxfirewall.excludedproc -a /usr/sbin/NetworkManager</code></p>
                     </div>
                 </div>
                 <p>Ввести лицензию</p>
