@@ -891,7 +891,9 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">apt-get install xfce4-full</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y xfce4-full && \</div>
+                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
             <p>Выйдите из сессии и при входе выберите сессию Xfce: на экране входа в систему (где вы вводите пароль) найдите значок шестеренки или меню сессий (обычно в углу экрана), нажмите на него и выберите «Сеанс Xfce».</p>
@@ -901,9 +903,28 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Выход из текущей сессии mate</div>
-                    <div class="cmd cmd-root">mate-session-logout --logout</div>
+                    <div class="cmd cmd-user">mate-session-save --logout</div>
                 </div>
             </div>
+            <p>Настройка темы</p>
+            <p>Поставить Светлую тему</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Тема интерфейса (GTK)</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "Greybird" --create</div>
+                    <div class="cmd-comment"># Тема иконок</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/IconThemeName -t string -s "Papirus-Light" --create</div>
+                    <div class="cmd-comment"># Тема заголовков окон (xfwm4)</div>
+                    <div class="cmd cmd-user">xfconf-query -c xfwm4 -p /general/theme -t string -s "Greybird" --create</div>
+                    <div class="cmd-comment"># Тема курсора</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Gtk/CursorThemeName -t string -s "jimmac" --create</div>
+                    <div class="cmd-comment"># Профиль панели</div>
+                    <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/openSUSE Leap 15.x.tar.bz2"</div>
+                </div>
+            </div>
+            <p>Поставить Темную тема</p>
             <p>Отключить звуковой сигнал встроенного динамика. Работает до перезагрузки. Чтобы работало постоянно, надо добавить в автозапуск (Сеансы и запуск) команду xset b off.</p>
             <!-- Команды -->
             <div class="code-wrapper">
