@@ -129,7 +129,7 @@ th, td {
 th {
     /* Дополнительно можно выделить фон заголовков */
     background-color: var(--bg-code);
-    font-weight: normal;
+    font-weight: bold;
 }
 
 /* =========================================
