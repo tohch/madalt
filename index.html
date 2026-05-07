@@ -51,17 +51,6 @@
             <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
             <li><a href="#xfce4">Окружение Xfce4</a></li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
-            <li><a href="#repo">Управление репозиториями</a></li>
-            <li><a href="#rules">Права</a></li>
-            <li><a href="#sytemd">Система инициализации</a>
-                <ul>
-                    <li><a href="#systemd-info">systemd</a></li>
-                    <li><a href="#daemon">Создание демона</a></li>
-                </ul>
-            </li>
-            <li><a href="#rpm">rpm - управление пакетами</a></li>
-            <li><a href="#apt-get">apt-get - управление пакетами</a></li>
-            <li><a href="#wine">Wine</a></li>
             <li><a href="#vim">Vim</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
@@ -98,7 +87,6 @@
             <li><a href="#scan">Сканер</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
             <li><a href="#msoffice2007">Microsoft Office 2007</a></li>
-            <li><a href="#sh">Создание sh скриптов</a></li>
             <li><a href="#cryptopro5">КриптоПро 5.0</a>
                 <ul>
                     <li><a href="#cryptopro5-install">Установка КриптоПро 5.0</a></li>
@@ -109,14 +97,14 @@
             </li>
             <li><a href="#sudo">sudo</a></li>
             <li><a href="#format-flash">Форматирование флешки</a></li>
-            <li><a href="#tar-get-os">Создание образа системы Альт Линукс</a></li>
-            <li><a href="#tar-set-os-legacy">Восстановление системы Альт Линукс из образа (Legacy(BIOS))</a></li>
-            <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
-            <li><a href="#assistent">Ассистент</a></li>
-            <li><a href="#rms">RMS</a></li>
-            <li><a href="#rdp">RDP</a></li>
-            <li><a href="#ssh">ssh - удаленный доступ</a></li>
-            <li><a href="#autorun">Автозапуск приложений</a></li>
+            <li><a href="#remote-access">Удаленный доступ</a>
+                <ul>
+                    <li><a href="#assistent">Ассистент</a></li>
+                    <li><a href="#rdp">RDP</a></li>
+                    <li><a href="#ssh">ssh</a></li>
+                    <li><a href="#rms">RMS</a></li>
+                </ul>
+            </li>
             <li><a href="#timesnewroman">Установка шрифта TimesNewRoman</a></li>
             <li><a href="#yandexbrowser">Яндекс браузер</a></li>
             <li><a href="#chromium">Chromium-Gost</a>
@@ -133,11 +121,15 @@
                     <li><a href="#gosuslugi-plagin-gosuslugi">Расширение для плагина Госуслуги</a></li>
                 </ul>
             </li>
-            <li><a href="#virtualbox">VirtualBox</a></li>
-            <li><a href="#kvm">KVM</a>
+            <li><a href="#virtual">Виртуализация</a>
                 <ul>
-                    <li><a href="#kvm-install">Установка</a></li>
-                    <li><a href="#kvm-share">Настройка общей папки между хостом и гостевой ВМ</a></li>
+                    <li><a href="#kvm">KVM</a>
+                        <ul>
+                            <li><a href="#kvm-install">Установка</a></li>
+                            <li><a href="#kvm-share">Настройка общей папки между хостом и гостевой ВМ</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#virtualbox">VirtualBox</a></li>
                 </ul>
             </li>
             <li><a href="#bridge">Сетевой мост</a></li>
@@ -155,6 +147,26 @@
                     <li><a href="#drweb-guard">Настройка исключений для SpIDer Guard</a></li>
                 </ul>
             </li>
+            <li><a href="#clone">Клонирование</a>
+                <ul>
+                    <li><a href="#tar-get-os">Создание образа системы Альт Линукс</a></li>
+                    <li><a href="#tar-set-os-legacy">Восстановление системы Альт Линукс из образа (Legacy(BIOS))</a></li>
+                    <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
+                </ul>
+            </li>
+            <li><a href="#repo">Управление репозиториями</a></li>
+            <li><a href="#rules">Права</a></li>
+            <li><a href="#sh">Создание sh скриптов</a></li>
+            <li><a href="#sytemd">Система инициализации</a>
+                <ul>
+                    <li><a href="#systemd-info">systemd</a></li>
+                    <li><a href="#daemon">Создание демона</a></li>
+                </ul>
+            </li>
+            <li><a href="#rpm">rpm - управление пакетами</a></li>
+            <li><a href="#apt-get">apt-get - управление пакетами</a></li>
+            <li><a href="#wine">Wine</a></li>
+            <li><a href="#autorun">Автозапуск приложений</a></li>
         </ul>
     </nav>
 
@@ -754,441 +766,6 @@
                 <div class="code-block">
                     <div class="cmd cmd-user">xfce4-session-settings</div>
                     <div><span class="config-value">Приложения - Настройки - Сеансы и запуск - Kerberos Ticket Watcher (отключить)</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="repo">
-            <h1>Управление репозиториями</h1>
-            <p>Удаление репозитория</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Посмотреть список подключенных репозиториев</div>
-                    <div class="cmd cmd-root">apt-repo list</div>
-                    <div class="cmd-comment"># Удалить репозиторий</div>
-                    <div class="cmd cmd-root">apt-repo rm <имя_репозитория></div>
-                    <div class="cmd-comment"># Ручное удаление репозитория</div>
-                    <div class="cmd cmd-root">ls /etc/apt/sources.list.d/</div>
-                    <div class="cmd cmd-root">rm /etc/apt/sources.list.d/имя_файла_list</div>
-                    <div class="cmd-comment"># Проверка основного файла источников</div>
-                    <div class="cmd cmd-root">vim /etc/apt/sources.list</div>
-                </div>
-            </div>
-            <p>Установка репозитория</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-repo list</div>
-                    <div class="cmd cmd-root">apt-repo add <имя_профиля></div>
-                    <div class="cmd-comment"># Ручная установка репозитория</div>
-                    <div class="cmd cmd-root">vim /etc/apt/sources.list.d/myrepo.list</div>
-                    <div class="config-line"><span class="config-value">rpm http://example.com/rop/p10/ x86_64-classic</span></div>
-                    <div class="cmd cmd-root">rpm --import http://example.com/keys/RPM-GPG-KEY-example</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="rules">
-            <h1>Права</h1>
-            <p>Форма записи</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">ls -la</div>
-                    <div class="cmd-comment"># - rw- r-- r--</div>
-                    <div><span class="config-value">1) - файл, d - директория, l - ссылка</span></div>
-                    <div><span class="config-value">2) rw- права для владельца</span></div>
-                    <div><span class="config-value">3) r-- права для группы владельца</span></div>
-                    <div><span class="config-value">4) r-- права для всех остальных</span></div>          
-                </div>
-            </div>
-            <p>chmod ugo</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># дать права всем</div>
-                    <div class="cmd cmd-user">chmod ugo=rwx test</div>
-                    <div class="cmd-comment"># дать права пользователю (user), группе (group), другим (other)</div>
-                    <div class="cmd cmd-user">chmod u=rws,g=r+r,o= test</div>
-                    <div class="cmd-comment"># убрать права (кроме root)</div>
-                    <div class="cmd cmd-user">chmod ugo= test</div>     
-                </div>
-            </div>
-            <p>chmod цифры</p>
-            <table>
-                <tr>
-                    <th>Символы</th>
-                    <td>rwx</td>
-                    <td>rw-</td>
-                    <td>r-x</td>
-                    <td>r--</td>
-                    <td>-wx</td>
-                    <td>-w-</td>
-                    <td>--x</td>
-                    <td>---</td>
-                </tr>
-                <tr>
-                    <th>Цифры</th>
-                    <td>7</td>
-                    <td>6</td>
-                    <td>5</td>
-                    <td>4</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                </tr>
-            </table>
-            <p>Дать права на директорию без вложений</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">chmod 0750 test</div>
-                    <div class="cmd cmd-user">ls -la</div>
-                    <div><span class="config-value">-rwxr-x--- test</span></div>
-                    <div><span class="config-value">1) - файл</span></div>
-                    <div><span class="config-value">2) rwx 7 права для владельца</span></div>
-                    <div><span class="config-value">3) r-x 5 права для группы владельца</span></div>
-                    <div><span class="config-value">4) --- 0 права для всех остальных</span></div>          
-                </div>
-            </div>
-            <p>Дать права директории и вложениям</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">chmod -R 0777 osec_old</div>         
-                </div>
-            </div>
-            <p>Изменение владельца</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># изменить владельца и группу владельца</div>
-                    <div class="cmd cmd-user">chown globonet:globonet dirs.conf</div>
-                    <div class="cmd-comment"># пользователь:группа директория</div>
-                    <div class="cmd-comment"># изменить только группу</div>
-                    <div class="cmd cmd-user">chown :root dirs.conf</div>       
-                </div>
-            </div>
-        </section>
-        
-        <!-- Глава -->
-        <section id="sytemd">
-            <h1>Система инициализации</h1>
-            <h2 id="systemd-info">systemd</h2>
-            <p>Службы = Юнит</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># показать службы</div>
-                    <div class="cmd cmd-root">systemctl</div>
-                    <div class="cmd-comment"># старт службы</div>
-                    <div class="cmd cmd-root">systemctl start cups.service</div>
-                    <div class="cmd-comment"># варианты:</div>
-                    <div class="cmd-comment">#start,stop,restart,status</div>
-                    <div class="cmd-comment"># включить при перезагрузки ОС</div>
-                    <div class="cmd cmd-root">systemctl enable cups</div>
-                    <div class="cmd-comment"># выключить</div>
-                    <div class="cmd cmd-root">systemctl disable cups</div>         
-                </div>
-            </div>
-            <p>Юниты хранятся:</p>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">cd /lib/systemd/system</div>
-                    <div class="cmd cmd-root">cd /usr/lib/systemd/system</div>
-                    <div class="cmd cmd-root">cd /run/systemd/system</div>
-                    <div class="cmd cmd-root">cd /etc/systemd/system</div>
-                </div>
-            </div>
-            <p>Заново прочитать все конфигурации юнитов</p>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">system daemon-reload</div>
-                </div>
-            </div>
-            <p>Примерное описание конфигурации unit</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">cat /etc/systemd/system/dbus-org.bluez.service</div>
-                </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">[Unit]</div>
-                    <div class="vim-line vim-string">Description=Bluetooth service #описание</div>
-                    <div class="vim-line vim-string">Wants = #зависимость запуска</div>
-                    <div class="vim-line vim-string">After = #зависимость порядка запуска, запустить только после указанных юнитов</div>
-                    <div class="vim-line vim-string">Before = #запустить перед</div>
-                    <div class="vim-line vim-string">[Install]</div>
-                    <div class="vim-line vim-string">#команды для systemd</div>
-                    <div class="vim-line vim-string">Alias=dbus-org.bluez.service #псевдоним</div>
-                </div>
-            </div>
-            <p>Создание собственного юнита</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">touch /etc/systemd/system/ping.service</div>
-                    <div class="cmd cmd-root">vim /etc/systemd/system/ping.service</div>
-                </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">[Unit]</div>
-                    <div class="vim-line vim-string">Description = Ping Utilis Tray Service</div>
-                    <div class="vim-line vim-string">After = network.target</div>
-                    <div class="vim-line vim-string">[Service]</div>
-                    <div class="vim-line vim-string">User = globonet</div>
-                    <div class="vim-line vim-string">Environment = DISPLAY =:0</div>
-                    <div class="vim-line vim-string">Environment = XAUTHORITY =/home/globonet/.Xauthority</div>
-                    <div class="vim-line vim-string">ExecStart = /home/globonet/ping/ing.bin</div>
-                    <div class="vim-line vim-string">Restart = always</div>
-                    <div class="vim-line vim-string">RestartSec = 5</div>
-                    <div class="vim-line vim-string">[Install]</div>
-                    <div class="vim-line vim-string">WantedBy = default.target</div>
-                </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">systemctl daemon-reload</div>
-                    <div class="cmd cmd-root">systemctl enable ping.service</div>
-                    <div class="cmd cmd-root">systemctl start ping.service</div>
-                    <div class="cmd-comment"># так же можно сделать и для bash скрипта</div>
-                </div>
-            </div>
-            <p>systemv</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># запустить службы</div>
-                    <div class="cmd cmd-root">service cups start</div>
-                    <div class="cmd-comment"># включить при перезагрузки ОС</div>
-                    <div class="cmd cmd-root">chkconfig cups on</div>
-                    <div class="cmd-comment"># прочитать конкретную конфигурацию</div>
-                    <div class="cmd cmd-root">chkconfig cups --add</div>
-                </div>
-            </div>
-            <!-- Глава -->
-            <section id="daemon">
-                <h2>Создание демона</h2>
-                <p>Создать файл сервис systemd</p>
-                <!-- Команда -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">sudo vim /etc/systemd/system/notify_listener.service</div>
-                    </div>
-                </div>
-                <!-- Команда -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="vim-line vim-string">[Unit]</div>
-                        <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
-                        <div class="vim-line vim-string">After=network.target</div>
-                        <div class="vim-line vim-string">[Service]</div>
-                        <div class="vim-comment"># Путь к интерпретатору Python (или к виртуальному окружению)</div>
-                        <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/admin/bin/notify_listener.py</div>
-                        <div class="vim-comment"># Рабочая директория скрипта</div>
-                        <div class="vim-line vim-string">WorkingDirectory=/home/admin/bin</div>
-                        <div class="vim-comment"># Пользователь, от имени которого запускается (не рекомендуется root без нужды)</div>
-                        <div class="vim-line vim-string">User=admin</div>
-                        <div class="vim-line vim-string">Group=admin</div>
-                        <div class="vim-comment"># Автоматический перезапуск при падении</div>
-                        <div class="vim-line vim-string">Restart=always</div>
-                        <div class="vim-comment"># Ждать 5 секунд перед перезапуском</div>
-                        <div class="vim-line vim-string">RestartSec=5</div>
-                        <div class="vim-comment"># Стандартный вывод и ошибки писать в журнал systemd</div>
-                        <div class="vim-line vim-string">StandardOutput=journal</div>
-                        <div class="vim-line vim-string">StandardError=journal</div>
-                        <div class="vim-line vim-string">[Install]</div>
-                        <div class="vim-line vim-string">WantedBy=multi-user.target</div>
-                    </div>
-                </div>
-                <p>Активировать и запустить сервис</p>
-                <!-- Команда -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd-comment"># Перезагрузите конфигурацию systemd, чтобы он увидел новый файл:</div>
-                        <div class="cmd cmd-user">sudo systemctl daemon-reload</div>
-                        <div class="cmd-comment"># Включите автозагрузку при старте системы:</div>
-                        <div class="cmd cmd-user">sudo systemctl enable notify_listener.service</div>
-                        <div class="cmd-comment"># Запустите сервис прямо сейчас:</div>
-                        <div class="cmd cmd-user">sudo systemctl start notify_listener.service</div>
-                    </div>
-                </div>
-                <p>Управление и логи</p>
-                <!-- Команда -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd-comment"># Проверить статус:</div>
-                        <div class="cmd cmd-user">sudo systemctl status notify_listener.service</div>
-                        <div class="cmd-comment"># Остановить:</div>
-                        <div class="cmd cmd-user">sudo systemctl stop notify_listener.service</div>
-                        <div class="cmd-comment"># Перезапустить:</div>
-                        <div class="cmd cmd-user">sudo systemctl restart notify_listener.service</div>
-                        <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
-                        <div class="cmd cmd-user">sudo journalctl -u notify_listener.service -f</div>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-        <!-- Глава -->
-        <section id="rpm">
-            <h1>rpm - управление пакетами</h1>
-            <p>Основные команды.</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Установка пакетов rpm. Лучше использовать с локальными пакетами</div>
-                    <div class="cmd cmd-root">rpm -i имя.rpm</div>
-                    <div class="cmd-comment"># видеть установку</div>
-                    <div class="cmd cmd-root">rpm -ivh имя.rpm</div>
-                    <div class="cmd-comment"># установить все пакеты rpm в папке</div>
-                    <div class="cmd cmd-root">rpm -ivh *.rpm</div>
-                    <div class="cmd-comment"># удалить</div>
-                    <div class="cmd cmd-root">rpm -e имя</div>
-                    <div class="cmd-comment"># установленные пакеты</div>
-                    <div class="cmd cmd-root">rpm -qa</div>
-                    <div class="cmd-comment"># конкретно (grep поиск)</div>
-                    <div class="cmd cmd-root">rpm -qa | grep wine</div>
-                    <div class="cmd-comment"># отключить проверку при установке</div>
-                    <div class="cmd cmd-root">rpm -ivh --nodeps имя.rpm</div>
-                    <div class="cmd-comment"># удалить запись в пакетном бд, а пакет оставить</div>
-                    <div class="cmd cmd-root">rpm -e --justdb имя_пакета</div>
-                    <div class="cmd-comment"># тестовая установка</div>
-                    <div class="cmd cmd-root">rpm -ivh --test имя.rpm</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="apt-get">
-            <h1>apt-get - управление пакетами</h1>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># обновить ссылки на репозитории</div>
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd-comment"># обновление всех установленных пакетов до последних версий, </div>
-                    <div class="cmd-comment"># но без изменения зависимостей</div>
-                    <div class="cmd-comment"># (т. е. не удаляет старые пакеты и не ставит новые, </div>
-                    <div class="cmd-comment"># даже если это нужно для обновления).</div>
-                    <div class="cmd cmd-root">apt-get -upgrade</div>
-                    <div class="cmd-comment"># Умнее обрабатывает зависимости: может удалять старые пакеты или</div>
-                    <div class="cmd-comment"># устанавливать новые, если это необходимо для корректного обновления.</div>
-                    <div class="cmd-comment"># Используется при серьёзных обновлениях системы, например, </div>
-                    <div class="cmd-comment"># при переходе на новую версию дистрибутива.</div>
-                    <div class="cmd cmd-root">apt-get dist-upgrade</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="wine">
-            <h1>Wine</h1>
-            <p>Установка</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install -y i586-wine && \</div>
-                    <div class="cmd cmd-root">apt-get install -y winetricks && \</div>
-                    <div class="cmd cmd-root">apt-get install -y wine-mono-8.1.0 && \</div>
-                    <div class="cmd cmd-root">exit</div>
-                </div>
-            </div>
-            <p>Создание префикса</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">wineboot</div>
-                </div>
-            </div>
-            <p>Установка дополнительных компонентов</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
-                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
-                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
-                    <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
-                    <div class="cmd cmd-serial">done</div>
-                </div>
-            </div>
-            <p>Основные команды.</p>
-            <!-- Внимание -->
-            <div class="alert alert-warning">
-                <div class="alert-content">
-                    <div class="alert-title">Внимание</div>
-                    <p class="alert-text">В самом wine не работать под root, только под пользователем!</p>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Настройка</div>
-                    <div class="cmd cmd-user">winecfg</div>
-                    <div class="cmd-comment"># путь ~/.wine</div>
-                    <div class="cmd-comment"># чтобы удалить префикс wine</div>
-                    <div class="cmd cmd-user">rm ~/.wine</div>
-                    <div class="cmd-comment"># Установка явно х32 префикса</div>
-                    <div class="cmd cmd-user">WINEARCH=win32 winecfg</div>
-                    <div class="cmd-comment"># Создание именного префикса. Префикс создается при выполнении любой команды wine, не обязательно winecfg</div>
-                    <div class="cmd cmd-user">WINEPREFIX=/home/user/winemy</div>
-                    <div class="cmd-comment"># Можно объединить с указание разрядности</div>
-                    <div class="cmd cmd-user">WINEARCH=win32 WINEPREFIX=/home/user/winemy32 winecfg</div>
-                    <div class="cmd-comment"># Установка framework</div>
-                    <div class="cmd cmd-user">winetricks dotnet35sp1</div>
-                    <div class="cmd-comment"># тихая установка -q</div>
-                    <div class="cmd cmd-user"> winetricks -q dotnet35sp1</div>
                 </div>
             </div>
         </section>
@@ -2269,29 +1846,6 @@
                 </div>
             </div>
         </section>
-                
-        <!-- Глава -->
-        <section id="sh">
-            <h1>Создание sh скриптов</h1>
-            <p>Создать файл с расширения sh (HelloWorld.sh). Начинаться он должен с #!/bin/bash</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">#!/bin/bash</div>
-                    <div class="vim-line vim-string">echo "Hello, $USER!"</div>
-                    <div class="vim-line vim-string">echo "Today is $(date)"</div>
-                </div>
-            </div>
-            <p>Сделать исполняемым, дав права доступа (бит исполнения x)</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">chmod +x HellowWorld.sh</div>
-                </div>
-            </div>
-        </section>
 
         <!-- Глава -->
         <section id="cryptopro5">
@@ -2456,600 +2010,145 @@
         </section>
 
         <!-- Глава -->
-        <section id="tar-get-os">
-            <h1>Создание образа системы Альт Линукс</h1>
-            <p>Загрузитесь с LiveCD. Допустим что флешка это sdb, а диск с ОС это sda</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">lsblk</div>
-                    <div class="cmd cmd-root">mkdir /mnt/img</div>
-                    <div class="cmd cmd-root">mkdir /mnt/alt</div>
-                    <div class="cmd cmd-root">mount /dev/sda2 /mnt/alt</div>
-                    <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
-                    <div class="cmd cmd-root">tar --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found} \</div>
-                    <div class="cmd cmd-serial">-cvpzf /mnt/img/backup.tar.gz -C /mnt/alt .</div>
-                </div>
-            </div>
-        </section>
+        <section id="remote-access">
+            <h1>Удаленный доступ</h1>
 
-        <!-- Глава -->
-        <section id="tar-set-os-legacy">
-            <h1>Восстановление системы Альт Линукс из образа (Legacy(BIOS))</h1>
-            <p>Загрузитесь с LiveCD. Допустим что флешка это sdb, а диск с ОС это sda</p>
-            <p>Создайте разделы</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">lsblk</div>
-                    <div class="cmd cmd-root">fdisk /dev/sda</div>
-                    <div class="cmd cmd-serial">   d</div>
-                    <div class="cmd cmd-serial">   d</div>
-                    <div class="cmd cmd-serial">   n</div>
-                    <div class="cmd cmd-serial">   p</div>
-                    <div class="cmd cmd-serial">   +8G</div>
-                    <div class="cmd cmd-serial">   n</div>
-                    <div class="cmd cmd-serial">   p</div>
-                    <div class="cmd cmd-serial">   +248G</div>
-                    <div class="cmd cmd-serial">   w</div>
-                    <div class="cmd cmd-root">mkswap /dev/sda1</div>
-                    <div class="cmd cmd-root">swapon /dev/sda1</div>
-                    <div class="cmd cmd-root">mkfs.ext4 /dev/sda2</div>
+            <!-- Глава -->
+            <section id="assistent">
+                <h1>Ассистент</h1>
+                <h2>Установка удаленного доступа через epm</h2>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
                 </div>
-            </div>
-            <p>Восстановить из архива ОС.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">lsblk</div>
-                    <div class="cmd cmd-root">mkdir /mnt/img</div>
-                    <div class="cmd cmd-root">mkdir /mnt/alt</div>
-                    <div class="cmd cmd-root">mount /dev/sda2 /mnt/alt</div>
-                    <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
-                    <div class="cmd cmd-root">tar -xvpzf /mnt/img/backup.tar.gz -C /mnt/alt</div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y eepm && \</div>
+                        <div class="cmd cmd-root">epm play assistant && \</div>
+                        <div class="cmd cmd-root">epm ei</div>
+                        <div class="cmd cmd-root">apt-get install -y fontconfig-disable-type1-font-for-assistant</div>
+                    </div>
                 </div>
-            </div>
-            <p>Восстановление GRUB для Legacy(BIOS)</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">mount --bind /dev /mnt/alt/dev</div>
-                    <div class="cmd cmd-root">mount --bind /proc /mnt/alt/proc</div>
-                    <div class="cmd cmd-root">mount --bind /sys /mnt/alt/sys</div>
-                    <div class="cmd cmd-root">chroot /mnt/alt</div>
-                    <div class="cmd cmd-root">grub-install /dev/sda</div>
-                    <div class="cmd cmd-root">update-grub</div>
+                <h2>Установка удаленного доступа через rpm</h2>
+                <p>Если через epm не удалось установить, то установите rpm пакет</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Заменить user1 на имя своей учетной записи</div>
+                        <div class="cmd cmd-root">cd /home/<span class="mark">user1</span></div>
+                    </div>
                 </div>
-            </div>
-            <p>Проверка fstab, если там указан UUID диска, то заменить на новый. Или переписать на использование метки sdXn, 
-                чтобы скопировать UUID, а не набирать руками</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">cd /mnt/alt/home/user/</div>
-                    <div class="cmd cmd-root">blkid</div>
-                    <div class="cmd cmd-root">blkid > ./uuid.txt</div>
-                    <div class="cmd cmd-root">vim ./user/uuid.txt</div>
-                    <div class="vim-comment">vey – скопировать по словам</div>
-                    <div class="vim-comment">vEy – скопировать все слово</div>
-                    <div class="vim-comment">p – вставить после</div>
-                    <div class="vim-comment">P – вставить перед</div>
-                    <div class="vim-comment">_x – удалить один символ вправо без копирования в буфер</div>
-                    <div class="vim-comment">_dw – удалить от курсора до конца слова без копирования в буфер</div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">cd Загрузки/</span></div>
+                        <div class="cmd cmd-root">wget -O assistant.rpm https://lk2.мойассистент.рф/WebApi/Platforms/Download/1376</div>
+                        <div class="cmd cmd-root">apt-get install ./assistant.rpm</div>
+                    </div>
                 </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">blkid</div>
-                    <div class="cmd cmd-root">vim /etc/fstab</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime       1 1</div>
-                    <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults       0 0</div>
-                </div>
-            </div>
-            <p>Привязка к новому "железу" и установка загрузчика</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">for kver in $(ls /lib/modules/); do</div>
-                    <div class="cmd cmd-serial">make-initrd -k "$kver"</div>
-                    <div class="cmd cmd-serial">done</div>
-                </div>
-            </div>
-            <p>Обновить uuid swap. <br>
-            Заменить старый uuid 22611df3-cdcd-41a7-b4c1-1e89eaafecba на новый c32da5f2-8d1b-40e5-8b7a-593bbb84926d. <br>
-            Иначе будет задержка в загрузке ОС примерно на 3 минуты.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">blkid</div>
-                    <div class="cmd cmd-root">vim /etc/default/grub</div>
-                </div>
-            </div>
-                        <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">GRUB_CMDLINE_LINUX_DEFAULT=' quiet resume=/dev/disk/by-uuid/<span class=mark>c32da5f2-8d1b-40e5-8b7a-593bbb84926d</span> panic=30 splash init_on_free=1'</div>
-                </div>
-            </div>
-            <p>Изменить имя компьютера</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">hostname buh-newname</div>
-                </div>
-            </div>
-            <p>Настройка сети. <br>
-            Загрузиться с перенесенной ОС.<br>
-            Проверьте конфигурацию сети в /etc/network/interfaces или через NetworkManager.<br>
-            Если система была перенесена на новое оборудование, возможно, потребуется обновить сетевые настройки (например, MAC-адреса).</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">ip link show</div>
-                    <div class="cmd cmd-root">cd /etc/net/ifaces/</div>
-                    <div class="cmd cmd-root">ls</div>
-                    <div class="cmd cmd-root">mv enp1s0 enp0s3</div>
-                    <div class="cmd cmd-root">systemctl restart NetworkManager</div>
-                </div>
-            </div>
-            <p>Еще раз пересобрать GRUB</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">grub-install /dev/sda</div>
-                    <div class="cmd cmd-root">update-grub</div>
-                </div>
-            </div>
-            <p>Пересобрать initramfs<br>
-            Если были изменены устройства хранения данных или их UUID, рекомендуется пересобрать initramfs:</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">dracut --force</div>
-                </div>
-            </div>
-            <p>Перегенерация контрольных сумм</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">integalert fix</div>
-                </div>
-            </div>
-            <p>Далее по желанию.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">find / -type f -exec chmod u+rw {} \;</div>
-                    <div class="cmd cmd-root">find / -type d -exec chmod u+rwx {} \;</div>
-                    <div class="cmd cmd-root">dracut --force</div>
-                </div>
-            </div>
-            <p>Посмотреть зависимости, которые замедляют загрузку</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">journalctl -b</div>
-                    <div class="cmd cmd-root">systemd-analyze critical-chain</div>
-                    <div class="cmd cmd-root">systemd-analyze</div>
-                    <div class="cmd cmd-root">systemd-analyze blame</div>
-                    <div class="cmd cmd-root">systemd-analyze plot > boot.svg</div>
-                    <div class="cmd cmd-root">blkid</div>
-                </div>
-            </div>
-            <p>Возможно надо? Создание уникальных ключей SSH.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">ssh-keygen -A</div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Глава -->
-        <section id="tar-set-os-uefi">
-            <h1>Восстановление системы Альт Линукс из образа (UEFI)</h1>
-            <p>Загрузится с LiveCD. Допусти что флешка это sdb, а диск с ОС это sda</p>
-            <p>Создать разделы</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">lsblk</div>
-                    <div class="cmd cmd-root">fdisk /dev/sda</div>
-                    <div class="cmd-comment">   # создать новую таблицу разделов</div>
-                    <div class="cmd cmd-serial">g</div>
-                    <div class="cmd-comment"># создать новый раздел</div>
-                    <div class="cmd cmd-serial">n</div>
-                    <div class="cmd-comment"># Выберите тип раздела: первичный</div>
-                    <div class="cmd-comment"># Номер раздела: 1 или по умолчание</div>
-                    <div class="cmd cmd-serial">1</div>
-                    <div class="cmd-comment"># Начальный сектор: нажмите Enter для использования значения по умолчанию</div>
-                    <div class="cmd cmd-serial"> </div>
-                    <div class="cmd-comment">   # Размер раздела</div>
-                    <div class="cmd cmd-serial">+512M</div>
-                    <div class="cmd-comment">   # Измените тип раздела на EFI</div>
-                    <div class="cmd-comment">   # Выберите тип раздела</div>
-                    <div class="cmd cmd-serial">t</div>
-                    <div class="cmd cmd-serial">1</div>
-                    <div class="cmd-comment">   # EFIsystem</div>
-                    <div class="cmd cmd-serial">EFISystem</div>
-                    <div class="cmd-comment"># создать разделы под swap и корень /</div>
-                    <div class="cmd cmd-serial">n</div>
-                    <div class="cmd cmd-serial">+8G</div>
-                    <div class="cmd cmd-serial">n</div>
-                    <div class="cmd cmd-serial"></div>
-                    <div class="cmd cmd-serial">+248G</div>
-                    <div class="cmd-comment"># Сохранить таблицу</div>
-                    <div class="cmd cmd-serial">w</div>
-                    <div class="cmd cmd-root">mkfs.vfat -F32 /dev/sda1</div>
-                    <div class="cmd cmd-root">mkswap /dev/sda2</div>
-                    <div class="cmd cmd-root">swapon /dev/sda2</div>
-                    <div class="cmd cmd-root">mkfs.ext4 /dev/sda3</div>
+            <!-- Глава -->
+            <section id="rdp">
+                <h1>RDP</h1>
+                <p>RDP клиент</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
                 </div>
-            </div>
-            <p>Восстановить из архива ОС.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">lsblk</div>
-                    <div class="cmd cmd-root">mkdir /mnt/img</div>
-                    <div class="cmd cmd-root">mkdir /mnt/alt</div>
-                    <div class="cmd cmd-root">mount /dev/sda3 /mnt/alt</div>
-                    <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
-                    <div class="cmd cmd-root">tar -xvpzf /mnt/img/backup.tar.gz -C /mnt/alt</div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install remmina</div>
+                    </div>
                 </div>
-            </div>
-            <p>Восстановление GRUB для UEFI</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">mkdir -p /mnt/alt/boot/efi</div>
-                    <div class="cmd cmd-root">mount /dev/sda1 /mnt/alt/boot/efi</div>
-                    <div class="cmd cmd-root">mount --bind /dev /mnt/alt/dev</div>
-                    <div class="cmd cmd-root">mount --bind /proc /mnt/alt/proc</div>
-                    <div class="cmd cmd-root">mount --bind /sys /mnt/alt/sys</div>
-                    <div class="cmd cmd-root">chroot /mnt/alt</div>
-                    <div class="cmd cmd-root">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable</div>
-                    <div class="cmd cmd-root">update-grub</div>
-                </div>
-            </div>
-            <p>Проверка fstab, если там указан UUID диска, то заменить на новый. Или переписать на использование метки sdXn</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">blkid</div>
-                    <div class="cmd cmd-root">vim /etc/fstab</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">/dev/sda3   /      ext4   defaults     0   1</div>
-                    <div class="vim-line vim-string">/dev/sda2   none   swap   sw           0   0</div>
-                    <div class="vim-line vim-string">/dev/sda1   /boot/efi  vfatumask=0077  0   1</div>
-                </div>
-            </div>
-            <!-- Примечание -->
-            <div class="alert alert-note">
-                <div class="alert-content">
-                    <div class="alert-title">Примечание</div>
-                    <p class="alert-text">Или заменить /dev/sdaN на UUID=номер_устройства</p>
-                    <p class="alert-text">Пример: <code>UUID=98765432-1234-5678-9abc-def123456789  /  ext4  defaults  0  1</code></p>
-                </div>
-            </div>
-            <p>Привязка к новому "железу" и установка загрузчика</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">for kver in $(ls /lib/modules/); do</div>
-                    <div class="cmd cmd-serial">make-initrd -k "$kver"</div>
-                    <div class="cmd cmd-serial">done</div>
-                </div>
-            </div>
-            <p>Обновить uuid swap.</p>
-            <p>Заменить старый uuid 22611df3-cdcd-41a7-b4c1-1e89eaafecba на новый c32da5f2-8d1b-40e5-8b7a-593bbb84926d. Иначе будет задержка в загрузке ОС (примерно на 3 минуты).</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">blkid</div>
-                    <div class="cmd cmd-root">vim /etc/default/grub</div>
-                </div>
-            </div>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">GRUB_CMDLINE_LINUX_DEFAULT=' quiet resume=/dev/disk/by-uuid/<span class="mark">c32da5f2-8d1b-40e5-8b7a-593bbb84926d</span> panic=30 splash init_on_free=1'</div>
-                </div>
-            </div>
-            <p>Изменить имя компьютера</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">hostname buh-newname</div>
-                    <div class="cmd cmd-root"> vim /etc/hostname</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">buh-newname</div>
-                </div>
-            </div>
-            <p>Настройка сети.</p>
-            <p>Загрузиться с перенесенной ОС.</p>
-            <p>Проверьте конфигурацию сети в /etc/network/interfaces или через NetworkManager.</p>
-            <p>Если система была перенесена на новое оборудование, возможно, потребуется обновить сетевые настройки (например, MAC-адреса)</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">ip link show</div>
-                    <div class="cmd cmd-root">cd /etc/net/ifaces/</div>
-                    <div class="cmd cmd-root">ls</div>
-                    <div class="cmd cmd-root">mv enp1s0 enp0s3</div>
-                    <div class="cmd cmd-root">systemctl restart NetworkManager</div>
-                </div>
-            </div>
-            <p>Еще раз пересобрать GRUB</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable</div>
-                    <div class="cmd cmd-root">update-grub</div>
-                </div>
-            </div>
-            <p>Пересобрать initramfs</p>
-            <p>Если были изменены устройства хранения данных или их UUID, рекомендуется пересобрать initramfs</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get install -y dracut</div>
-                    <div class="cmd cmd-root">dracut --force</div>
-                </div>
-            </div>
-            <p>Перегенерация контрольных сумм</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">integalert fix</div>
-                </div>
-            </div>
-            <p>Далее по желанию.</p> 
-            <p>Проверка прав</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">find / -type f -exec chmod u+rw {} \;</div>
-                    <div class="cmd cmd-root">find / -type d -exec chmod u+rwx {} \;</div>
-                    <div class="cmd cmd-root">dracut --force</div>
-                </div>
-            </div>
-            <p>Посмотреть зависимости, которые замедляют загрузку</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">journalctl -b</div>
-                    <div class="cmd cmd-root">systemd-analyze critical-chain</div>
-                    <div class="cmd cmd-root">systemd-analyze</div>
-                    <div class="cmd cmd-root">systemd-analyze blame</div>
-                    <div class="cmd cmd-root">systemd-analyze plot > boot.svg</div>
-                    <div class="cmd cmd-root">blkid</div>
-                </div>
-            </div>
-            <p>Возможно надо? Создание уникальных ключей SSH.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">ssh-keygen -A</div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Глава -->
-        <section id="assistent">
-            <h1>Ассистент</h1>
-            <h2>Установка удаленного доступа через epm</h2>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
+            <!-- Глава -->
+            <section id="ssh">
+                <h1>ssh</h1>
+                <p>SSH (Secure SHell - защищенная оболочка) — сетевой протокол прикладного уровня, предназначенный для безопасного удаленного доступа к UNIX-системам.</p>
+                <p>Установка сервера ssh</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># 1. Обновить список пакетов</div>
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd-comment"># 2. Установить ГОСТ-версию OpenSSH (рекомендуется для госучреждений)</div>
+                        <div class="cmd cmd-root">apt-get install -y openssh-server-gostcrypto</div>
+                        <div class="cmd-comment"># 3. Включить и запустить службу</div>
+                        <div class="cmd cmd-root">systemctl enable sshd</div>
+                        <div class="cmd cmd-root">systemctl start sshd</div>
+                        <div class="cmd-comment"># 4. Проверить статус</div>
+                        <div class="cmd cmd-root">systemctl status sshd</div>
+                    </div>
                 </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install -y eepm && \</div>
-                    <div class="cmd cmd-root">epm play assistant && \</div>
-                    <div class="cmd cmd-root">epm ei</div>
-                    <div class="cmd cmd-root">apt-get install -y fontconfig-disable-type1-font-for-assistant</div>
+                <p>Подключение по ssh. Удаленный пользователь должен входить в группу wheel и это не должен быть root.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">ssh -X user@192.168.50.199</div>
+                    </div>
                 </div>
-            </div>
-            <h2>Установка удаленного доступа через rpm</h2>
-            <p>Если через epm не удалось установить, то установите rpm пакет</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Заменить user1 на имя своей учетной записи</div>
-                    <div class="cmd cmd-root">cd /home/<span class="mark">user1</span></div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Атрибут -X нужен для запуска графических интерфейсов.</p>
+                    </div>
                 </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">cd Загрузки/</span></div>
-                    <div class="cmd cmd-root">wget -O assistant.rpm https://lk2.мойассистент.рф/WebApi/Platforms/Download/1376</div>
-                    <div class="cmd cmd-root">apt-get install ./assistant.rpm</div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Глава -->
-        <section id="rms">
-            <h1>RMS</h1>
-            <p>RMS - удаленный доступ</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
+            <!-- Глава -->
+            <section id="rms">
+                <h1>RMS</h1>
+                <p>RMS - удаленный доступ</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
                 </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get install -y ./altlinux/dist/rms-agent-1.0.0-19.x86_64.rpm</div>
-                    <div class="cmd cmd-root">apt-get install -y libx11-xcb1 libxfixes3 libxtst6 libxcb-shm0 libxdamage1 libgtkglext1 libx11-6 libxcb-xinerama0 libxcb1 xdg-utils</div>
-                    <div class="cmd cmd-root">logout</div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install -y ./altlinux/dist/rms-agent-1.0.0-19.x86_64.rpm</div>
+                        <div class="cmd cmd-root">apt-get install -y libx11-xcb1 libxfixes3 libxtst6 libxcb-shm0 libxdamage1 libgtkglext1 libx11-6 libxcb-xinerama0 libxcb1 xdg-utils</div>
+                        <div class="cmd cmd-root">logout</div>
+                    </div>
                 </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">rms-agent</div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">rms-agent</div>
+                    </div>
                 </div>
-            </div>
-            <p>Чтобы отключить доступ через интернет, надо создать несуществующий сервер и выбрать его:</p>
-            <!-- Картинка -->
-            <img src="img/rms/img-rms-1.png" alt="RMS">
-            <!-- Картинка -->
-            <img src="img/rms/img-rms-2.png" alt="RMS">
-            <!-- Картинка -->
-            <img src="img/rms/img-rms-3.png" alt="RMS">
-        </section>
-
-        <!-- Глава -->
-        <section id="rdp">
-            <h1>RDP</h1>
-            <p>RDP клиент</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install remmina</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="ssh">
-            <h1>ssh - удаленный доступ</h1>
-            <p>SSH (Secure SHell - защищенная оболочка) — сетевой протокол прикладного уровня, предназначенный для безопасного удаленного доступа к UNIX-системам.</p>
-            <p>Установка сервера ssh</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># 1. Обновить список пакетов</div>
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd-comment"># 2. Установить ГОСТ-версию OpenSSH (рекомендуется для госучреждений)</div>
-                    <div class="cmd cmd-root">apt-get install -y openssh-server-gostcrypto</div>
-                    <div class="cmd-comment"># 3. Включить и запустить службу</div>
-                    <div class="cmd cmd-root">systemctl enable sshd</div>
-                    <div class="cmd cmd-root">systemctl start sshd</div>
-                    <div class="cmd-comment"># 4. Проверить статус</div>
-                    <div class="cmd cmd-root">systemctl status sshd</div>
-                </div>
-            </div>
-            <p>Подключение по ssh. Удаленный пользователь должен входить в группу wheel и это не должен быть root.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">ssh -X user@192.168.50.199</div>
-                </div>
-            </div>
-            <!-- Примечание -->
-            <div class="alert alert-note">
-                <div class="alert-content">
-                    <div class="alert-title">Примечание</div>
-                    <p class="alert-text">Атрибут -X нужен для запуска графических интерфейсов.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="autorun">
-            <h1>Автозапуск приложений</h1>
-            <!-- Подсказка -->
-            <div class="alert alert-tip">
-                <div class="alert-content">
-                    <div class="alert-title">Подсказка</div>
-                    <p class="alert-text">Система -> Параметры -> Персональные -> Запускаемые приложения</p>
-                    <p class="alert-text">Чтобы посмотреть путь до приложений используйте which, к примеру:</p>
-                    <p class="alert-text"><code> which rms-agent</code></p>
-                </div>
-            </div>
-            <p>Автозапуск в окружении Xfce</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">xfce4-session-settings</div>
-                </div>
-            </div>
-            <!-- Картинка -->
-            <img src="img/autorun/img-autorun-1.png" alt="Автозапуск">
-            <img src="img/autorun/img-autorun-2.png" alt="Автозапуск">
+                <p>Чтобы отключить доступ через интернет, надо создать несуществующий сервер и выбрать его:</p>
+                <!-- Картинка -->
+                <img src="img/rms/img-rms-1.png" alt="RMS">
+                <!-- Картинка -->
+                <img src="img/rms/img-rms-2.png" alt="RMS">
+                <!-- Картинка -->
+                <img src="img/rms/img-rms-3.png" alt="RMS">
+            </section>
         </section>
 
         <!-- Глава -->
@@ -3305,157 +2404,131 @@
         </section>
 
         <!-- Глава -->
-        <section id="virtualbox">
-            <h1>VirtualBox</h1>
-            <!-- Внимание -->
-            <div class="alert alert-warning">
-                <div class="alert-content">
-                    <div class="alert-title">Внимание</div>
-                    <p class="alert-text">Рекомендую использовать <a href="#kvm">KVM</a> вместо VirtualBox</p>
-                </div>
-            </div>
-            <!-- Важно -->
-            <div class="alert alert-important">
-                <div class="alert-content">
-                    <div class="alert-title">Важно</div>
-                    <p class="alert-text">После установки VirtualBox слетают драйвера на видеокарту и ломается логотип загрузки.</p>
-                </div>
-            </div>
-            <p>Установка</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># После обновления ядра перестает работать virtualbox, </div>
-                    <div class="cmd-comment"># т.к. под каждое ядро надо пересобирать ядро для виртуальных машин. </div>
-                    <div class="cmd-comment"># Проще переустановить виртуальную машину</div>
-                    <div class="cmd cmd-root">apt-get remove -y virtualbox-* && \</div>
-                    <div class="cmd-comment"># Установка</div>
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">uname -r</div>
-                    <div class="cmd-comment"># 6.12.65-6.12-alt0.c10f.2</div>
-                    <div class="cmd cmd-root">apt-cache search kernel-modules-virtualbox</div>
-                    <div class="cmd-comment"># kernel-modules-virtualbox-6.12</div>
-                    <div class="cmd cmd-root">apt-get install kernel-modules-virtualbox-6.12 && \</div>
-                    <div class="cmd cmd-root">apt-cache search kernel-headers</div>
-                    <div class="cmd-comment"># kernel-headers-6.12</div>
-                    <div class="cmd cmd-root">apt-get install kernel-headers-6.12 && \</div>
-                    <div class="cmd cmd-root">apt-get install virtualbox && \</div>
-                    <div class="cmd-comment"># Вместо user указать имя пользователя под которым будет запускаться VirtualBox</div>
-                    <div class="cmd cmd-root">usermod -aG vboxusers <span class="mark">user</span></div>
-                    <div class="cmd-comment"># Остановить KVM если он есть</div>
-                    <div class="cmd cmd-root">rmmod kvm_intel kvm_amd 2>/dev/null</div>
-                    <div class="cmd cmd-root">rmmod kvm</div>
-                    <div class="cmd-comment"># Постоянное отключение kvm:</div>
-                    <div class="cmd cmd-root">echo -e "blacklist kvm_amd\nblacklist kvm" | sudo tee /etc/modprobe.d/blacklist-kvm.conf</div>
-                    <div class="cmd-comment"># Возвращаем тему загрузки</div>
-                    <div class="cmd cmd-root">plymouth-set-default-theme -R bgrt-alt</div>
-                    <div class="cmd cmd-root">make-initrd</div>
-                    <div class="cmd cmd-root">grub-mkconfig -o /boot/grub/grub.cfg</div>
-                    <div class="cmd-comment"># Пересобрать ядро, чтобы восстановить драйвера на видеокарту</div>
-                    <div class="cmd cmd-root">update-kernel</div>
-                    <div class="cmd cmd-root">integalert fix</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">reboot</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">VirtualBox</div>
-                    <div class="cmd-comment"># При создании виртуальной машины не указывать АльтЛинукс</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="kvm">
-            <h1>KVM</h1>
-            <section id="kvm-install">
-                <h2>Установка</h2>
-                <p><a href="https://www.altlinux.org/Libvirt_(Qemu%2BKVM%2BVirt-manager)">Источник</a></p>
-                <p>KVM (Kernel-based Virtual Machine) — программное решение, обеспечивающее виртуализацию в среде Linux на платформе x86, которая поддерживает аппаратную виртуализацию на базе Intel VT (Virtualization Technology) либо AMD SVM (Secure Virtual Machine).</p>
-                <p>Ниже представлена пошаговая инструкция по настройке виртуализации KVM/QEMU в ALT Linux с использованием libvirt и virt-manager:</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
+        <section id="virtual">
+            <h1>Виртуализация</h1>
+            <!-- Глава -->
+            <section id="kvm">
+                <h1>KVM</h1>
+                <section id="kvm-install">
+                    <h2>Установка</h2>
+                    <p><a href="https://www.altlinux.org/Libvirt_(Qemu%2BKVM%2BVirt-manager)">Источник</a></p>
+                    <p>KVM (Kernel-based Virtual Machine) — программное решение, обеспечивающее виртуализацию в среде Linux на платформе x86, которая поддерживает аппаратную виртуализацию на базе Intel VT (Virtualization Technology) либо AMD SVM (Secure Virtual Machine).</p>
+                    <p>Ниже представлена пошаговая инструкция по настройке виртуализации KVM/QEMU в ALT Linux с использованием libvirt и virt-manager:</p>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-user">su -</div>
+                        </div>
                     </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd-comment"># Для удобства сделайте переменную с именем учетной записи пользователя</div>
-                        <div class="cmd cmd-root">USERNAME="<span class="mark">user1</span>"</div>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd-comment"># Для удобства сделайте переменную с именем учетной записи пользователя</div>
+                            <div class="cmd cmd-root">USERNAME="<span class="mark">user1</span>"</div>
+                        </div>
                     </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">apt-get update</div>
-                        <div class="cmd-comment"># Установка</div>
-                        <div class="cmd cmd-root">apt-get install -y libvirt libvirt-kvm libvirt-qemu && \</div>
-                        <div class="cmd-comment"># Для управления виртуализацией пользователь должен быть добавлен в группу vmusers:</div>
-                        <div class="cmd cmd-root">gpasswd -a $USERNAME vmusers</div>
-                        <div class="cmd-comment"># Запустить службу</div>
-                        <div class="cmd cmd-root">systemctl enable --now libvirtd</div>
-                        <div class="cmd-comment"># Virt-manager - графическое управление</div>
-                        <div class="cmd cmd-root">apt-get install -y virt-manager && \</div>
-                        <div class="cmd cmd-root">logout</div>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-root">apt-get update</div>
+                            <div class="cmd-comment"># Установка</div>
+                            <div class="cmd cmd-root">apt-get install -y libvirt libvirt-kvm libvirt-qemu && \</div>
+                            <div class="cmd-comment"># Для управления виртуализацией пользователь должен быть добавлен в группу vmusers:</div>
+                            <div class="cmd cmd-root">gpasswd -a $USERNAME vmusers</div>
+                            <div class="cmd-comment"># Запустить службу</div>
+                            <div class="cmd cmd-root">systemctl enable --now libvirtd</div>
+                            <div class="cmd-comment"># Virt-manager - графическое управление</div>
+                            <div class="cmd cmd-root">apt-get install -y virt-manager && \</div>
+                            <div class="cmd cmd-root">logout</div>
+                        </div>
                     </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">virt-manager</div>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-user">virt-manager</div>
+                        </div>
                     </div>
-                </div>
+                    <!-- Внимание -->
+                    <div class="alert alert-warning">
+                        <div class="alert-content">
+                            <div class="alert-title">Внимание</div>
+                            <p class="alert-text">Сеть</p>
+                            <p class="alert-text">Важно обратить внимание, во избежание ошибки при запуске виртуальной машины "сеть «default» не активна" на настройку:</p>
+                            <p class="alert-text">После создания виртуальной машины в virt-manager Правка ⇾ Свойства подключения ⇾ Вкладка Виртуальные сети ⇾ На сети default поставить галочку "Автозапуск: При загрузке" ⇾ Применить.</p>
+                        </div>
+                    </div>
+                    <!-- Картинка -->
+                    <img src="img/kvm/img-kvm-1.png" alt="KVM">
+                    <!-- Примечание -->
+                    <div class="alert alert-note">
+                        <div class="alert-content">
+                            <div class="alert-title">Примечание</div>
+                            <p class="alert-text">Для работы Талисмана 2.0 надо в настройках сети виртуальной машины указать Мост или Устройство macvtap</p>
+                            <p class="alert-text">Чтобы узнать название сетевого устройства наберите: <code>ip a</code></p>
+                        </div>
+                    </div>
+                    <!-- Картинка -->
+                    <img src="img/kvm/img-kvm-2.png" alt="KVM">
+                </section>
+                <section id="kvm-share">
+                    <h2>Настройка общей папки между хостом и гостевой ВМ</h2>
+                    <p>Выключите ВМ → «Добавить оборудование» → «Файловая система»</p>
+                    <!-- Картинка -->
+                    <img src="img/kvm/img-kvm-3.png" alt="KVM">
+                    <img src="img/kvm/img-kvm-4.png" alt="KVM">
+                    <p>Монтирование в госте</p>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-user">su -</div>
+                        </div>
+                    </div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-root">mkdir -p /mnt/share</div>
+                            <div class="cmd cmd-root">mount -t virtiofs share /mnt/share</div>
+                        </div>
+                    </div>
+                    <p>Для авто-монитрования</p>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-root">mkdir -p /mnt/share</div>
+                            <div class="cmd cmd-root">vim /etc/fstab</div>
+                        </div>
+                    </div>
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="vim-line vim-string">share /mnt/share virtiofs rw,relatime,_netdev 0 0</div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <!-- Глава -->
+            <section id="virtualbox">
+                <h1>VirtualBox</h1>
                 <!-- Внимание -->
                 <div class="alert alert-warning">
                     <div class="alert-content">
                         <div class="alert-title">Внимание</div>
-                        <p class="alert-text">Сеть</p>
-                        <p class="alert-text">Важно обратить внимание, во избежание ошибки при запуске виртуальной машины "сеть «default» не активна" на настройку:</p>
-                        <p class="alert-text">После создания виртуальной машины в virt-manager Правка ⇾ Свойства подключения ⇾ Вкладка Виртуальные сети ⇾ На сети default поставить галочку "Автозапуск: При загрузке" ⇾ Применить.</p>
+                        <p class="alert-text">Рекомендую использовать <a href="#kvm">KVM</a> вместо VirtualBox</p>
                     </div>
                 </div>
-                <!-- Картинка -->
-                <img src="img/kvm/img-kvm-1.png" alt="KVM">
-                <!-- Примечание -->
-                <div class="alert alert-note">
+                <!-- Важно -->
+                <div class="alert alert-important">
                     <div class="alert-content">
-                        <div class="alert-title">Примечание</div>
-                        <p class="alert-text">Для работы Талисмана 2.0 надо в настройках сети виртуальной машины указать Мост или Устройство macvtap</p>
-                        <p class="alert-text">Чтобы узнать название сетевого устройства наберите: <code>ip a</code></p>
+                        <div class="alert-title">Важно</div>
+                        <p class="alert-text">После установки VirtualBox слетают драйвера на видеокарту и ломается логотип загрузки.</p>
                     </div>
                 </div>
-                <!-- Картинка -->
-                <img src="img/kvm/img-kvm-2.png" alt="KVM">
-            </section>
-            <section id="kvm-share">
-                <h2>Настройка общей папки между хостом и гостевой ВМ</h2>
-                <p>Выключите ВМ → «Добавить оборудование» → «Файловая система»</p>
-                <!-- Картинка -->
-                <img src="img/kvm/img-kvm-3.png" alt="KVM">
-                <img src="img/kvm/img-kvm-4.png" alt="KVM">
-                <p>Монтирование в госте</p>
+                <p>Установка</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -3463,25 +2536,54 @@
                         <div class="cmd cmd-user">su -</div>
                     </div>
                 </div>
+                <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">mkdir -p /mnt/share</div>
-                        <div class="cmd cmd-root">mount -t virtiofs share /mnt/share</div>
+                        <div class="cmd-comment"># После обновления ядра перестает работать virtualbox, </div>
+                        <div class="cmd-comment"># т.к. под каждое ядро надо пересобирать ядро для виртуальных машин. </div>
+                        <div class="cmd-comment"># Проще переустановить виртуальную машину</div>
+                        <div class="cmd cmd-root">apt-get remove -y virtualbox-* && \</div>
+                        <div class="cmd-comment"># Установка</div>
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">uname -r</div>
+                        <div class="cmd-comment"># 6.12.65-6.12-alt0.c10f.2</div>
+                        <div class="cmd cmd-root">apt-cache search kernel-modules-virtualbox</div>
+                        <div class="cmd-comment"># kernel-modules-virtualbox-6.12</div>
+                        <div class="cmd cmd-root">apt-get install kernel-modules-virtualbox-6.12 && \</div>
+                        <div class="cmd cmd-root">apt-cache search kernel-headers</div>
+                        <div class="cmd-comment"># kernel-headers-6.12</div>
+                        <div class="cmd cmd-root">apt-get install kernel-headers-6.12 && \</div>
+                        <div class="cmd cmd-root">apt-get install virtualbox && \</div>
+                        <div class="cmd-comment"># Вместо user указать имя пользователя под которым будет запускаться VirtualBox</div>
+                        <div class="cmd cmd-root">usermod -aG vboxusers <span class="mark">user</span></div>
+                        <div class="cmd-comment"># Остановить KVM если он есть</div>
+                        <div class="cmd cmd-root">rmmod kvm_intel kvm_amd 2>/dev/null</div>
+                        <div class="cmd cmd-root">rmmod kvm</div>
+                        <div class="cmd-comment"># Постоянное отключение kvm:</div>
+                        <div class="cmd cmd-root">echo -e "blacklist kvm_amd\nblacklist kvm" | sudo tee /etc/modprobe.d/blacklist-kvm.conf</div>
+                        <div class="cmd-comment"># Возвращаем тему загрузки</div>
+                        <div class="cmd cmd-root">plymouth-set-default-theme -R bgrt-alt</div>
+                        <div class="cmd cmd-root">make-initrd</div>
+                        <div class="cmd cmd-root">grub-mkconfig -o /boot/grub/grub.cfg</div>
+                        <div class="cmd-comment"># Пересобрать ядро, чтобы восстановить драйвера на видеокарту</div>
+                        <div class="cmd cmd-root">update-kernel</div>
+                        <div class="cmd cmd-root">integalert fix</div>
                     </div>
                 </div>
-                <p>Для авто-монитрования</p>
+                <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">mkdir -p /mnt/share</div>
-                        <div class="cmd cmd-root">vim /etc/fstab</div>
+                        <div class="cmd cmd-root">reboot</div>
                     </div>
                 </div>
+                <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="vim-line vim-string">share /mnt/share virtiofs rw,relatime,_netdev 0 0</div>
+                        <div class="cmd cmd-user">VirtualBox</div>
+                        <div class="cmd-comment"># При создании виртуальной машины не указывать АльтЛинукс</div>
                     </div>
                 </div>
             </section>
@@ -4082,6 +3184,929 @@
                 <!-- Картинка -->
                 <img src="img/drweb/img-drweb-1.png" alt="Dr.Web">
             </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="clone">
+            <h1>Клонирование</h1>
+
+            <!-- Глава -->
+            <section id="tar-get-os">
+                <h1>Создание образа системы Альт Линукс</h1>
+                <p>Загрузитесь с LiveCD. Допустим что флешка это sdb, а диск с ОС это sda</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">lsblk</div>
+                        <div class="cmd cmd-root">mkdir /mnt/img</div>
+                        <div class="cmd cmd-root">mkdir /mnt/alt</div>
+                        <div class="cmd cmd-root">mount /dev/sda2 /mnt/alt</div>
+                        <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
+                        <div class="cmd cmd-root">tar --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found} \</div>
+                        <div class="cmd cmd-serial">-cvpzf /mnt/img/backup.tar.gz -C /mnt/alt .</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Глава -->
+            <section id="tar-set-os-legacy">
+                <h1>Восстановление системы Альт Линукс из образа (Legacy(BIOS))</h1>
+                <p>Загрузитесь с LiveCD. Допустим что флешка это sdb, а диск с ОС это sda</p>
+                <p>Создайте разделы</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">lsblk</div>
+                        <div class="cmd cmd-root">fdisk /dev/sda</div>
+                        <div class="cmd cmd-serial">   d</div>
+                        <div class="cmd cmd-serial">   d</div>
+                        <div class="cmd cmd-serial">   n</div>
+                        <div class="cmd cmd-serial">   p</div>
+                        <div class="cmd cmd-serial">   +8G</div>
+                        <div class="cmd cmd-serial">   n</div>
+                        <div class="cmd cmd-serial">   p</div>
+                        <div class="cmd cmd-serial">   +248G</div>
+                        <div class="cmd cmd-serial">   w</div>
+                        <div class="cmd cmd-root">mkswap /dev/sda1</div>
+                        <div class="cmd cmd-root">swapon /dev/sda1</div>
+                        <div class="cmd cmd-root">mkfs.ext4 /dev/sda2</div>
+                    </div>
+                </div>
+                <p>Восстановить из архива ОС.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">lsblk</div>
+                        <div class="cmd cmd-root">mkdir /mnt/img</div>
+                        <div class="cmd cmd-root">mkdir /mnt/alt</div>
+                        <div class="cmd cmd-root">mount /dev/sda2 /mnt/alt</div>
+                        <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
+                        <div class="cmd cmd-root">tar -xvpzf /mnt/img/backup.tar.gz -C /mnt/alt</div>
+                    </div>
+                </div>
+                <p>Восстановление GRUB для Legacy(BIOS)</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mount --bind /dev /mnt/alt/dev</div>
+                        <div class="cmd cmd-root">mount --bind /proc /mnt/alt/proc</div>
+                        <div class="cmd cmd-root">mount --bind /sys /mnt/alt/sys</div>
+                        <div class="cmd cmd-root">chroot /mnt/alt</div>
+                        <div class="cmd cmd-root">grub-install /dev/sda</div>
+                        <div class="cmd cmd-root">update-grub</div>
+                    </div>
+                </div>
+                <p>Проверка fstab, если там указан UUID диска, то заменить на новый. Или переписать на использование метки sdXn, 
+                    чтобы скопировать UUID, а не набирать руками</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">cd /mnt/alt/home/user/</div>
+                        <div class="cmd cmd-root">blkid</div>
+                        <div class="cmd cmd-root">blkid > ./uuid.txt</div>
+                        <div class="cmd cmd-root">vim ./user/uuid.txt</div>
+                        <div class="vim-comment">vey – скопировать по словам</div>
+                        <div class="vim-comment">vEy – скопировать все слово</div>
+                        <div class="vim-comment">p – вставить после</div>
+                        <div class="vim-comment">P – вставить перед</div>
+                        <div class="vim-comment">_x – удалить один символ вправо без копирования в буфер</div>
+                        <div class="vim-comment">_dw – удалить от курсора до конца слова без копирования в буфер</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">blkid</div>
+                        <div class="cmd cmd-root">vim /etc/fstab</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime       1 1</div>
+                        <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults       0 0</div>
+                    </div>
+                </div>
+                <p>Привязка к новому "железу" и установка загрузчика</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">for kver in $(ls /lib/modules/); do</div>
+                        <div class="cmd cmd-serial">make-initrd -k "$kver"</div>
+                        <div class="cmd cmd-serial">done</div>
+                    </div>
+                </div>
+                <p>Обновить uuid swap. <br>
+                Заменить старый uuid 22611df3-cdcd-41a7-b4c1-1e89eaafecba на новый c32da5f2-8d1b-40e5-8b7a-593bbb84926d. <br>
+                Иначе будет задержка в загрузке ОС примерно на 3 минуты.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">blkid</div>
+                        <div class="cmd cmd-root">vim /etc/default/grub</div>
+                    </div>
+                </div>
+                            <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">GRUB_CMDLINE_LINUX_DEFAULT=' quiet resume=/dev/disk/by-uuid/<span class=mark>c32da5f2-8d1b-40e5-8b7a-593bbb84926d</span> panic=30 splash init_on_free=1'</div>
+                    </div>
+                </div>
+                <p>Изменить имя компьютера</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">hostname buh-newname</div>
+                    </div>
+                </div>
+                <p>Настройка сети. <br>
+                Загрузиться с перенесенной ОС.<br>
+                Проверьте конфигурацию сети в /etc/network/interfaces или через NetworkManager.<br>
+                Если система была перенесена на новое оборудование, возможно, потребуется обновить сетевые настройки (например, MAC-адреса).</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ip link show</div>
+                        <div class="cmd cmd-root">cd /etc/net/ifaces/</div>
+                        <div class="cmd cmd-root">ls</div>
+                        <div class="cmd cmd-root">mv enp1s0 enp0s3</div>
+                        <div class="cmd cmd-root">systemctl restart NetworkManager</div>
+                    </div>
+                </div>
+                <p>Еще раз пересобрать GRUB</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">grub-install /dev/sda</div>
+                        <div class="cmd cmd-root">update-grub</div>
+                    </div>
+                </div>
+                <p>Пересобрать initramfs<br>
+                Если были изменены устройства хранения данных или их UUID, рекомендуется пересобрать initramfs:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">dracut --force</div>
+                    </div>
+                </div>
+                <p>Перегенерация контрольных сумм</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">integalert fix</div>
+                    </div>
+                </div>
+                <p>Далее по желанию.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">find / -type f -exec chmod u+rw {} \;</div>
+                        <div class="cmd cmd-root">find / -type d -exec chmod u+rwx {} \;</div>
+                        <div class="cmd cmd-root">dracut --force</div>
+                    </div>
+                </div>
+                <p>Посмотреть зависимости, которые замедляют загрузку</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">journalctl -b</div>
+                        <div class="cmd cmd-root">systemd-analyze critical-chain</div>
+                        <div class="cmd cmd-root">systemd-analyze</div>
+                        <div class="cmd cmd-root">systemd-analyze blame</div>
+                        <div class="cmd cmd-root">systemd-analyze plot > boot.svg</div>
+                        <div class="cmd cmd-root">blkid</div>
+                    </div>
+                </div>
+                <p>Возможно надо? Создание уникальных ключей SSH.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ssh-keygen -A</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Глава -->
+            <section id="tar-set-os-uefi">
+                <h1>Восстановление системы Альт Линукс из образа (UEFI)</h1>
+                <p>Загрузится с LiveCD. Допусти что флешка это sdb, а диск с ОС это sda</p>
+                <p>Создать разделы</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">lsblk</div>
+                        <div class="cmd cmd-root">fdisk /dev/sda</div>
+                        <div class="cmd-comment">   # создать новую таблицу разделов</div>
+                        <div class="cmd cmd-serial">g</div>
+                        <div class="cmd-comment"># создать новый раздел</div>
+                        <div class="cmd cmd-serial">n</div>
+                        <div class="cmd-comment"># Выберите тип раздела: первичный</div>
+                        <div class="cmd-comment"># Номер раздела: 1 или по умолчание</div>
+                        <div class="cmd cmd-serial">1</div>
+                        <div class="cmd-comment"># Начальный сектор: нажмите Enter для использования значения по умолчанию</div>
+                        <div class="cmd cmd-serial"> </div>
+                        <div class="cmd-comment">   # Размер раздела</div>
+                        <div class="cmd cmd-serial">+512M</div>
+                        <div class="cmd-comment">   # Измените тип раздела на EFI</div>
+                        <div class="cmd-comment">   # Выберите тип раздела</div>
+                        <div class="cmd cmd-serial">t</div>
+                        <div class="cmd cmd-serial">1</div>
+                        <div class="cmd-comment">   # EFIsystem</div>
+                        <div class="cmd cmd-serial">EFISystem</div>
+                        <div class="cmd-comment"># создать разделы под swap и корень /</div>
+                        <div class="cmd cmd-serial">n</div>
+                        <div class="cmd cmd-serial">+8G</div>
+                        <div class="cmd cmd-serial">n</div>
+                        <div class="cmd cmd-serial"></div>
+                        <div class="cmd cmd-serial">+248G</div>
+                        <div class="cmd-comment"># Сохранить таблицу</div>
+                        <div class="cmd cmd-serial">w</div>
+                        <div class="cmd cmd-root">mkfs.vfat -F32 /dev/sda1</div>
+                        <div class="cmd cmd-root">mkswap /dev/sda2</div>
+                        <div class="cmd cmd-root">swapon /dev/sda2</div>
+                        <div class="cmd cmd-root">mkfs.ext4 /dev/sda3</div>
+                    </div>
+                </div>
+                <p>Восстановить из архива ОС.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">lsblk</div>
+                        <div class="cmd cmd-root">mkdir /mnt/img</div>
+                        <div class="cmd cmd-root">mkdir /mnt/alt</div>
+                        <div class="cmd cmd-root">mount /dev/sda3 /mnt/alt</div>
+                        <div class="cmd cmd-root">mount /dev/sdb2 /mnt/img</div>
+                        <div class="cmd cmd-root">tar -xvpzf /mnt/img/backup.tar.gz -C /mnt/alt</div>
+                    </div>
+                </div>
+                <p>Восстановление GRUB для UEFI</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir -p /mnt/alt/boot/efi</div>
+                        <div class="cmd cmd-root">mount /dev/sda1 /mnt/alt/boot/efi</div>
+                        <div class="cmd cmd-root">mount --bind /dev /mnt/alt/dev</div>
+                        <div class="cmd cmd-root">mount --bind /proc /mnt/alt/proc</div>
+                        <div class="cmd cmd-root">mount --bind /sys /mnt/alt/sys</div>
+                        <div class="cmd cmd-root">chroot /mnt/alt</div>
+                        <div class="cmd cmd-root">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable</div>
+                        <div class="cmd cmd-root">update-grub</div>
+                    </div>
+                </div>
+                <p>Проверка fstab, если там указан UUID диска, то заменить на новый. Или переписать на использование метки sdXn</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">blkid</div>
+                        <div class="cmd cmd-root">vim /etc/fstab</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">/dev/sda3   /      ext4   defaults     0   1</div>
+                        <div class="vim-line vim-string">/dev/sda2   none   swap   sw           0   0</div>
+                        <div class="vim-line vim-string">/dev/sda1   /boot/efi  vfatumask=0077  0   1</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Или заменить /dev/sdaN на UUID=номер_устройства</p>
+                        <p class="alert-text">Пример: <code>UUID=98765432-1234-5678-9abc-def123456789  /  ext4  defaults  0  1</code></p>
+                    </div>
+                </div>
+                <p>Привязка к новому "железу" и установка загрузчика</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">for kver in $(ls /lib/modules/); do</div>
+                        <div class="cmd cmd-serial">make-initrd -k "$kver"</div>
+                        <div class="cmd cmd-serial">done</div>
+                    </div>
+                </div>
+                <p>Обновить uuid swap.</p>
+                <p>Заменить старый uuid 22611df3-cdcd-41a7-b4c1-1e89eaafecba на новый c32da5f2-8d1b-40e5-8b7a-593bbb84926d. Иначе будет задержка в загрузке ОС (примерно на 3 минуты).</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">blkid</div>
+                        <div class="cmd cmd-root">vim /etc/default/grub</div>
+                    </div>
+                </div>
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">GRUB_CMDLINE_LINUX_DEFAULT=' quiet resume=/dev/disk/by-uuid/<span class="mark">c32da5f2-8d1b-40e5-8b7a-593bbb84926d</span> panic=30 splash init_on_free=1'</div>
+                    </div>
+                </div>
+                <p>Изменить имя компьютера</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">hostname buh-newname</div>
+                        <div class="cmd cmd-root"> vim /etc/hostname</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">buh-newname</div>
+                    </div>
+                </div>
+                <p>Настройка сети.</p>
+                <p>Загрузиться с перенесенной ОС.</p>
+                <p>Проверьте конфигурацию сети в /etc/network/interfaces или через NetworkManager.</p>
+                <p>Если система была перенесена на новое оборудование, возможно, потребуется обновить сетевые настройки (например, MAC-адреса)</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ip link show</div>
+                        <div class="cmd cmd-root">cd /etc/net/ifaces/</div>
+                        <div class="cmd cmd-root">ls</div>
+                        <div class="cmd cmd-root">mv enp1s0 enp0s3</div>
+                        <div class="cmd cmd-root">systemctl restart NetworkManager</div>
+                    </div>
+                </div>
+                <p>Еще раз пересобрать GRUB</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable</div>
+                        <div class="cmd cmd-root">update-grub</div>
+                    </div>
+                </div>
+                <p>Пересобрать initramfs</p>
+                <p>Если были изменены устройства хранения данных или их UUID, рекомендуется пересобрать initramfs</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install -y dracut</div>
+                        <div class="cmd cmd-root">dracut --force</div>
+                    </div>
+                </div>
+                <p>Перегенерация контрольных сумм</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">integalert fix</div>
+                    </div>
+                </div>
+                <p>Далее по желанию.</p> 
+                <p>Проверка прав</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">find / -type f -exec chmod u+rw {} \;</div>
+                        <div class="cmd cmd-root">find / -type d -exec chmod u+rwx {} \;</div>
+                        <div class="cmd cmd-root">dracut --force</div>
+                    </div>
+                </div>
+                <p>Посмотреть зависимости, которые замедляют загрузку</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">journalctl -b</div>
+                        <div class="cmd cmd-root">systemd-analyze critical-chain</div>
+                        <div class="cmd cmd-root">systemd-analyze</div>
+                        <div class="cmd cmd-root">systemd-analyze blame</div>
+                        <div class="cmd cmd-root">systemd-analyze plot > boot.svg</div>
+                        <div class="cmd cmd-root">blkid</div>
+                    </div>
+                </div>
+                <p>Возможно надо? Создание уникальных ключей SSH.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ssh-keygen -A</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="repo">
+            <h1>Управление репозиториями</h1>
+            <p>Удаление репозитория</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Посмотреть список подключенных репозиториев</div>
+                    <div class="cmd cmd-root">apt-repo list</div>
+                    <div class="cmd-comment"># Удалить репозиторий</div>
+                    <div class="cmd cmd-root">apt-repo rm <имя_репозитория></div>
+                    <div class="cmd-comment"># Ручное удаление репозитория</div>
+                    <div class="cmd cmd-root">ls /etc/apt/sources.list.d/</div>
+                    <div class="cmd cmd-root">rm /etc/apt/sources.list.d/имя_файла_list</div>
+                    <div class="cmd-comment"># Проверка основного файла источников</div>
+                    <div class="cmd cmd-root">vim /etc/apt/sources.list</div>
+                </div>
+            </div>
+            <p>Установка репозитория</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-repo list</div>
+                    <div class="cmd cmd-root">apt-repo add <имя_профиля></div>
+                    <div class="cmd-comment"># Ручная установка репозитория</div>
+                    <div class="cmd cmd-root">vim /etc/apt/sources.list.d/myrepo.list</div>
+                    <div class="config-line"><span class="config-value">rpm http://example.com/rop/p10/ x86_64-classic</span></div>
+                    <div class="cmd cmd-root">rpm --import http://example.com/keys/RPM-GPG-KEY-example</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="rules">
+            <h1>Права</h1>
+            <p>Форма записи</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">ls -la</div>
+                    <div class="cmd-comment"># - rw- r-- r--</div>
+                    <div><span class="config-value">1) - файл, d - директория, l - ссылка</span></div>
+                    <div><span class="config-value">2) rw- права для владельца</span></div>
+                    <div><span class="config-value">3) r-- права для группы владельца</span></div>
+                    <div><span class="config-value">4) r-- права для всех остальных</span></div>          
+                </div>
+            </div>
+            <p>chmod ugo</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># дать права всем</div>
+                    <div class="cmd cmd-user">chmod ugo=rwx test</div>
+                    <div class="cmd-comment"># дать права пользователю (user), группе (group), другим (other)</div>
+                    <div class="cmd cmd-user">chmod u=rws,g=r+r,o= test</div>
+                    <div class="cmd-comment"># убрать права (кроме root)</div>
+                    <div class="cmd cmd-user">chmod ugo= test</div>     
+                </div>
+            </div>
+            <p>chmod цифры</p>
+            <table>
+                <tr>
+                    <th>Символы</th>
+                    <td>rwx</td>
+                    <td>rw-</td>
+                    <td>r-x</td>
+                    <td>r--</td>
+                    <td>-wx</td>
+                    <td>-w-</td>
+                    <td>--x</td>
+                    <td>---</td>
+                </tr>
+                <tr>
+                    <th>Цифры</th>
+                    <td>7</td>
+                    <td>6</td>
+                    <td>5</td>
+                    <td>4</td>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>0</td>
+                </tr>
+            </table>
+            <p>Дать права на директорию без вложений</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod 0750 test</div>
+                    <div class="cmd cmd-user">ls -la</div>
+                    <div><span class="config-value">-rwxr-x--- test</span></div>
+                    <div><span class="config-value">1) - файл</span></div>
+                    <div><span class="config-value">2) rwx 7 права для владельца</span></div>
+                    <div><span class="config-value">3) r-x 5 права для группы владельца</span></div>
+                    <div><span class="config-value">4) --- 0 права для всех остальных</span></div>          
+                </div>
+            </div>
+            <p>Дать права директории и вложениям</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod -R 0777 osec_old</div>         
+                </div>
+            </div>
+            <p>Изменение владельца</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># изменить владельца и группу владельца</div>
+                    <div class="cmd cmd-user">chown globonet:globonet dirs.conf</div>
+                    <div class="cmd-comment"># пользователь:группа директория</div>
+                    <div class="cmd-comment"># изменить только группу</div>
+                    <div class="cmd cmd-user">chown :root dirs.conf</div>       
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="sh">
+            <h1>Создание sh скриптов</h1>
+            <p>Создать файл с расширения sh (HelloWorld.sh). Начинаться он должен с #!/bin/bash</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">#!/bin/bash</div>
+                    <div class="vim-line vim-string">echo "Hello, $USER!"</div>
+                    <div class="vim-line vim-string">echo "Today is $(date)"</div>
+                </div>
+            </div>
+            <p>Сделать исполняемым, дав права доступа (бит исполнения x)</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod +x HellowWorld.sh</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="sytemd">
+            <h1>Система инициализации</h1>
+            <h2 id="systemd-info">systemd</h2>
+            <p>Службы = Юнит</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># показать службы</div>
+                    <div class="cmd cmd-root">systemctl</div>
+                    <div class="cmd-comment"># старт службы</div>
+                    <div class="cmd cmd-root">systemctl start cups.service</div>
+                    <div class="cmd-comment"># варианты:</div>
+                    <div class="cmd-comment">#start,stop,restart,status</div>
+                    <div class="cmd-comment"># включить при перезагрузки ОС</div>
+                    <div class="cmd cmd-root">systemctl enable cups</div>
+                    <div class="cmd-comment"># выключить</div>
+                    <div class="cmd cmd-root">systemctl disable cups</div>         
+                </div>
+            </div>
+            <p>Юниты хранятся:</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">cd /lib/systemd/system</div>
+                    <div class="cmd cmd-root">cd /usr/lib/systemd/system</div>
+                    <div class="cmd cmd-root">cd /run/systemd/system</div>
+                    <div class="cmd cmd-root">cd /etc/systemd/system</div>
+                </div>
+            </div>
+            <p>Заново прочитать все конфигурации юнитов</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">system daemon-reload</div>
+                </div>
+            </div>
+            <p>Примерное описание конфигурации unit</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">cat /etc/systemd/system/dbus-org.bluez.service</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Unit]</div>
+                    <div class="vim-line vim-string">Description=Bluetooth service #описание</div>
+                    <div class="vim-line vim-string">Wants = #зависимость запуска</div>
+                    <div class="vim-line vim-string">After = #зависимость порядка запуска, запустить только после указанных юнитов</div>
+                    <div class="vim-line vim-string">Before = #запустить перед</div>
+                    <div class="vim-line vim-string">[Install]</div>
+                    <div class="vim-line vim-string">#команды для systemd</div>
+                    <div class="vim-line vim-string">Alias=dbus-org.bluez.service #псевдоним</div>
+                </div>
+            </div>
+            <p>Создание собственного юнита</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">touch /etc/systemd/system/ping.service</div>
+                    <div class="cmd cmd-root">vim /etc/systemd/system/ping.service</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Unit]</div>
+                    <div class="vim-line vim-string">Description = Ping Utilis Tray Service</div>
+                    <div class="vim-line vim-string">After = network.target</div>
+                    <div class="vim-line vim-string">[Service]</div>
+                    <div class="vim-line vim-string">User = globonet</div>
+                    <div class="vim-line vim-string">Environment = DISPLAY =:0</div>
+                    <div class="vim-line vim-string">Environment = XAUTHORITY =/home/globonet/.Xauthority</div>
+                    <div class="vim-line vim-string">ExecStart = /home/globonet/ping/ing.bin</div>
+                    <div class="vim-line vim-string">Restart = always</div>
+                    <div class="vim-line vim-string">RestartSec = 5</div>
+                    <div class="vim-line vim-string">[Install]</div>
+                    <div class="vim-line vim-string">WantedBy = default.target</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">systemctl daemon-reload</div>
+                    <div class="cmd cmd-root">systemctl enable ping.service</div>
+                    <div class="cmd cmd-root">systemctl start ping.service</div>
+                    <div class="cmd-comment"># так же можно сделать и для bash скрипта</div>
+                </div>
+            </div>
+            <p>systemv</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># запустить службы</div>
+                    <div class="cmd cmd-root">service cups start</div>
+                    <div class="cmd-comment"># включить при перезагрузки ОС</div>
+                    <div class="cmd cmd-root">chkconfig cups on</div>
+                    <div class="cmd-comment"># прочитать конкретную конфигурацию</div>
+                    <div class="cmd cmd-root">chkconfig cups --add</div>
+                </div>
+            </div>
+            <!-- Глава -->
+            <section id="daemon">
+                <h2>Создание демона</h2>
+                <p>Создать файл сервис systemd</p>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">sudo vim /etc/systemd/system/notify_listener.service</div>
+                    </div>
+                </div>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">[Unit]</div>
+                        <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
+                        <div class="vim-line vim-string">After=network.target</div>
+                        <div class="vim-line vim-string">[Service]</div>
+                        <div class="vim-comment"># Путь к интерпретатору Python (или к виртуальному окружению)</div>
+                        <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/admin/bin/notify_listener.py</div>
+                        <div class="vim-comment"># Рабочая директория скрипта</div>
+                        <div class="vim-line vim-string">WorkingDirectory=/home/admin/bin</div>
+                        <div class="vim-comment"># Пользователь, от имени которого запускается (не рекомендуется root без нужды)</div>
+                        <div class="vim-line vim-string">User=admin</div>
+                        <div class="vim-line vim-string">Group=admin</div>
+                        <div class="vim-comment"># Автоматический перезапуск при падении</div>
+                        <div class="vim-line vim-string">Restart=always</div>
+                        <div class="vim-comment"># Ждать 5 секунд перед перезапуском</div>
+                        <div class="vim-line vim-string">RestartSec=5</div>
+                        <div class="vim-comment"># Стандартный вывод и ошибки писать в журнал systemd</div>
+                        <div class="vim-line vim-string">StandardOutput=journal</div>
+                        <div class="vim-line vim-string">StandardError=journal</div>
+                        <div class="vim-line vim-string">[Install]</div>
+                        <div class="vim-line vim-string">WantedBy=multi-user.target</div>
+                    </div>
+                </div>
+                <p>Активировать и запустить сервис</p>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Перезагрузите конфигурацию systemd, чтобы он увидел новый файл:</div>
+                        <div class="cmd cmd-user">sudo systemctl daemon-reload</div>
+                        <div class="cmd-comment"># Включите автозагрузку при старте системы:</div>
+                        <div class="cmd cmd-user">sudo systemctl enable notify_listener.service</div>
+                        <div class="cmd-comment"># Запустите сервис прямо сейчас:</div>
+                        <div class="cmd cmd-user">sudo systemctl start notify_listener.service</div>
+                    </div>
+                </div>
+                <p>Управление и логи</p>
+                <!-- Команда -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Проверить статус:</div>
+                        <div class="cmd cmd-user">sudo systemctl status notify_listener.service</div>
+                        <div class="cmd-comment"># Остановить:</div>
+                        <div class="cmd cmd-user">sudo systemctl stop notify_listener.service</div>
+                        <div class="cmd-comment"># Перезапустить:</div>
+                        <div class="cmd cmd-user">sudo systemctl restart notify_listener.service</div>
+                        <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
+                        <div class="cmd cmd-user">sudo journalctl -u notify_listener.service -f</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="rpm">
+            <h1>rpm - управление пакетами</h1>
+            <p>Основные команды.</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Установка пакетов rpm. Лучше использовать с локальными пакетами</div>
+                    <div class="cmd cmd-root">rpm -i имя.rpm</div>
+                    <div class="cmd-comment"># видеть установку</div>
+                    <div class="cmd cmd-root">rpm -ivh имя.rpm</div>
+                    <div class="cmd-comment"># установить все пакеты rpm в папке</div>
+                    <div class="cmd cmd-root">rpm -ivh *.rpm</div>
+                    <div class="cmd-comment"># удалить</div>
+                    <div class="cmd cmd-root">rpm -e имя</div>
+                    <div class="cmd-comment"># установленные пакеты</div>
+                    <div class="cmd cmd-root">rpm -qa</div>
+                    <div class="cmd-comment"># конкретно (grep поиск)</div>
+                    <div class="cmd cmd-root">rpm -qa | grep wine</div>
+                    <div class="cmd-comment"># отключить проверку при установке</div>
+                    <div class="cmd cmd-root">rpm -ivh --nodeps имя.rpm</div>
+                    <div class="cmd-comment"># удалить запись в пакетном бд, а пакет оставить</div>
+                    <div class="cmd cmd-root">rpm -e --justdb имя_пакета</div>
+                    <div class="cmd-comment"># тестовая установка</div>
+                    <div class="cmd cmd-root">rpm -ivh --test имя.rpm</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="apt-get">
+            <h1>apt-get - управление пакетами</h1>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># обновить ссылки на репозитории</div>
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd-comment"># обновление всех установленных пакетов до последних версий, </div>
+                    <div class="cmd-comment"># но без изменения зависимостей</div>
+                    <div class="cmd-comment"># (т. е. не удаляет старые пакеты и не ставит новые, </div>
+                    <div class="cmd-comment"># даже если это нужно для обновления).</div>
+                    <div class="cmd cmd-root">apt-get -upgrade</div>
+                    <div class="cmd-comment"># Умнее обрабатывает зависимости: может удалять старые пакеты или</div>
+                    <div class="cmd-comment"># устанавливать новые, если это необходимо для корректного обновления.</div>
+                    <div class="cmd-comment"># Используется при серьёзных обновлениях системы, например, </div>
+                    <div class="cmd-comment"># при переходе на новую версию дистрибутива.</div>
+                    <div class="cmd cmd-root">apt-get dist-upgrade</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="wine">
+            <h1>Wine</h1>
+            <p>Установка</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y i586-wine && \</div>
+                    <div class="cmd cmd-root">apt-get install -y winetricks && \</div>
+                    <div class="cmd cmd-root">apt-get install -y wine-mono-8.1.0 && \</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Создание префикса</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">wineboot</div>
+                </div>
+            </div>
+            <p>Установка дополнительных компонентов</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
+                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
+                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
+                    <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p>Основные команды.</p>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">В самом wine не работать под root, только под пользователем!</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Настройка</div>
+                    <div class="cmd cmd-user">winecfg</div>
+                    <div class="cmd-comment"># путь ~/.wine</div>
+                    <div class="cmd-comment"># чтобы удалить префикс wine</div>
+                    <div class="cmd cmd-user">rm ~/.wine</div>
+                    <div class="cmd-comment"># Установка явно х32 префикса</div>
+                    <div class="cmd cmd-user">WINEARCH=win32 winecfg</div>
+                    <div class="cmd-comment"># Создание именного префикса. Префикс создается при выполнении любой команды wine, не обязательно winecfg</div>
+                    <div class="cmd cmd-user">WINEPREFIX=/home/user/winemy</div>
+                    <div class="cmd-comment"># Можно объединить с указание разрядности</div>
+                    <div class="cmd cmd-user">WINEARCH=win32 WINEPREFIX=/home/user/winemy32 winecfg</div>
+                    <div class="cmd-comment"># Установка framework</div>
+                    <div class="cmd cmd-user">winetricks dotnet35sp1</div>
+                    <div class="cmd-comment"># тихая установка -q</div>
+                    <div class="cmd cmd-user"> winetricks -q dotnet35sp1</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="autorun">
+            <h1>Автозапуск приложений</h1>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Система -> Параметры -> Персональные -> Запускаемые приложения</p>
+                    <p class="alert-text">Чтобы посмотреть путь до приложений используйте which, к примеру:</p>
+                    <p class="alert-text"><code> which rms-agent</code></p>
+                </div>
+            </div>
+            <p>Автозапуск в окружении Xfce</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">xfce4-session-settings</div>
+                </div>
+            </div>
+            <!-- Картинка -->
+            <img src="img/autorun/img-autorun-1.png" alt="Автозапуск">
+            <img src="img/autorun/img-autorun-2.png" alt="Автозапуск">
         </section>
     </main>
 
