@@ -40,6 +40,7 @@
                     <li><a href="#after-install-alt-10-work">После установки</a></li>
                 </ul>
             </li>
+            <li><a href="#vim">Vim</a></li>
             <li><a href="#useradd">Управление пользователями</a></li>
             <li><a href="#sudo">sudo</a></li>
             <li><a href="#update-kernel">Обновление Альт СП релиз 10 до версии 10.2</a>
@@ -52,7 +53,6 @@
             <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
             <li><a href="#xfce4">Окружение Xfce4</a></li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
-            <li><a href="#vim">Vim</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
                     <li><a href="#requir-mout">Монтированние по запросу к сетевому ресурсу</a></li>
@@ -87,6 +87,7 @@
             </li>
             <li><a href="#scan">Сканер</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
+            <li><a href="#wine">Wine</a></li>
             <li><a href="#msoffice2007">Microsoft Office 2007</a></li>
             <li><a href="#cryptopro5">КриптоПро 5.0</a>
                 <ul>
@@ -96,7 +97,6 @@
                     <li><a href="#cryptopro5-tokenandcer">Привязать и положить открытый сертификат в контейнер</a></li>
                 </ul>
             </li>
-            <li><a href="#format-flash">Форматирование флешки</a></li>
             <li><a href="#remote-access">Удаленный доступ</a>
                 <ul>
                     <li><a href="#assistent">Ассистент</a></li>
@@ -165,8 +165,8 @@
             </li>
             <li><a href="#rpm">rpm - управление пакетами</a></li>
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
-            <li><a href="#wine">Wine</a></li>
             <li><a href="#autorun">Автозапуск приложений</a></li>
+            <li><a href="#format-flash">Форматирование флешки</a></li>
         </ul>
     </nav>
 
@@ -350,6 +350,51 @@
                     </div>
                 </section>
             </section> 
+        </section>
+
+        <!-- Глава -->
+        <section id="vim">
+            <h1>Vim</h1>
+            <p>Vim: рабочие режимы, хоткейсы и команды</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string"><span class="vim-command">/</span> - поиск вниз</div>
+                    <div class="vim-line vim-string"><span class="vim-command">?</span> - поиск вверх</div>
+                    <div class="vim-line vim-string"><span class="vim-command">n</span> - следующее вхождение (в том же направлении)</div>
+                    <div class="vim-line vim-string"><span class="vim-command">N</span> - следующее вхождение (в обратном направлении)</div>
+                    <div class="vim-line vim-string"><span class="vim-command">de</span> - Удалить символы с текущего до конца слова, не включая пунктуация</div>
+                    <div class="vim-line vim-string"><span class="vim-command">x</span> - удалить символ под курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">dd</span> - удалить строку</div>
+                    <div class="vim-line vim-string"><span class="vim-command">i</span> - перейти в режим редактирования текста перед курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Shift + i</span> — перейти в режим редактирования текста сначала строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">a</span> — перейти в режим редактирования текста после курсора</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Shift + a</span> — перейти в режим редактирования текста с конца строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">o</span> — перейти в режим редактирования текста с новой строки под курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">Esc</span> - режим команд</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:w</span> - записать</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:q!</span> - выйти без сохранения</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:w!</span> - записать в новый файл</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:sav имя_файла</span> - сохранить как</div>
+                    <div class="vim-line vim-string"><span class="vim-command">:wq</span> - сохранить и выйти</div>
+                    <div class="vim-line vim-string"><span class="vim-command">/DBASE</span> - начать поиск по имени DBASE</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vly</span> - копировать заданное количество символов</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yy</span> - копировать строку целиком, включая символ новой строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yiw</span> - скопировать слова целиком</div>
+                    <div class="vim-line vim-string"><span class="vim-command">yw</span> - скопировать символы от курсора до конца слова</div>
+                    <div class="vim-line vim-string"><span class="vim-command">число yy</span> - скопировать заданное кол-во строк, включая текущую</div>
+                    <div class="vim-line vim-string"><span class="vim-command">y$ (Shift + 4)</span> — скопировать всё от курсора до конца строки</div>
+                    <div class="vim-line vim-string"><span class="vim-command">y) (Shift + 0)</span> — скопировать всё от курсора до конца абзаца</div>
+                    <div class="vim-line vim-string"><span class="vim-command">y( (Shift + 9)</span> — скопировать всё от курсора до начала абзаца</div>
+                    <div class="vim-line vim-string"><span class="vim-command">p</span> - вставить содержимое буфера после курсора</div>
+                    <div class="vim-line vim-string"><span class="vim-command">P</span> - вставить содержимое буфера перед курсором</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vey</span> - скопировать по словам</div>
+                    <div class="vim-line vim-string"><span class="vim-command">vEy</span> - скопировать все слово</div>
+                    <div class="vim-line vim-string"><span class="vim-command">«_x</span> - удалить один символ вправо без копирования в буфер</div>
+                    <div class="vim-line vim-string"><span class="vim-command">«_dw</span> - удалить от курсора до конца слова без копирования в буфер</div>
+                </div>
+            </div>
         </section>
 
         <!-- Глава -->
@@ -808,51 +853,6 @@
                 <div class="code-block">
                     <div class="cmd cmd-user">xfce4-session-settings</div>
                     <div><span class="config-value">Приложения - Настройки - Сеансы и запуск - Kerberos Ticket Watcher (отключить)</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
-        <section id="vim">
-            <h1>Vim</h1>
-            <p>Vim: рабочие режимы, хоткейсы и команды</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string"><span class="vim-command">/</span> - поиск вниз</div>
-                    <div class="vim-line vim-string"><span class="vim-command">?</span> - поиск вверх</div>
-                    <div class="vim-line vim-string"><span class="vim-command">n</span> - следующее вхождение (в том же направлении)</div>
-                    <div class="vim-line vim-string"><span class="vim-command">N</span> - следующее вхождение (в обратном направлении)</div>
-                    <div class="vim-line vim-string"><span class="vim-command">de</span> - Удалить символы с текущего до конца слова, не включая пунктуация</div>
-                    <div class="vim-line vim-string"><span class="vim-command">x</span> - удалить символ под курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">dd</span> - удалить строку</div>
-                    <div class="vim-line vim-string"><span class="vim-command">i</span> - перейти в режим редактирования текста перед курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">Shift + i</span> — перейти в режим редактирования текста сначала строки</div>
-                    <div class="vim-line vim-string"><span class="vim-command">a</span> — перейти в режим редактирования текста после курсора</div>
-                    <div class="vim-line vim-string"><span class="vim-command">Shift + a</span> — перейти в режим редактирования текста с конца строки</div>
-                    <div class="vim-line vim-string"><span class="vim-command">o</span> — перейти в режим редактирования текста с новой строки под курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">Esc</span> - режим команд</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:w</span> - записать</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:q!</span> - выйти без сохранения</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:w!</span> - записать в новый файл</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:sav имя_файла</span> - сохранить как</div>
-                    <div class="vim-line vim-string"><span class="vim-command">:wq</span> - сохранить и выйти</div>
-                    <div class="vim-line vim-string"><span class="vim-command">/DBASE</span> - начать поиск по имени DBASE</div>
-                    <div class="vim-line vim-string"><span class="vim-command">vly</span> - копировать заданное количество символов</div>
-                    <div class="vim-line vim-string"><span class="vim-command">yy</span> - копировать строку целиком, включая символ новой строки</div>
-                    <div class="vim-line vim-string"><span class="vim-command">yiw</span> - скопировать слова целиком</div>
-                    <div class="vim-line vim-string"><span class="vim-command">yw</span> - скопировать символы от курсора до конца слова</div>
-                    <div class="vim-line vim-string"><span class="vim-command">число yy</span> - скопировать заданное кол-во строк, включая текущую</div>
-                    <div class="vim-line vim-string"><span class="vim-command">y$ (Shift + 4)</span> — скопировать всё от курсора до конца строки</div>
-                    <div class="vim-line vim-string"><span class="vim-command">y) (Shift + 0)</span> — скопировать всё от курсора до конца абзаца</div>
-                    <div class="vim-line vim-string"><span class="vim-command">y( (Shift + 9)</span> — скопировать всё от курсора до начала абзаца</div>
-                    <div class="vim-line vim-string"><span class="vim-command">p</span> - вставить содержимое буфера после курсора</div>
-                    <div class="vim-line vim-string"><span class="vim-command">P</span> - вставить содержимое буфера перед курсором</div>
-                    <div class="vim-line vim-string"><span class="vim-command">vey</span> - скопировать по словам</div>
-                    <div class="vim-line vim-string"><span class="vim-command">vEy</span> - скопировать все слово</div>
-                    <div class="vim-line vim-string"><span class="vim-command">«_x</span> - удалить один символ вправо без копирования в буфер</div>
-                    <div class="vim-line vim-string"><span class="vim-command">«_dw</span> - удалить от курсора до конца слова без копирования в буфер</div>
                 </div>
             </div>
         </section>
@@ -1511,12 +1511,12 @@
                     <div class="code-block">
                         <div class="vim-line vim-string">[Desktop Entry]</div>
                         <div class="vim-line vim-string">Name=BDEADMIN</div>
-                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user</span>/.tal" wine "C:\\Program Files\\Borland\\Common Files\\BDE\\BDEADMIN.EXE" ""</div>
+                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user1</span>/.tal" wine "C:\\Program Files\\Borland\\Common Files\\BDE\\BDEADMIN.EXE" ""</div>
                         <div class="vim-line vim-string">Type=Application</div>
                         <div class="vim-line vim-string">StartupNotify=true</div>
-                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user</span>/.tal/drive_c/5dll/bdeadmin.ico</div>
+                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user1</span>/.tal/drive_c/5dll/bdeadmin.ico</div>
                         <div class="vim-line vim-string">StartupWMClass=BDEADMIN.EXE</div>
-                        <div class="vim-line vim-string">Path=/home/<span class="mark">user</span>/.tal/drive_c/Program Files/Borland/Common Files/BDE</div>
+                        <div class="vim-line vim-string">Path=/home/<span class="mark">user1</span>/.tal/drive_c/Program Files/Borland/Common Files/BDE</div>
                     </div>
                 </div>
                 <!-- Команды -->
@@ -1533,12 +1533,12 @@
                     <div class="code-block">
                         <div class="vim-line vim-string">[Desktop Entry]</div>
                         <div class="vim-line vim-string">Name=Талисман 2.0</div>
-                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user</span>/.tal" wine "C:\\5dll\\tal2005.exe" ""</div>
+                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user1</span>/.tal" wine "C:\\5dll\\tal2005.exe" ""</div>
                         <div class="vim-line vim-string">Type=Application</div>
                         <div class="vim-line vim-string">StartupNotify=true</div>
-                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user</span>/.tal/drive_c/5dll/tal2005.ico</div>
+                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user1</span>/.tal/drive_c/5dll/tal2005.ico</div>
                         <div class="vim-line vim-string">StartupWMClass=tal2005.exe</div>
-                        <div class="vim-line vim-string">Path=/home/<span class="mark">user</span>/.tal/drive_c/5dll</div>
+                        <div class="vim-line vim-string">Path=/home/<span class="mark">user1</span>/.tal/drive_c/5dll</div>
                     </div>
                 </div>
                 <!-- Команды -->
@@ -1824,6 +1824,79 @@
         </section>
 
         <!-- Глава -->
+        <section id="wine">
+            <h1>Wine</h1>
+            <p>Установка</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y i586-wine && \</div>
+                    <div class="cmd cmd-root">apt-get install -y winetricks && \</div>
+                    <div class="cmd cmd-root">apt-get install -y wine-mono-8.1.0 && \</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Создание префикса</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">wineboot</div>
+                </div>
+            </div>
+            <p>Установка дополнительных компонентов</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
+                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
+                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
+                    <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p>Основные команды.</p>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">В самом wine не работать под root, только под пользователем!</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Настройка</div>
+                    <div class="cmd cmd-user">winecfg</div>
+                    <div class="cmd-comment"># путь ~/.wine</div>
+                    <div class="cmd-comment"># чтобы удалить префикс wine</div>
+                    <div class="cmd cmd-user">rm ~/.wine</div>
+                    <div class="cmd-comment"># Установка явно х32 префикса</div>
+                    <div class="cmd cmd-user">WINEARCH=win32 winecfg</div>
+                    <div class="cmd-comment"># Создание именного префикса. Префикс создается при выполнении любой команды wine, не обязательно winecfg</div>
+                    <div class="cmd cmd-user">WINEPREFIX=/home/user/winemy</div>
+                    <div class="cmd-comment"># Можно объединить с указание разрядности</div>
+                    <div class="cmd cmd-user">WINEARCH=win32 WINEPREFIX=/home/user/winemy32 winecfg</div>
+                    <div class="cmd-comment"># Установка framework</div>
+                    <div class="cmd cmd-user">winetricks dotnet35sp1</div>
+                    <div class="cmd-comment"># тихая установка -q</div>
+                    <div class="cmd cmd-user"> winetricks -q dotnet35sp1</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
         <section id="msoffice2007">
             <h1>Microsoft Office 2007</h1>
             <p>Установите <a href="#wine">Wine</a>.</p>
@@ -1883,7 +1956,7 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="config-line"><span class="config-value">Файл.docx - ПКМ – Открыть с помощью – Другое приложение... – </span></div>
-                    <div class="config-line"><span class="config-value">Использовать собственную команду – Просмотреть... – ‘home/user/distr/office2007/word.sh’ –</span></div>
+                    <div class="config-line"><span class="config-value">Использовать собственную команду – Просмотреть... – ‘/home/user1/altlinux/dist/office2007/word.sh’ –</span></div>
                     <div class="config-line"><span class="config-value">Запомнить это приложение для файлов типа “Документ Word 2007” - Открыть</span></div>
                 </div>
             </div>
@@ -1994,34 +2067,13 @@
         </section>
 
         <!-- Глава -->
-        <section id="format-flash">
-            <h1>Форматирование флешки</h1>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">lsblk</div>
-                    <div class="cmd cmd-root">umount /dev/sdb4</div>
-                    <div class="cmd cmd-root">mkfs.ntfs /dev/sdb4</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
         <section id="remote-access">
             <h1>Удаленный доступ</h1>
 
             <!-- Глава -->
             <section id="assistent">
                 <h1>Ассистент</h1>
-                <h2>Установка удаленного доступа через epm</h2>
+                <h2>Установка Ассистента через epm</h2>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -2040,7 +2092,7 @@
                         <div class="cmd cmd-root">apt-get install -y fontconfig-disable-type1-font-for-assistant</div>
                     </div>
                 </div>
-                <h2>Установка удаленного доступа через rpm</h2>
+                <h2>Установка Ассистента через rpm</h2>
                 <p>Если через epm не удалось установить, то установите rpm пакет</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
@@ -2107,7 +2159,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">ssh -X user@192.168.50.199</div>
+                        <div class="cmd cmd-user">ssh -X user1@192.168.50.199</div>
                     </div>
                 </div>
                 <!-- Примечание -->
@@ -2561,7 +2613,7 @@
                         <div class="cmd cmd-root">apt-get install kernel-headers-6.12 && \</div>
                         <div class="cmd cmd-root">apt-get install virtualbox && \</div>
                         <div class="cmd-comment"># Вместо user указать имя пользователя под которым будет запускаться VirtualBox</div>
-                        <div class="cmd cmd-root">usermod -aG vboxusers <span class="mark">user</span></div>
+                        <div class="cmd cmd-root">usermod -aG vboxusers <span class="mark">user1</span></div>
                         <div class="cmd-comment"># Остановить KVM если он есть</div>
                         <div class="cmd cmd-root">rmmod kvm_intel kvm_amd 2>/dev/null</div>
                         <div class="cmd cmd-root">rmmod kvm</div>
@@ -3124,8 +3176,8 @@
             </section>
             <!-- Глава -->
             <section id="drweb-guard">
-                <h2>Настройка исключений для SpIDer Guard</h2>
-                <p>Для снижения нагрузки на ЦП добавьте исключения в сканер реального времени SpIDer Guard:</p>
+                <h2>Настройка исключений для SpIDer Guard и Gate</h2>
+                <p>Для снижения нагрузки на ЦП добавьте исключения в сканер реального времени SpIDer Guard и для работы lan-messenger внисити его в исключение SpIDer Gate:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -3167,7 +3219,7 @@
                         <p class="alert-text">drweb-ctl cfshow linuxgui.excludedpath</p>
                         <p class="alert-text">/proc /sys - должны быть и в исключениях проверки в реальном времени (linuxspider),</p>
                         <p class="alert-text">и в исключениях проверки при ручном запуске сканирования (linuxgui).</p>
-                        <p class="alert-text">Эти два пути добавлены по умолчание. Если их нет, то добавьти:</p>
+                        <p class="alert-text">Эти два пути добавлены по умолчание. Если их нет, то добавьте:</p>
                         <p class="alert-text"><code>drweb-ctl cfset linuxspider.excludedpath -a /proc</code></p>
                         <p class="alert-text"><code>drweb-ctl cfset linuxgui.excludedpath -a /proc</code></p>
                         <p class="alert-text"><code>drweb-ctl cfset linuxspider.excludedpath -a /sys</code></p>
@@ -3181,7 +3233,7 @@
                         <p class="alert-text"><code>drweb-ctl cfshow linuxfirewall.excludedproc</code></p>
                         <p class="alert-text">Должно быть</p>
                         <p class="alert-text">LinuxFirewall.ExcludedProc = /usr/sbin/NetworkManager</p>
-                        <p class="alert-text">Если нет, то добавить:</p>
+                        <p class="alert-text">Если нет, то добавьте:</p>
                         <p class="alert-text"><code>drweb-ctl cfset linuxfirewall.excludedproc -a /usr/sbin/NetworkManager</code></p>
                     </div>
                 </div>
@@ -4017,79 +4069,6 @@
         </section>
 
         <!-- Глава -->
-        <section id="wine">
-            <h1>Wine</h1>
-            <p>Установка</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install -y i586-wine && \</div>
-                    <div class="cmd cmd-root">apt-get install -y winetricks && \</div>
-                    <div class="cmd cmd-root">apt-get install -y wine-mono-8.1.0 && \</div>
-                    <div class="cmd cmd-root">exit</div>
-                </div>
-            </div>
-            <p>Создание префикса</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">wineboot</div>
-                </div>
-            </div>
-            <p>Установка дополнительных компонентов</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
-                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
-                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
-                    <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
-                    <div class="cmd cmd-serial">done</div>
-                </div>
-            </div>
-            <p>Основные команды.</p>
-            <!-- Внимание -->
-            <div class="alert alert-warning">
-                <div class="alert-content">
-                    <div class="alert-title">Внимание</div>
-                    <p class="alert-text">В самом wine не работать под root, только под пользователем!</p>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Настройка</div>
-                    <div class="cmd cmd-user">winecfg</div>
-                    <div class="cmd-comment"># путь ~/.wine</div>
-                    <div class="cmd-comment"># чтобы удалить префикс wine</div>
-                    <div class="cmd cmd-user">rm ~/.wine</div>
-                    <div class="cmd-comment"># Установка явно х32 префикса</div>
-                    <div class="cmd cmd-user">WINEARCH=win32 winecfg</div>
-                    <div class="cmd-comment"># Создание именного префикса. Префикс создается при выполнении любой команды wine, не обязательно winecfg</div>
-                    <div class="cmd cmd-user">WINEPREFIX=/home/user/winemy</div>
-                    <div class="cmd-comment"># Можно объединить с указание разрядности</div>
-                    <div class="cmd cmd-user">WINEARCH=win32 WINEPREFIX=/home/user/winemy32 winecfg</div>
-                    <div class="cmd-comment"># Установка framework</div>
-                    <div class="cmd cmd-user">winetricks dotnet35sp1</div>
-                    <div class="cmd-comment"># тихая установка -q</div>
-                    <div class="cmd cmd-user"> winetricks -q dotnet35sp1</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Глава -->
         <section id="autorun">
             <h1>Автозапуск приложений</h1>
             <!-- Подсказка -->
@@ -4112,6 +4091,27 @@
             <!-- Картинка -->
             <img src="img/autorun/img-autorun-1.png" alt="Автозапуск">
             <img src="img/autorun/img-autorun-2.png" alt="Автозапуск">
+        </section>
+
+        <!-- Глава -->
+        <section id="format-flash">
+            <h1>Форматирование флешки</h1>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">lsblk</div>
+                    <div class="cmd cmd-root">umount /dev/sdb4</div>
+                    <div class="cmd cmd-root">mkfs.ntfs /dev/sdb4</div>
+                </div>
+            </div>
         </section>
     </main>
 
