@@ -41,6 +41,7 @@
                 </ul>
             </li>
             <li><a href="#useradd">Управление пользователями</a></li>
+            <li><a href="#sudo">sudo</a></li>
             <li><a href="#update-kernel">Обновление Альт СП релиз 10 до версии 10.2</a>
                 <ul>
                     <li><a href="#auto-update-kernel">Автоматическое обновление</a></li>
@@ -95,7 +96,6 @@
                     <li><a href="#cryptopro5-tokenandcer">Привязать и положить открытый сертификат в контейнер</a></li>
                 </ul>
             </li>
-            <li><a href="#sudo">sudo</a></li>
             <li><a href="#format-flash">Форматирование флешки</a></li>
             <li><a href="#remote-access">Удаленный доступ</a>
                 <ul>
@@ -367,13 +367,55 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Добавление нового пользователя user1</div>
-                    <div class="cmd cmd-root">useradd user1</div>
+                    <div class="cmd cmd-root">useradd <span class="mark">user1</span></div>
                     <div class="cmd-comment"># Создать пароль для пользователя user1</div>
-                    <div class="cmd cmd-root">passwd user1</div>
+                    <div class="cmd cmd-root">passwd <span class="mark">user1</span></div>
                     <div class="cmd-comment"># Предоставление прав суперпользователя su</div>
-                    <div class="cmd cmd-root">usermod -aG wheel user1</div>
-                    <div class="cmd-comment"># Удалить из группы wheel</div>
-                    <div class="cmd cmd-root">gpasswd -d user1 wheel</div>           
+                    <div class="cmd cmd-root">usermod -aG wheel <span class="mark">user1</span></div>           
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Чтобы удалить из группы wheel пользователя user1 наберите: <code>gpasswd -d user1 wheel</code></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="sudo">
+            <h1>sudo</h1>
+            <p>Установка и настройка sudo</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y sudo</div>
+                    <div class="cmd-comment"># создать группу sudo</div>
+                    <div class="cmd cmd-root">groupadd sudo</div>
+                    <div class="cmd-comment"># добавить user1 в группу sudo</div>
+                    <div class="cmd cmd-root">usermod -aG sudo <span class="mark">user1</span></div>
+                    <div class="cmd cmd-root">visudo</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-comment"># расскомментировать Доступ группе sudo и группе wheel</div>
+                    <div class="vim-line vim-string">User_Alias WHEEL_USERS = %wheel</div>
+                    <div class="vim-line vim-string">User_Alias SUDO_USERS = %sudo</div>
+                    <div class="vim-line vim-string">WHEEL_USERS ALL(ALL:ALL) ALL</div>
+                    <div class="vim-line vim-string">SUDO_USERS ALL=(ALL:ALL) ALL</div>
                 </div>
             </div>
         </section>
@@ -1949,43 +1991,6 @@
                     </div>
                 </div>
             </section>
-        </section>
-
-        <!-- Глава -->
-        <section id="sudo">
-            <h1>sudo</h1>
-            <p>user - это имя пользователя</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install -y sudo</div>
-                    <div class="cmd-comment"># создать группу sudo</div>
-                    <div class="cmd cmd-root">groupadd sudo</div>
-                    <div class="cmd-comment"># добавить user в группу sudo</div>
-                    <div class="cmd cmd-root">usermod -aG sudo user</div>
-                    <div class="cmd cmd-root">visudo</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-comment"># расскомментировать Доступ группе sudo и группе wheel</div>
-                    <div class="vim-line vim-string">User_Alias WHEEL_USERS = %wheel</div>
-                    <div class="vim-line vim-string">User_Alias SUDO_USERS = %sudo</div>
-                    <div class="vim-line vim-string">WHEEL_USERS ALL(ALL:ALL) ALL</div>
-                    <div class="vim-line vim-string">SUDO_USERS ALL=(ALL:ALL) ALL</div>
-                </div>
-            </div>
         </section>
 
         <!-- Глава -->
