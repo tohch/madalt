@@ -555,41 +555,84 @@ handle_integalert() {
 # Обновление системы
 #===============================================================================
 update_system() {
-    if confirm "Выполнить апгрейд системы на c10f2 (apt-get update dist-upgrade)?"; then
-        local max_retries=3
-        local retry=0
-    
-        info "Начало обновления системы..."
-    
-        # Обновление индексов репозиториев apt-repo
-    
-        while [[ $retry -lt $max_retries ]]; do
-            info "Попытка #$((retry+1)) обновления индексов..."
-        
-            if apt-get update 2>&1 | tee -a "$LOG_FILE"; then
-                success "Индексы обновлены"
-                break
+    if ! confirm "Выполнить апгрейд системы на c10f2 (apt-get update && dist-upgrade)?"; then
+        info "Апгрейд системы c10f2 отменен"
+        return 0
+    fi
+
+    local max_retries_update=3
+    local max_retries_upgrade=3
+    local retry=0
+
+    # --- 1. Обновление индексов ---
+    info "Начало обновления индексов..."
+    while [[ $retry -lt $max_retries_update ]]; do
+        info "Попытка #$((retry+1)) обновления индексов..."
+        if apt-get update 2>&1 | tee -a "$LOG_FILE"; then
+            success "Индексы обновлены"
+            break
+        else
+            ((retry++))
+            if [[ $retry -lt $max_retries_update ]]; then
+                warn "Ошибка обновления. Повтор через 10 секунд..."
+                sleep 10
             else
-                ((retry++))
-                if [[ $retry -lt $max_retries ]]; then
-                    warn "Ошибка обновления. Повтор через 10 секунд..."
-                    sleep 10
-                else
-                    error "Не удалось обновить индексы после $max_retries попыток"
-                    return 1
-                fi
+                error "Не удалось обновить индексы после $max_retries_update попыток"
+                return 1
             fi
-        done
-    
+        fi
+    done
+
+    # --- 2. Обновление пакетов (dist-upgrade) ---
+    retry=0
+    info "Начало обновления пакетов (dist-upgrade)..."
+    while [[ $retry -lt $max_retries_upgrade ]]; do
+        info "Попытка #$((retry+1)) dist-upgrade..."
+        
+        # Запускаем dist-upgrade, вывод идёт и в лог, и на экран
         apt-get dist-upgrade -y 2>&1 | tee -a "$LOG_FILE"
-        success "Обновление пакетов завершено"
-    
-        # Очистка кэша
-        apt-get clean
-        info "Кэш APT очищен"
-	else
-	    info "Апгрейд системы c10f2 отменен"
-	fi
+        # Забираем код возврата именно apt-get, а не tee
+        local upgrade_status=${PIPESTATUS[0]}
+
+        if [[ $upgrade_status -eq 0 ]]; then
+            success "Обновление пакетов завершено успешно"
+            break
+        else
+            ((retry++))
+            warn "dist-upgrade завершился с ошибкой (код: $upgrade_status)"
+            
+            if [[ $retry -lt $max_retries_upgrade ]]; then
+                warn "Повторная попытка через 15 секунд..."
+                sleep 15
+                
+                # 🔑 Критично для ALT Linux: перед повтором пытаемся исправить зависимости
+                info "Попытка исправить сломанные зависимости (apt-get -f install)..."
+                apt-get -f install -y >> "$LOG_FILE" 2>&1 || true
+            else
+                error "Не удалось выполнить dist-upgrade после $max_retries_upgrade попыток"
+                error "Настоятельно рекомендую прервать выполнение скрипта и попробовать позже. Если вы продолжите, то есть шанс, что система не загрузится!"
+                error "Если все же рискнете продолжить, то рекомендация что делать если система не загрузится: Рекомендуется загрузиться с LiveUSB, выполнить chroot и запустить: apt-get -f install && dpkg --configure -a"
+                error "1. Вариант: при загрузки выберите загрузку дополнительных параметров и выберете предыдущее ядро.Рекомендуется загрузиться с LiveUSB, выполнить chroot и запустить: apt-get -f install && dpkg --configure -a"
+                error "2. Вариант если система вообще не загружается: загрузиться с LiveUSB, выполнить chroot и запустить: apt-get -f install && dpkg --configure -a"
+                if confirm "Прервать обновление?"; then
+                    if confirm "Вернутся на ветку c10f?"; then
+                        setup_and_update_s10
+                        apt-get clean >> "$LOG_FILE" 2>&1
+                        rm -f /etc/rpm/macros.d/priority_distbranch
+                        success "Временные файлы макросов удалены"
+                    fi
+                    info "Обновление прервано!"
+                    exit 1
+                fi
+                return 1
+            fi
+        fi
+    done
+
+    # Очистка кэша
+    apt-get clean >> "$LOG_FILE" 2>&1
+    info "Кэш APT очищен"
+    return 0
 }
 
 #===============================================================================
