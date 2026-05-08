@@ -619,6 +619,7 @@ update_system() {
                         apt-get clean >> "$LOG_FILE" 2>&1
                         rm -f /etc/rpm/macros.d/priority_distbranch
                         success "Временные файлы макросов удалены"
+                        apt-get -f install -y >> "$LOG_FILE" 2>&1 || true
                     fi
                     info "Обновление прервано!"
                     exit 1
