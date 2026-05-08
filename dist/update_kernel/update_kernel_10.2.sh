@@ -189,6 +189,27 @@ disable_cdrom_sources() {
 	return 0
 }
 
+interrupt_back_s10(){
+    if confirm "Прервать обновление?"; then
+        if confirm "Вернутся на ветку c10f?"; then
+            setup_and_update_s10
+            apt-get clean >> "$LOG_FILE" 2>&1
+            rm -f /etc/rpm/macros.d/priority_distbranch
+            success "Временные файлы макросов удалены"
+            apt-get -f install -y >> "$LOG_FILE" 2>&1 || true
+        fi
+        info "Обновление прервано!"
+        exit 1
+    fi
+}
+
+interrupt(){
+    if confirm "Прервать обновление?"; then
+        info "Обновление прервано!"
+        exit 1
+    fi
+}
+
 #================================================================================
 # Функция перезагрузки
 #================================================================================
@@ -308,11 +329,13 @@ setup_and_update_s10() {
     
         if ! setup_sp10_repositories; then
             error "Не удалось настроить репозитории. Прерывание."
+            interrupt
             return 1
         fi
     
         if ! update_system_packages; then
             error "Ошибка при обновлении системы"
+            interrupt
             return 1
         fi
     
@@ -578,17 +601,7 @@ update_system() {
                 sleep 10
             else
                 error "Не удалось обновить индексы после $max_retries_update попыток"
-                if confirm "Прервать обновление?"; then
-                    if confirm "Вернутся на ветку c10f?"; then
-                        setup_and_update_s10
-                        apt-get clean >> "$LOG_FILE" 2>&1
-                        rm -f /etc/rpm/macros.d/priority_distbranch
-                        success "Временные файлы макросов удалены"
-                        apt-get -f install -y >> "$LOG_FILE" 2>&1 || true
-                    fi
-                    info "Обновление прервано!"
-                    exit 1
-                fi
+                interrupt_back_s10
                 return 1
             fi
         fi
@@ -624,17 +637,7 @@ update_system() {
                 error "Настоятельно рекомендую прервать выполнение скрипта и попробовать позже. Если вы продолжите, то есть шанс, что система не загрузится!"
                 error "Если все же рискнете продолжить, то рекомендация что делать если система не загрузится:"
                 error "При загрузке нажмите Escape и выберите Advanced option for ALT SP Workstation 1110, далее выберете предыдущее ядро."
-                if confirm "Прервать обновление?"; then
-                    if confirm "Вернутся на ветку c10f?"; then
-                        setup_and_update_s10
-                        apt-get clean >> "$LOG_FILE" 2>&1
-                        rm -f /etc/rpm/macros.d/priority_distbranch
-                        success "Временные файлы макросов удалены"
-                        apt-get -f install -y >> "$LOG_FILE" 2>&1 || true
-                    fi
-                    info "Обновление прервано!"
-                    exit 1
-                fi
+                interrupt_back_s10
                 return 1
             fi
         fi
