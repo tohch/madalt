@@ -946,6 +946,22 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Установка пакета с темой windows 10</div>
+                    <div class="cmd cmd-root">apt-get install -y gtk-theme-windows-10 && \</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd-comment"># Тема интерфейса (GTK)</div>
                     <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "Windows 10" --create</div>
                     <div class="cmd-comment"># Тема иконок</div>
