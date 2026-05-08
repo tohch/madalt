@@ -578,6 +578,17 @@ update_system() {
                 sleep 10
             else
                 error "Не удалось обновить индексы после $max_retries_update попыток"
+                if confirm "Прервать обновление?"; then
+                    if confirm "Вернутся на ветку c10f?"; then
+                        setup_and_update_s10
+                        apt-get clean >> "$LOG_FILE" 2>&1
+                        rm -f /etc/rpm/macros.d/priority_distbranch
+                        success "Временные файлы макросов удалены"
+                        apt-get -f install -y >> "$LOG_FILE" 2>&1 || true
+                    fi
+                    info "Обновление прервано!"
+                    exit 1
+                fi
                 return 1
             fi
         fi
