@@ -947,6 +947,23 @@
                     <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/openSUSE Leap 15.x.tar.bz2"</div>
                 </div>
             </div>
+            <p>Поставить Тему Windows10</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Тема интерфейса (GTK)</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "Windows10" --create</div>
+                    <div class="cmd-comment"># Тема иконок</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/IconThemeName -t string -s "Windows10" --create</div>
+                    <div class="cmd-comment"># Тема заголовков окон (xfwm4)</div>
+                    <div class="cmd cmd-user">xfconf-query -c xfwm4 -p /general/theme -t string -s "Windows10" --create</div>
+                    <div class="cmd-comment"># Тема курсора</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Gtk/CursorThemeName -t string -s "jimmac" --create</div>
+                    <div class="cmd-comment"># Профиль панели</div>
+                    <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/Simply Linux 9.tar.bz2"</div>
+                </div>
+            </div>
             <h2 id="xfce4-beep">Отключить звуковой сигнал встроенного динамика</h2> 
             <p>Команда <code>xset b off</code> отключает уведомления встроенного динамика, но работает до перезагрузки. 
                 Чтобы работало постоянно, надо добавить ее в автозапуск (Сеансы и запуск). 
