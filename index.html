@@ -830,7 +830,8 @@
         <!-- Глава -->
         <section id="intall-them-windows">
             <h1>Установка темы "Windows"</h1>
-            <p>Установка самой темы. Пакет необходимо установить до создания пользователя, затем создать пользователя.</p>
+            <p>Тема "Windows" улучшает стандартное оформление.<br>
+            Установка. Пакет необходимо установить до создания пользователя, затем создать пользователя.</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -843,7 +844,6 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install -y theme-mate-windows && \</div>
                     <div class="cmd cmd-root">apt-get install -y gtk-theme-windows-10 && \</div>
                     <div class="cmd cmd-root">exit</div>
                 </div>
@@ -852,7 +852,7 @@
             <div class="alert alert-warning">
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
-                    <p class="alert-text">Если требуется установить тему под текущим пользователем, то необходимо после установки пакета перегрузить компьютер, выполнить от пользователя:</p>
+                    <p class="alert-text">Если требуется установить тему под текущим пользователем, то необходимо выполнить сброс настроек темы от имени пользователя:</p>
                 </div>
             </div>
             <!-- Команды -->
@@ -860,9 +860,6 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">dconf reset -f /</div>
-                    <div class="cmd-comment"># Далее можно (НЕ ОБЯЗАТЕЛЬНО) установить тему windows 10</div>
-                    <div class="cmd cmd-user">su -</div>
-                    <div class="cmd-comment"># И после этого выбрать тему Windows 10 в темах оформления</div>
                 </div>
             </div>
         </section>
