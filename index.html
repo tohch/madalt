@@ -52,7 +52,11 @@
                 </ul>
             </li>
             <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
-            <li><a href="#xfce4">Окружение Xfce4</a></li>
+            <li><a href="#xfce4">Окружение Xfce4</a>
+                <ul><li><a href="#xfce4-install">Установка окружения Xfce4</a></li></ul>
+                <ul><li><a href="#xfce4-theme">Настройка темы</a></li></ul>
+                <ul><li><a href="#xfce4-beep">Отключить звуковой сигнал встроенного динамика</a></li></ul>
+            </li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
@@ -872,14 +876,16 @@
         <!-- Глава -->
         <section id="xfce4">
             <h1>Окружение Xfce4</h1>
-            <p>После обновления до с10f2 обновляется окружение MATE до 1.26.1, у которой наблюдаются проблемы с дочерними окнами, они открываются за главным окном.
-            _NET_ACTIVE_WINDOW message with a timestamp of 0
-            Приложение пытается активировать своё окно через стандартный X11-протокол, но не передаёт корректный таймстамп (временную метку последнего пользовательского события — клика, нажатия клавиши). По стандарту EWMH таймстамп не может быть 0.</p>
-            <p>meta_window_activate called by a pager with a 0 timestamp
-            Marco (как и его «родитель» Mutter из GNOME) игнорирует такие запросы — это защита от «фокус-хищений» (когда вредоносное приложение могло бы принудительно перехватывать фокус ввода).
-            Из-за игнорирования запроса активации всплывающее окно (диалог загрузки, файловый менеджер) не поднимается поверх родительского окна — остаётся в фоне.</p>
-            <p>Решение: перейти на другое окружение, например Xfce4.</p>
-            <p>Установка окружения Xfce4</p>
+            <p>После обновления до с10f2 обновляется окружение MATE до 1.26.1, у которой наблюдаются проблемы с дочерними окнами, 
+                они открываются за главным окном "<code>_NET_ACTIVE_WINDOW message with a timestamp of 0</code>". 
+                Приложение пытается активировать своё окно через стандартный X11-протокол, но не передаёт корректный таймстамп 
+                (временную метку последнего пользовательского события — клика, нажатия клавиши). По стандарту EWMH таймстамп не может быть 0
+                "<code>meta_window_activate called by a pager with a 0 timestamp</code>".<br>
+                Marco (как и его «родитель» Mutter из GNOME) игнорирует такие запросы — это защита от «фокус-хищений» 
+                (когда вредоносное приложение могло бы принудительно перехватывать фокус ввода).
+                Из-за игнорирования запроса активации всплывающее окно (диалог загрузки, файловый менеджер) не поднимается поверх родительского окна — 
+                остаётся в фоне. Чтобы решить данную проблему, проще перейти на другое окружение, например Xfce4.</p>
+            <h2 id="xfce4-install">Установка окружения Xfce4</h2>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -906,7 +912,7 @@
                     <div class="cmd cmd-user">mate-session-save --logout</div>
                 </div>
             </div>
-            <p>Настройка темы</p>
+            <h2 id="xfce4-theme">Настройка темы</h2>
             <p>Поставить Светлую тему</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -924,12 +930,33 @@
                     <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/openSUSE Leap 15.x.tar.bz2"</div>
                 </div>
             </div>
-            <p>Поставить Темную тема</p>
-            <p>Отключить звуковой сигнал встроенного динамика. Работает до перезагрузки. Чтобы работало постоянно, надо добавить в автозапуск (Сеансы и запуск) команду xset b off.</p>
+            <p>Поставить Темную тему</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
+                    <div class="cmd-comment"># Тема интерфейса (GTK)</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "Greybird-dark" --create</div>
+                    <div class="cmd-comment"># Тема иконок</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/IconThemeName -t string -s "Papirus-Dark" --create</div>
+                    <div class="cmd-comment"># Тема заголовков окон (xfwm4)</div>
+                    <div class="cmd cmd-user">xfconf-query -c xfwm4 -p /general/theme -t string -s "Greybird-dark" --create</div>
+                    <div class="cmd-comment"># Тема курсора</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Gtk/CursorThemeName -t string -s "jimmac" --create</div>
+                    <div class="cmd-comment"># Профиль панели</div>
+                    <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/openSUSE Leap 15.x.tar.bz2"</div>
+                </div>
+            </div>
+            <h2 id="xfce4-beep">Отключить звуковой сигнал встроенного динамика</h2> 
+            <p>Команда <code>xset b off</code> отключает уведомления встроенного динамика, но работает до перезагрузки. 
+                Чтобы работало постоянно, надо добавить ее в автозапуск (Сеансы и запуск). 
+                Обратите внимание, что когда копируете команды нажатием кнопки "копировать", 
+                то в последней строке автоматически добавляется перевод строки. Удалите его, когда будете вставлять команду <code>xset b off</code> в Автозапуск.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">xset b off</div>
                     <div class="cmd cmd-user">xfce4-session-settings</div>
                 </div>
             </div>
