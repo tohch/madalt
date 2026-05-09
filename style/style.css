@@ -462,6 +462,9 @@ th {
         max-width: 100%;
         padding: 30px 4%;
     }
+    /* Кнопки остаются прижатыми к правому краю */
+    .print-btn { right: 20px !important; }
+    .download-btn { right: 150px !important; }
 }
 
 /* 🖥️ ШИРОКИЕ ЭКРАНЫ (от 1400px) */
