@@ -8,24 +8,7 @@
     <link rel="icon" type="image/png" href="img/icon/icon-page.png">
 </head>
 <body>
-    <!-- Кнопка ПЕЧАТЬ -->
-    <button class="print-btn" onclick="window.print()" title="Распечатать страницу">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px;height:16px">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-        </svg>
-        Печать
-    </button>
 
-    <!-- Кнопка СКАЧАТЬ -->
-    <a href="https://github.com/tohch/madalt/archive/refs/heads/main.zip" 
-    class="download-btn" 
-    title="Скачать всю документацию (.zip)"
-    download>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px;height:16px">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        Скачать
-    </a>
 
     <nav class="sidebar">
         <h2>📖 Оглавление</h2>
@@ -176,6 +159,24 @@
     </nav>
 
     <main class="main">
+        <!-- Кнопка ПЕЧАТЬ -->
+        <button class="print-btn" onclick="window.print()" title="Распечатать страницу">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px;height:16px">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Печать
+        </button>
+
+        <!-- Кнопка СКАЧАТЬ -->
+        <a href="https://github.com/tohch/madalt/archive/refs/heads/main.zip" 
+        class="download-btn" 
+        title="Скачать всю документацию (.zip)"
+        download>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px;height:16px">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Скачать
+        </a>
         <!-- Глава -->
         <section id="intro-header" class="doc-header">
             <!-- Git-стиль: основной заголовок -->
