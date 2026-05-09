@@ -23,7 +23,8 @@
     --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { margin: 0; }
+
 html { scroll-behavior: smooth; scroll-padding-top: 20px; overflow-x: hidden; }
 
 body {
@@ -50,7 +51,9 @@ body {
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
     z-index: 10;
+    box-sizing: border-box;
 }
+
 .sidebar h2 { font-size: 1.1rem; color: var(--text-heading); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 .sidebar ul { list-style: none; }
 .sidebar li { margin: 6px 0; }
@@ -79,6 +82,7 @@ body {
     flex: 1;
     position: relative;
     z-index: 1;
+    box-sizing: border-box;
 }
 
 section { margin-bottom: 60px; }
@@ -97,7 +101,7 @@ h1 {
 h2 { font-size: 1.5rem; padding-bottom: 0.2em; }
 h3 { font-size: 1.25rem; padding-bottom: 0.2em; }
 
-p, ul, ol { margin-bottom: 1em; }
+p, ul, ol { margin-bottom: 1em; padding-inline-start: 0; }
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; color: var(--link-hover); }
 .mark { color: #dd6142; font-weight: bold; }
@@ -374,7 +378,7 @@ th {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23238636' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'/%3E%3C/svg%3E");
 }
 
-.dist-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: #238636; color: #fff; border-radius: 6px; font-weight: 500; margin: 1em 0; transition: background 0.2s; }
+.dist-link { box-sizing: border-box; display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: #238636; color: #fff; border-radius: 6px; font-weight: 500; margin: 1em 0; transition: background 0.2s; }
 .dist-link:hover { background: #2ea043; text-decoration: none; }
 
 /* =========================================
@@ -411,7 +415,10 @@ th {
 
 /* 📱 МОБИЛЬНЫЕ (до 850px) */
 @media (max-width: 850px) {
-    body { flex-direction: column; }
+    body { 
+        flex-direction: column; 
+        overflow-x: hidden;
+    }
     
     .sidebar {
         position: relative;
@@ -422,6 +429,7 @@ th {
         border-right: none;
         border-bottom: 1px solid var(--border);
         padding: 12px;
+        margin: 0;
     }
     .sidebar h2 { font-size: 1rem; margin-bottom: 8px; }
     .sidebar a { font-size: 0.9rem; padding: 4px 8px; }
