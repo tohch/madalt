@@ -460,7 +460,6 @@ th {
     .git-title { font-size: 1.3rem; }
     .subtitle { font-size: 1.15rem; }
     .code-block { padding: 12px; font-size: 0.85em; }
-    .copy-btn { opacity: 1 !important; }
     .dist-link { width: 100%; justify-content: center; }
 }
 
@@ -496,7 +495,7 @@ th {
     body { background: white; color: black; }
     
     .code-block { background: #f5f5f5; border: 1px solid #ddd; color: #000; }
-    .code-block > div { color: #000; }
+    .code-block > div { color: #000;  white-space: pre-wrap !important;}
     .code-block > .cmd-comment,
     .code-block > .config-comment,
     .code-block > .vim-comment { color: #666 !important; }
