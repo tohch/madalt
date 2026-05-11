@@ -67,6 +67,7 @@
                     <li><a href="#sshfs">Монтирование SSHFS</a></li>
                 </ul>
             </li>
+            <li><a href="#mdns">mDNS</a></li>
             <li><a href="#talisman-sql">Талисман-SQL</a>
                 <ul>
                     <li><a href="#talisman-sql-install-wine">Установка Wine</a></li>
@@ -844,7 +845,7 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install theme-mate-windows && \</div>
+                    <div class="cmd cmd-root">apt-get install -y theme-mate-windows && \</div>
                     <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
@@ -1256,6 +1257,45 @@
                     <div class="cmd cmd-user">sshfs user_buh@192.168.218.4:/D:/Talisman_SQL  ~/test</div>
                     <div class="cmd-comment"># Для того чтобы отмонтировать файловую систему используйте привычную команду umount:</div>
                     <div class="cmd cmd-user">umount ~/mnt/</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="mdns">
+            <h1>mDNS</h1>
+            <p>mDNS — это протокол для автоматического разрешения имён в локальной сети без централизованного DNS-сервера. Работает по принципу «спросил соседей — получил ответ».</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Установка (если не установлен)</div>
+                    <div class="cmd cmd-root">apt-get install -y avahi-daemon</div>
+                    <div class="cmd-comment"># Включение и запуск</div>
+                    <div class="cmd cmd-root">systemctl enable --now avahi-daemon</div>
+                    <div class="cmd-comment"># Проверка статуса</div>
+                    <div class="cmd cmd-root">systemctl status avahi-daemon</div>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Теперь любые устройства в одной подсети, поддерживающие mDNS, будут доступны с суффиксом <code>.local</code></p>
+                </div>
+            </div>
+            <p>Проверка работы</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Просмотр объявленных сервисов в сети</div>
+                    <div class="cmd cmd-root">avahi-browse -a -t</div>
+                    <div class="cmd-comment"># Поиск конкретного хоста</div>
+                    <div class="cmd cmd-root">avahi-resolve -n adm-1.local</div>
+                    <div class="cmd-comment"># Или через стандартные утилиты</div>
+                    <div class="cmd cmd-root">getent hosts adm-1.local</div>
+                    <div class="cmd cmd-root">ping adm-1.local</div>
                 </div>
             </div>
         </section>
