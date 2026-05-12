@@ -60,11 +60,11 @@
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
-                    <li><a href="#require-mount">Монтированние по запросу к сетевому ресурсу</a></li>
-                    <li><a href="#smb1">SMB1</a></li>
-                    <li><a href="#permanent-mount">Постоянное монтирование</a></li>
-                    <li><a href="#button-mount">Простое подключение сетевой папки через кнопку</a></li>
-                    <li><a href="#sshfs">Монтирование SSHFS</a></li>
+                    <li><a href="#require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу</a></li>
+                    <li><a href="#smb1">Вариант 2. SMB1</a></li>
+                    <li><a href="#permanent-mount">Вариант 3. Постоянное монтирование</a></li>
+                    <li><a href="#button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</a></li>
+                    <li><a href="#sshfs">Вариант 5. Монтирование SSHFS</a></li>
                 </ul>
             </li>
             <li><a href="#mdns">mDNS</a></li>
@@ -1011,7 +1011,8 @@
         <!-- Глава -->
         <section id="share">
             <h1>Сетевые папки</h1>
-            <h2 id="require-mount">Монтированние по запросу к сетевому ресурсу</h2>
+            <p>Выберите один из вариантов подключения к сетевым ресурсам.</p>
+            <h2 id="require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу</h2>
             <p>Создать папки для монтирования</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -1024,8 +1025,8 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">mkdir /mnt/talsql/out</div>
-                    <div class="cmd cmd-root">mkdir /mnt/talsql/pochta</div>
+                    <div class="cmd cmd-root">mkdir /mnt/out</div>
+                    <div class="cmd cmd-root">mkdir /mnt/pochta</div>
                 </div>
             </div>
             <p>Создать ссылки на Рабочий стол для удобства</p>
@@ -1033,8 +1034,8 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">ln -s /mnt/talsql/out /home/user/Рабочий\ стол/out</div>
-                    <div class="cmd cmd-root">ln -s /mnt/talsql/pochta /home/user/Рабочий\ стол/pochta</div>
+                    <div class="cmd cmd-root">ln -s /mnt/out /home/user/Рабочий\ стол/out</div>
+                    <div class="cmd cmd-root">ln -s /mnt/pochta /home/user/Рабочий\ стол/pochta</div>
                 </div>
             </div>
             <!-- Подсказка -->
@@ -1043,8 +1044,8 @@
                     <div class="alert-title">Подсказка</div>
                     <p class="alert-text">Чтобы дать сетевой доступ для префикса wine:</p>
                     <p class="alert-text"><code>mkdir /home/.wine/dosdevices/unc/192.168.205.4</code></p>
-                    <p class="alert-text"><code>ln -s /mnt/talsql/out /home/user/.wine/dosdevices/unc/192.168.205.4/out</code></p>
-                    <p class="alert-text"><code>ln -s /mnt/talsql/pochta /home/user/.wine/dosdevices/unc/192.168.205.4/pochta</code></p>
+                    <p class="alert-text"><code>ln -s /mnt/out /home/user/.wine/dosdevices/unc/192.168.205.4/out</code></p>
+                    <p class="alert-text"><code>ln -s /mnt/pochta /home/user/.wine/dosdevices/unc/192.168.205.4/pochta</code></p>
                 </div>
             </div>
             <p>Создать логин и пароль для сетевого подключение</p>
@@ -1098,9 +1099,9 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="vim-comment"># smb3</div>
-                    <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="vim-line vim-string">//192.168.205.4/out /mnt/out cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
                     <div class="vim-comment"># без file_mode и dir_mode - только чтение</div>
-                    <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</div>
+                    <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</div>
                 </div>
             </div>
             <p>Активируйте автомонтирования (можно просто сделать <code>reboot</code>)</p>
@@ -1109,8 +1110,8 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">systemctl daemon-reload</div>
-                    <div class="cmd cmd-root">systemctl start mnt-talsql-out.automount</div>
-                    <div class="cmd cmd-root">systemctl start mnt-talsql-pochta.automount</div>
+                    <div class="cmd cmd-root">systemctl start mnt-out.automount</div>
+                    <div class="cmd cmd-root">systemctl start mnt-pochta.automount</div>
                 </div>
             </div>
             <!-- Внимание -->
@@ -1122,7 +1123,7 @@
                     <p class="alert-text"><code>reboot</code></p>
                 </div>
             </div>
-            <h2 id="smb1">SMB1</h2>
+            <h2 id="smb1">Вариант 2. SMB1</h2>
             <!-- Важно -->
             <div class="alert alert-important">
                 <div class="alert-content">
@@ -1217,7 +1218,7 @@
                     <div class="vim-line vim-string">//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>     
                 </div>
             </div>
-            <h2 id="permanent-mount">Постоянное монтирование</h2> 
+            <h2 id="permanent-mount">Вариант 3. Постоянное монтирование</h2> 
             <p>Загрузка через /etc/fstab</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -1252,11 +1253,11 @@
                     <div class="cmd cmd-root">mount -a</div>
                 </div>
             </div>
-            <h2 id="button-mount">Простое подключение сетевой папки через кнопку</h2>
+            <h2 id="button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</h2>
             <p>ПКМ - Создать кнопку запуска… Тип: Расположение, Название: любое, Команда: smb://tal/trash</p>
             <!-- Картинка -->
             <img src="img/share/img-share-1.png" alt="Простое подключение сетевой папки через кнопку">
-            <h2 id="sshfs">Монтирование SSHFS</h2>
+            <h2 id="sshfs">Вариант 5. Монтирование SSHFS</h2>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1315,6 +1316,13 @@
                 <div class="alert-content">
                     <div class="alert-title">Примечание</div>
                     <p class="alert-text">Теперь любые устройства в одной подсети, поддерживающие mDNS, будут доступны с суффиксом <code>.local</code></p>
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Чтобы отключить демон avahi-daemon: <code>sudo systemctl disable --now avahi-daemon</code></p>
                 </div>
             </div>
             <p>Проверка работы</p>
