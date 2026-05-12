@@ -1135,11 +1135,11 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="vim-line vim-string">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                    <div class="cmd-comment">1. Что монтируем и куда</div>
-                    <div class="config-line"><span class="config-value">//192.168.205.4/share</span>  Сетевая папка. Можно указывать и сетевые имена вместо ip если сервер под Windows, но если сервер под Линуксом, но надо настроить DNS перед тем как использовать сетевое имя сервера.</div>
-                    <div class="config-line"><span class="config-value">/mnt/share</span>	Точка монтирования (локальная папка, в которой будет доступна шара. (Должна существовать)).</div>
-                    <div class="config-line"><span>cifs</span>	Common Internet File System — протокол для доступа к Windows-шарам (SMB).</div>
+                    <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
+                    <p class="cmd-comment">1. Что монтируем и куда</p>
+                    <p class="vim-line vim-string"><span class="vim-command">//192.168.205.4/share</span> - сетевая папка к которой хотите получить доступ. Можно указывать и сетевые имена вместо ip если сервер под Windows, то если сервер под Линуксом, но надо настроить DNS перед тем как использовать сетевое имя сервера.</p>
+                    <div class="vim-line vim-string"><span class="vim-command">/mnt/share</span> - точка монтирования (локальная папка, в которой будет доступна шара. (Должна существовать)).</div>
+                    <div class="config-line"><span>cifs</span> - Common Internet File System — протокол для доступа к Windows-шарам (SMB).</div>
                     <div>2. Основные параметры (опции)</div>
                     <div>Параметр	Объяснение</div>
                     <div>noauto	Не монтировать автоматически при загрузке (только по явной команде mount или по требованию).  Если удалить noauto и x-systemd.automount то шара будет монтироваться сразу при старте ОС</div>
