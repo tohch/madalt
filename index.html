@@ -1027,6 +1027,7 @@
                 <div class="code-block">
                     <div class="cmd cmd-root">mkdir /mnt/out</div>
                     <div class="cmd cmd-root">mkdir /mnt/pochta</div>
+                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
             <p>Создать ссылки на Рабочий стол для удобства</p>
@@ -1034,8 +1035,8 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">ln -s /mnt/out /home/user/Рабочий\ стол/out</div>
-                    <div class="cmd cmd-root">ln -s /mnt/pochta /home/user/Рабочий\ стол/pochta</div>
+                    <div class="cmd cmd-user">ln -s /mnt/out ~/Рабочий\ стол/out</div>
+                    <div class="cmd cmd-user">ln -s /mnt/pochta ~/Рабочий\ стол/pochta</div>
                 </div>
             </div>
             <!-- Подсказка -->
@@ -1048,7 +1049,7 @@
                     <p class="alert-text"><code>ln -s /mnt/pochta /home/user/.wine/dosdevices/unc/192.168.205.4/pochta</code></p>
                 </div>
             </div>
-            <p>Создать логин и пароль для сетевого подключение</p>
+            <p>Создать файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
