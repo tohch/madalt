@@ -1025,8 +1025,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-root">mkdir /mnt/out</div>
-                    <div class="cmd cmd-root">mkdir /mnt/pochta</div>
+                    <div class="cmd cmd-root">mkdir /mnt/share</div>
                     <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
@@ -1035,8 +1034,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">ln -s /mnt/out ~/Рабочий\ стол/out</div>
-                    <div class="cmd cmd-user">ln -s /mnt/pochta ~/Рабочий\ стол/pochta</div>
+                    <div class="cmd cmd-user">ln -s /mnt/share ~/Рабочий\ стол/share</div>
                 </div>
             </div>
             <!-- Подсказка -->
@@ -1044,9 +1042,8 @@
                 <div class="alert-content">
                     <div class="alert-title">Подсказка</div>
                     <p class="alert-text">Чтобы дать сетевой доступ для префикса wine:</p>
-                    <p class="alert-text"><code>mkdir /home/.wine/dosdevices/unc/192.168.205.4</code></p>
-                    <p class="alert-text"><code>ln -s /mnt/out /home/user/.wine/dosdevices/unc/192.168.205.4/out</code></p>
-                    <p class="alert-text"><code>ln -s /mnt/pochta /home/user/.wine/dosdevices/unc/192.168.205.4/pochta</code></p>
+                    <p class="alert-text"><code>mkdir ~/.wine/dosdevices/unc/192.168.205.4</code></p>
+                    <p class="alert-text"><code>ln -s /mnt/share ~/.wine/dosdevices/unc/192.168.205.4/share</code></p>
                 </div>
             </div>
             <p>Создать файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
@@ -1063,6 +1060,7 @@
                 <div class="code-block">
                     <div class="vim-line vim-string">username=administrator</div>
                     <div class="vim-line vim-string">password=mir9Ckflrbq</div>
+                    <div class="vim-comment"># Параметр domain необязателен в сетях без домена</div>
                     <div class="vim-line vim-string">domain=RCBUSO</div>
                 </div>
             </div>
@@ -1071,6 +1069,16 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">chmod 600 /root/.cifsmnt</div>
+                </div>
+            </div>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Если подключаетесь как гость (Доступ Все), то в /root/.cifsmnt указывать guest и пустой пароль:</p>
+                    <p class="alert-text"><code>username=<span class="mark">guest</span></code></p>
+                    <p class="alert-text"><code>password=</code></p>
+                    <p class="alert-text"><br>Также для подключения как гость убедитесь, что на сервере под Windows активна учетная запись Гость и в политике "secpol.msc" - "Локальные политики" - "Назначение прав пользователя" - "Отказывать в доступе к этому компьютеру из сети" - Не должно быть учетной записи Гость</p>
                 </div>
             </div>
             <!-- Внимание -->
@@ -1099,10 +1107,9 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="vim-comment"># smb3</div>
-                    <div class="vim-line vim-string">//192.168.205.4/out /mnt/out cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="vim-comment"># без указания vers используется по умолчанию smb3</div>
                     <div class="vim-comment"># без file_mode и dir_mode - только чтение</div>
-                    <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</div>
+                    <div class="vim-line vim-string">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
                 </div>
             </div>
             <p>Активируйте автомонтирования (можно просто сделать <code>reboot</code>)</p>
@@ -1111,8 +1118,7 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">systemctl daemon-reload</div>
-                    <div class="cmd cmd-root">systemctl start mnt-out.automount</div>
-                    <div class="cmd cmd-root">systemctl start mnt-pochta.automount</div>
+                    <div class="cmd cmd-root">systemctl start mnt-share.automount</div>
                 </div>
             </div>
             <!-- Внимание -->
@@ -1122,6 +1128,50 @@
                     <p class="alert-text">Если точка монтирования содержит кириллические символы (например, <code>/mnt/Общая папка</code>), то запуск соответствующего юнита systemd через <code>systemctl start</code> затруднён. Systemd преобразует кириллицу в экранированные последовательности вроде <code>\x20</code>, и имя юнита приходится угадывать.
                     Проще перезагрузить ОС:</p>
                     <p class="alert-text"><code>reboot</code></p>
+                </div>
+            </div>
+            <p>Разбор строки в fstab c монтирование share</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="cmd-comment">1. Что монтируем и куда</div>
+                    <div class="config-line"><span class="config-value">//192.168.205.4/share</span>  Сетевая папка. Можно указывать и сетевые имена вместо ip если сервер под Windows, но если сервер под Линуксом, но надо настроить DNS перед тем как использовать сетевое имя сервера.</div>
+                    <div class="config-line"><span class="config-value">/mnt/share</span>	Точка монтирования (локальная папка, в которой будет доступна шара. (Должна существовать)).</div>
+                    <div class="config-line"><span>cifs</span>	Common Internet File System — протокол для доступа к Windows-шарам (SMB).</div>
+                    <div>2. Основные параметры (опции)</div>
+                    <div>Параметр	Объяснение</div>
+                    <div>noauto	Не монтировать автоматически при загрузке (только по явной команде mount или по требованию).  Если удалить noauto и x-systemd.automount то шара будет монтироваться сразу при старте ОС</div>
+                    <div>x-systemd.automount	В паре с noauto — при первом обращении к /mnt/share система сама выполнит монтирование «на лету». Экономит ресурсы и не ждет сети.</div>
+                    <div>_netdev	Говорит системе, что это сетевое устройство. При загрузке монтировать только после поднятия сети (важно для CIFS/NFS).</div>
+                    <div>rw	Монтировать в режиме чтения и записи (Read-Write).</div>
+                    <div>nofail	Если шара недоступна (например, нет сети), не прерывать загрузку системы и не вызывать ошибку.</div>
+                    <div>Дополнительные параметры, которые можно указать</div>
+                    <div>vers=1.0 Использовать smb1 (полезно для старых систем, но небезопасно)</div>
+                    <div>vers=2.0 Использовать smb2</div>
+                    <div>vers=3.0 Использовать smb3, если не писать vers, то по умолчанию используется smb3</div>
+                    <div>3. Доступ и права</div>
+                    <div>Параметр	Объяснение</div>
+                    <div>credentials=/root/.cifsmnt	Файл с логином/паролем для доступа к шаре (пример:</div>
+                    <div>username=myuser</div>
+                    <div>password=mypass</div>
+                    <div>domain=MYDOM ) — безопаснее, чем пароль в открытом виде. Для подключения как гость используйте username=guest password=</div>
+                    <div>nobrl	Отключить блокировки байтов (byte-range locks). Помогает при работе некоторых баз данных (SQLite, MySQL) или при конфликтах с блокировками Windows.</div>
+                    <div>soft	При ошибке соединения вернуть ошибку приложению (а не «виснуть» вечно, как hard). Программа сама решит, повторить попытку или нет.</div>
+                    <div>file_mode=0777	Права доступа для файлов на шаре (все права — rwx для всех).</div>
+                    <div>dir_mode=0777	Права доступа для папок на шаре (все права — rwx для всех).</div>
+                    <div>⚠️ 0777 — широкие права. В production лучше ограничить (например, 0755 для папок, 0644 для файлов).</div>
+                    <div>Дополнительные параметры, которые можно указать</div>
+                    <div>Ограничить доступ к шаре</div>
+                    <div>uid=500 Дать доступ к шаре только конкретному пользователю по его идентификатору (Узнать свой UID и GID команды: id)</div>
+                    <div>gid=500 Дать доступ к шаре только конкретной группе по ее идентификатору (Узнать свой UID и GID команды: id)</div>
+                    <div>file_mode=0700 Дать доступ к файлам только владельцу. Владелиц определяется по параметру uid и gid</div>
+                    <div>dir_mode=0700 Дать доступ к папкам только владельцу. Владелиц определяется по параметру uid и gid</div>
+                    <div>4. Поля для dump и fsck</div>
+                    <div>Поле	Значение	Объяснение</div>
+                    <div>0 (пятое поле)	0	Резервное копирование dump — выключено.</div>
+                    <div>0 (шестое поле)	0	Проверка fsck при загрузке — выключена (для сетевых ФС всегда 0).</div>
                 </div>
             </div>
             <h2 id="smb1">Вариант 2. SMB1</h2>
