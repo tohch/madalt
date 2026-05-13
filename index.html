@@ -60,11 +60,10 @@
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
-                    <li><a href="#require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу</a></li>
+                    <li><a href="#require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</a></li>
                     <li><a href="#smb1">Вариант 2. SMB1</a></li>
-                    <li><a href="#permanent-mount">Вариант 3. Постоянное монтирование</a></li>
-                    <li><a href="#button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</a></li>
-                    <li><a href="#sshfs">Вариант 5. Монтирование SSHFS</a></li>
+                    <li><a href="#button-mount">Вариант 3. Простое подключение сетевой папки через кнопку</a></li>
+                    <li><a href="#sshfs">Вариант 4. Монтирование SSHFS</a></li>
                 </ul>
             </li>
             <li><a href="#mdns">mDNS</a></li>
@@ -1011,8 +1010,26 @@
         <!-- Глава -->
         <section id="share">
             <h1>Сетевые папки</h1>
+            <p>Убедитесь что пакеты samba и cifs установлены</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># Установка</div>
+                    <div class="cmd cmd-root">apt-get install -y samba-client cifs-utils</div>
+                    <div class="cmd-comment"># Проверка установленных утилит</div>
+                    <div class="cmd cmd-root">which smbclient smbtree</div>
+                </div>
+            </div>
             <p>Выберите один из вариантов подключения к сетевым ресурсам.</p>
-            <h2 id="require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу</h2>
+            <h2 id="require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</h2>
             <p>Создать папки для монтирования</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -1029,7 +1046,7 @@
                     <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
-            <p>Создать ссылки на Рабочий стол для удобства</p>
+            <p>Создать ссылку на Рабочий стол для удобства</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1092,7 +1109,7 @@
             <div class="alert alert-warning">
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
-                    <p class="alert-text">Если в вашей сети не настроен DNS-сервер или не работает <a href="#mdns">mDNS</a>, подключиться к устройству по его имени не получится. В этом случае используйте вместо имени его IP-адрес</p>
+                    <p class="alert-text">Если в вашей сети не настроен DNS-сервер или не работает <a href="#mdns">mDNS</a>, то подключиться к устройству, которое работает под Альт Линуксом, по его имени не получится. В этом случае используйте вместо имени его IP-адрес</p>
                 </div>
             </div>
             <p>Загрузка через /etc/fstab</p>
@@ -1130,7 +1147,8 @@
                     <p class="alert-text"><code>reboot</code></p>
                 </div>
             </div>
-            <p>Разбор строки в fstab c монтирование share</p>
+            <p>Готово!</p>
+            <p>Разбор строки в fstab c монтирование по протоколу cifs</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1138,43 +1156,46 @@
                     <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
                     <p class="cmd-comment">1. Что монтируем и куда</p>
                     <p class="vim-line vim-string"><span class="vim-command">//192.168.205.4/share</span> - сетевая папка к которой хотите получить доступ. Можно указывать и сетевые имена вместо ip если сервер под Windows, то если сервер под Линуксом, но надо настроить DNS перед тем как использовать сетевое имя сервера.</p>
-                    <div class="vim-line vim-string"><span class="vim-command">/mnt/share</span> - точка монтирования (локальная папка, в которой будет доступна шара. (Должна существовать)).</div>
-                    <div class="config-line"><span>cifs</span> - Common Internet File System — протокол для доступа к Windows-шарам (SMB).</div>
-                    <div>2. Основные параметры (опции)</div>
-                    <div>Параметр	Объяснение</div>
-                    <div>noauto	Не монтировать автоматически при загрузке (только по явной команде mount или по требованию).  Если удалить noauto и x-systemd.automount то шара будет монтироваться сразу при старте ОС</div>
-                    <div>x-systemd.automount	В паре с noauto — при первом обращении к /mnt/share система сама выполнит монтирование «на лету». Экономит ресурсы и не ждет сети.</div>
-                    <div>_netdev	Говорит системе, что это сетевое устройство. При загрузке монтировать только после поднятия сети (важно для CIFS/NFS).</div>
-                    <div>rw	Монтировать в режиме чтения и записи (Read-Write).</div>
-                    <div>nofail	Если шара недоступна (например, нет сети), не прерывать загрузку системы и не вызывать ошибку.</div>
-                    <div>Дополнительные параметры, которые можно указать</div>
-                    <div>vers=1.0 Использовать smb1 (полезно для старых систем, но небезопасно)</div>
-                    <div>vers=2.0 Использовать smb2</div>
-                    <div>vers=3.0 Использовать smb3, если не писать vers, то по умолчанию используется smb3</div>
-                    <div>3. Доступ и права</div>
-                    <div>Параметр	Объяснение</div>
-                    <div>credentials=/root/.cifsmnt	Файл с логином/паролем для доступа к шаре (пример:</div>
-                    <div>username=myuser</div>
-                    <div>password=mypass</div>
-                    <div>domain=MYDOM ) — безопаснее, чем пароль в открытом виде. Для подключения как гость используйте username=guest password=</div>
-                    <div>nobrl	Отключить блокировки байтов (byte-range locks). Помогает при работе некоторых баз данных (SQLite, MySQL) или при конфликтах с блокировками Windows.</div>
-                    <div>soft	При ошибке соединения вернуть ошибку приложению (а не «виснуть» вечно, как hard). Программа сама решит, повторить попытку или нет.</div>
-                    <div>file_mode=0777	Права доступа для файлов на шаре (все права — rwx для всех).</div>
-                    <div>dir_mode=0777	Права доступа для папок на шаре (все права — rwx для всех).</div>
-                    <div>⚠️ 0777 — широкие права. В production лучше ограничить (например, 0755 для папок, 0644 для файлов).</div>
-                    <div>Дополнительные параметры, которые можно указать</div>
-                    <div>Ограничить доступ к шаре</div>
-                    <div>uid=500 Дать доступ к шаре только конкретному пользователю по его идентификатору (Узнать свой UID и GID команды: id)</div>
-                    <div>gid=500 Дать доступ к шаре только конкретной группе по ее идентификатору (Узнать свой UID и GID команды: id)</div>
-                    <div>file_mode=0700 Дать доступ к файлам только владельцу. Владелиц определяется по параметру uid и gid</div>
-                    <div>dir_mode=0700 Дать доступ к папкам только владельцу. Владелиц определяется по параметру uid и gid</div>
-                    <div>4. Поля для dump и fsck</div>
-                    <div>Поле	Значение	Объяснение</div>
-                    <div>0 (пятое поле)	0	Резервное копирование dump — выключено.</div>
-                    <div>0 (шестое поле)	0	Проверка fsck при загрузке — выключена (для сетевых ФС всегда 0).</div>
+                    <p class="vim-line vim-string"><span class="vim-command">/mnt/share</span> - точка монтирования (локальная папка, в которой будет доступна шара. (Должна существовать)).</p>
+                    <p class="vim-line vim-string"><span class="vim-command">cifs</span> - Common Internet File System — протокол для доступа к Windows-шарам (SMB).</p>
+                    <p class="cmd-comment">2. Основные параметры (опции)</p>
+                    <p class="cmd-comment">Параметр	Объяснение</p>
+                    <p class="vim-line vim-string"><span class="vim-command">noauto</span> - не монтировать автоматически при загрузке (только по явной команде mount или по требованию).  Если удалить noauto и x-systemd.automount то шара будет монтироваться сразу при старте ОС</p>
+                    <p class="vim-line vim-string"><span class="vim-command">x-systemd.automount</span> - в паре с noauto - при первом обращении к /mnt/share система сама выполнит монтирование «на лету». Экономит ресурсы и не ждет сети.</p>
+                    <p class="vim-line vim-string"><span class="vim-command">_netdev</span> - говорит системе, что это сетевое устройство. При загрузке монтировать только после поднятия сети (важно для CIFS/NFS).</p>
+                    <p class="vim-line vim-string"><span class="vim-command">rw</span> - монтировать в режиме чтения и записи (Read-Write).</p>
+                    <p class="vim-line vim-string"><span class="vim-command">nofail</span> - если шара недоступна (например, нет сети), не прерывать загрузку системы и не вызывать ошибку.</p>
+                    <p class="cmd-comment">Дополнительные параметры, которые можно указать</p>
+                    <p class="vim-line vim-string"><span class="vim-command">vers=1.0 </span> - использовать smb1 (полезно для старых систем, но небезопасно)</p>
+                    <p class="vim-line vim-string"><span class="vim-command">vers=2.0</span> - использовать smb2</p>
+                    <p class="vim-line vim-string"><span class="vim-command">vers=3.0</span> - использовать smb3, если не писать vers, то по умолчанию используется smb3</p>
+                    <p class="cmd-comment">3. Доступ и права</p>
+                    <p class="vim-line vim-string"><span class="vim-command">credentials=/root/.cifsmnt</span> - файл с логином/паролем для доступа к шаре (пример: <br>username=myuser <br>password=mypass <br>domain=MYDOM ) — безопаснее, чем пароль в открытом виде. <br>Для подключения как гость используйте: <br>username=guest <br>password=</p>
+                    <p class="vim-line vim-string"><span class="vim-command">nobrl</span> - отключить блокировки байтов (byte-range locks). Помогает при работе некоторых баз данных (SQLite, MySQL) или при конфликтах с блокировками Windows.</p>
+                    <p class="vim-line vim-string"><span class="vim-command">soft</span> - при ошибке соединения вернуть ошибку приложению (а не «виснуть» вечно, как hard). Программа сама решит, повторить попытку или нет.</p>
+                    <p class="vim-line vim-string"><span class="vim-command">file_mode=0777</span> - права доступа для файлов на шаре (все права — rwx для всех).</p>
+                    <p class="vim-line vim-string"><span class="vim-command">dir_mode=0777</span> - права доступа для папок на шаре (все права — rwx для всех).<br> ⚠️ 0777 - широкие права. В production лучше ограничить (например, 0755 для папок, 0644 для файлов).</p>
+                    <p class="vim-line vim-string"></p>
+                    <p class="cmd-comment">Дополнительные параметры, которые можно указать</p>
+                    <p class="cmd-comment">Ограничить доступ к шаре</p>
+                    <p class="vim-line vim-string"><span class="vim-command">uid=500</span> - дать доступ к шаре только конкретному пользователю по его идентификатору (Узнать свой UID и GID можно командой: id)</p>
+                    <p class="vim-line vim-string"><span class="vim-command">gid=500</span> - дать доступ к шаре только конкретной группе по ее идентификатору (Узнать свой UID и GID можно командой: id)</p>
+                    <p class="vim-line vim-string"><span class="vim-command">file_mode=0700</span> - дать доступ к файлам только владельцу. Владелиц определяется по параметру uid и gid</p>
+                    <p class="vim-line vim-string"><span class="vim-command">dir_mode=0700</span> - дать доступ к папкам только владельцу. Владелиц определяется по параметру uid и gid</p>
+                    <p class="cmd-comment">4. Поля для dump и fsck</p>
+                    <p class="vim-line vim-string"><span class="vim-command">0</span> - (пятое поле) Резервное копирование dump — выключено.</p>
+                    <p class="vim-line vim-string"><span class="vim-command">0</span> - (шестое поле)	0	Проверка fsck при загрузке — выключена (для сетевых ФС всегда 0).</p>
+                    <p class="vim-line">Примеры альтернативных подключений:</p>
+                    <p class="cmd-comment">Подключение по SMB1</p>
+                    <p class="vim-line">//192.168.205.254/share /mnt/share cifs <span class="mark">vers=1.0</span>,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
+                    <p class="cmd-comment">Постоянное подключение (сетевая папка будет монтироваться сразу при старте ОС) (удалить <span class="mark">noauto,x-systemd.automount</span>). Для подключения без перезагрузки используйте: <span class="mark">mount -a</span></p>
+                    <p class="vim-line">//192.168.205.4/out /mnt/talsql/out cifs _netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
+                    <p class="cmd-comment">Подключить сетевую папку только для чтения (удалить <span class="mark">file_mode=0777,dir_mode=0777</span>)</p>
+                    <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</p>
                 </div>
             </div>
             <h2 id="smb1">Вариант 2. SMB1</h2>
+            <p>Чтобы Samba могла работать по протоколу smb1 надо явно указать в <code>/etc/samba/smb.conf</code> протокол NT1</p>
             <!-- Важно -->
             <div class="alert alert-important">
                 <div class="alert-content">
@@ -1212,103 +1233,42 @@
                     <div class="cmd cmd-root">systemctl restart smb.service nmb.service</div>
                 </div>
             </div>
-            <p>Создать папки для монтирования и ссылок</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">mkdir /mnt/tal/trash</div>
-                    <div class="cmd-comment"># создать ссылку</div>
-                    <div class="cmd cmd-root">ln -s /mnt/tal/trash /home/user/Рабочий\ стол/Общая\ папка</div>
-                </div>
-            </div>
-            <p>Создать логин и пароль для сетевого подключение</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">vim /root/.usermnt</div>
-                </div>
-            </div>
+            <p>Проверить подключение</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="vim-line vim-string">username=userbuh</div>
-                    <div class="vim-line vim-string">password=gla9Ckflrbq</div>
-                    <div class="vim-line vim-string">domain=RCBUSO</div>
+                    <div class="cmd-comment"># Принудительно SMB1 (старые сервера, но небезопасно)</div>
+                    <div class="cmd cmd-root">smbclient -L //192.168.205.254 -U username -d 3 --option='client min protocol=NT1' --option='client max protocol=NT1'</div>
+                    <div class="cmd-comment"># SMB2.0</div>
+                    <div class="cmd cmd-root">smbclient -L //192.168.205.254 -U username -d 3 --option='client min protocol=SMB2_02'</div>
+                    <div class="cmd-comment"># SMB3.0 (современные сервера)</div>
+                    <div class="cmd cmd-root">smbclient -L //192.168.205.254 -U username -d 3 --option='client min protocol=SMB3_00'</div>
+                    <div class="cmd-comment"># Авто-переговоры (по умолчанию, но можно уточнить)</div>
+                    <div class="cmd cmd-root">smbclient -L //192.168.205.254 -U username -d 3</div>
+                    <div class="cmd-comment"># 1. Посмотреть шары на сервере (анонимно)</div>
+                    <div class="cmd cmd-root">smbclient -L //192.168.205.254 -N</div>
+                    <div class="cmd-comment"># 2. Подключиться интерактивно с паролем</div>
+                    <div class="cmd cmd-root">smbclient //192.168.205.254/trash -U myuser</div>
+                    <div class="cmd-comment"># 3. Скачать файл одной командой</div>
+                    <div class="cmd cmd-root">smbclient //192.168.205.254/trash -U myuser%pass -c "get file.txt"</div>
+                    <div class="cmd-comment"># 4. Смонтировать шару вручную</div>
+                    <div class="cmd cmd-root">sudo mkdir -p /mnt/tal/trash</div>
+                    <div class="cmd cmd-root">sudo mount -t cifs //192.168.205.254/trash /mnt/tal/trash -o guest</div>
+                    <div class="cmd-comment"># 5. Проверить содержимое</div>
+                    <div class="cmd cmd-root">ls -la /mnt/tal/trash/</div>
+                    <div class="cmd-comment"># 6. Размонтировать</div>
+                    <div class="cmd cmd-root">umount /mnt/tal/trash</div>
                 </div>
             </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">chmod 600 /root/.usermnt</div>
-                </div>
-            </div>
-            <!-- Внимание -->
-            <div class="alert alert-warning">
-                <div class="alert-content">
-                    <div class="alert-title">Внимание</div>
-                    <p class="alert-text">Если в именах сетевых путей есть пробелы, то замените их на <span class="mark">\040</span></p>
-                    <p class="alert-text">Например путь //192.168.205.4/Общая папка</p> 
-                    <p class="alert-text">Заменить на //192.168.205.4/Общая<span class="mark">\040</span>папка</p>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">vim /etc/fstab</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>     
-                </div>
-            </div>
-            <h2 id="permanent-mount">Вариант 3. Постоянное монтирование</h2> 
-            <p>Загрузка через /etc/fstab</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">vim /etc/fstab</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-comment"># vers=1.0 - если требуется smb1</div>
-                    <div class="vim-line vim-string">//tal/trash /mnt/tal/trash cifs vers=1.0,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                    <div class="vim-comment"># smb3</div>
-                    <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs _netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                    <div class="vim-comment"># без file_mode и dir_mode - только чтение</div>
-                    <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs _netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">mount -a</div>
-                </div>
-            </div>
-            <h2 id="button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</h2>
-            <p>ПКМ - Создать кнопку запуска… Тип: Расположение, Название: любое, Команда: smb://tal/trash</p>
+            <p>Подключение через оконный проводник</p>
+            <!-- Картинка -->
+            <img src="img/share/img-share-2.png" alt="smb">
+            <h2 id="button-mount">Вариант 3. Простое подключение сетевой папки через кнопку</h2>
+            <p>ПКМ - "Создать кнопку запуска…" или "Создать значок запуска..." Тип: Расположение, Название: любое, Команда: smb://tal/trash</p>
             <!-- Картинка -->
             <img src="img/share/img-share-1.png" alt="Простое подключение сетевой папки через кнопку">
-            <h2 id="sshfs">Вариант 5. Монтирование SSHFS</h2>
+            <h2 id="sshfs">Вариант 4. Монтирование SSHFS</h2>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -2237,8 +2197,8 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="config-line"><span class="config-value">Файл.docx - ПКМ – Открыть с помощью – Другое приложение... – </span></div>
-                    <div class="config-line"><span class="config-value">Использовать собственную команду – Просмотреть... – ‘/home/user1/altlinux/dist/office2007/word.sh’ –</span></div>
+                    <div class="config-line"><span class="config-value">Файл.docx - ПКМ - Открыть с помощью - Другое приложение... - </span></div>
+                    <div class="config-line"><span class="config-value">Использовать собственную команду - Просмотреть... - ‘/home/user1/altlinux/dist/office2007/word.sh’ -</span></div>
                     <div class="config-line"><span class="config-value">Запомнить это приложение для файлов типа “Документ Word 2007” - Открыть</span></div>
                 </div>
             </div>
@@ -3609,12 +3569,12 @@
                         <div class="cmd cmd-root">blkid</div>
                         <div class="cmd cmd-root">blkid > ./uuid.txt</div>
                         <div class="cmd cmd-root">vim ./user/uuid.txt</div>
-                        <div class="vim-comment">vey – скопировать по словам</div>
-                        <div class="vim-comment">vEy – скопировать все слово</div>
-                        <div class="vim-comment">p – вставить после</div>
-                        <div class="vim-comment">P – вставить перед</div>
-                        <div class="vim-comment">_x – удалить один символ вправо без копирования в буфер</div>
-                        <div class="vim-comment">_dw – удалить от курсора до конца слова без копирования в буфер</div>
+                        <div class="vim-comment">vey - скопировать по словам</div>
+                        <div class="vim-comment">vEy - скопировать все слово</div>
+                        <div class="vim-comment">p - вставить после</div>
+                        <div class="vim-comment">P - вставить перед</div>
+                        <div class="vim-comment">_x - удалить один символ вправо без копирования в буфер</div>
+                        <div class="vim-comment">_dw - удалить от курсора до конца слова без копирования в буфер</div>
                     </div>
                 </div>
                 <!-- Команды -->
