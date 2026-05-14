@@ -152,6 +152,7 @@
                     <li><a href="#drweb-guard">Настройка исключений для SpIDer Guard</a></li>
                 </ul>
             </li>
+            <li><a href="#timeshift">TimeShift</a></li>
             <li><a href="#clone">Клонирование</a>
                 <ul>
                     <li><a href="#tar-get-os">Создание образа системы Альт Линукс</a></li>
@@ -2775,6 +2776,9 @@
                 </section>
                 <section id="kvm-share">
                     <h2>Настройка общей папки между хостом и гостевой ВМ</h2>
+                    <p>Включите разделяемую память</p>
+                    <!-- Картинка -->
+                    <img src="img/kvm/img-kvm-5.png" alt="KVM">
                     <p>Выключите ВМ → «Добавить оборудование» → «Файловая система»</p>
                     <!-- Картинка -->
                     <img src="img/kvm/img-kvm-3.png" alt="KVM">
@@ -3482,6 +3486,114 @@
                 <p>Ввести лицензию</p>
                 <!-- Картинка -->
                 <img src="img/drweb/img-drweb-1.png" alt="Dr.Web">
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="timeshift">
+            <h1>TimeShift</h1>
+            <p><a href="https://www.altlinux.org/Timeshift">Статья на altlinux.org</a></p>
+            <p>Timeshift — программа для автоматического периодического создания копий системы (снимков/snapshots).</p>
+            <p>Timeshift предназначен прежде всего для создания снимков системных файлов и настроек. Пользовательские данные по умолчанию не архивируются поэтому в случае сбоя системы, восстанавливаются системные файлы, а данные пользователей остаются в актуальном состоянии (конечно, если они не были повреждены).</p>
+            <p>Резервные копии не могут быть восстановлены на уровне отдельных файлов, восстановление всегда происходит в полном объеме настроек Timeshift.</p>
+            <!-- Глава -->
+            <section id="timeshift-install">
+                <h2>Установка</h2>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">TimeShift установлен по умполчанию в Альт Линукс СП 10 Рабочая станция</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y timeshift</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="timeshift-create">
+                <h2>Создание снимков</h2>
+                <p>Создать снимок вручную</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">timeshift --create</div>
+                    </div>
+                </div>
+                <p>Создания снимка ежемесячно в автоматическом режиме через cron</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment">Перед автоматизацией убедитесь, что timeshift уже знает, куда сохранять снимки. Запустите --create</div>
+                        <div class="cmd cmd-root">timeshift --create --comments "Первоначальная настройка"</div>
+                        <div class="cmd-comment"># Установить правило в TimeShift для регулирования ежемесячного снимка</div>
+                        <div class="cmd cmd-root">jq '.schedule_monthly = true' /etc/timeshift.json</div>
+                        <div class="cmd-comment"># Создать задачу в crontab для ежемесячного запуска timshift</div>
+                        <div class="cmd cmd-root">(crontab -l 2>/dev/null | grep -v 'timeshift --create'; echo "0 13 1 * * /usr/bin/timeshift --create --scripted --comments 'Monthly' --tags M >> /var/log/timeshift.log 2>&1") | crontab -</div>
+                        <div class="cmd-comment"># Проверить установленную задачу</div>
+                        <div class="cmd cmd-root">crontab -l</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="timeshift-restore">
+                <h2>Восстановление системы</h2>
+                <p>Если система загружается, то используте терминал или графический режим timeshift-launcher</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">timeshift --restor</div>
+                    </div>
+                </div>
+                <p>Если система не загружается, то используйте Rescue-диск</p>
+                <p>Вставьте установочный диск и загрузитесь в режиме восстановления</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Просмотрите список дисков/разделов</div>
+                        <div class="cmd cmd-root">fdisk -l</div>
+                        <div class="cmd-comment"># Определите ваш системный диск (ext4). Если у вас несколько систем, то можете попробовать выполнить, например:</div>
+                        <div class="cmd cmd-root">mount /dev/sda3 /mnt</div>
+                        <div class="cmd-comment"># Перейдите в корень системы</div>
+                        <div class="cmd cmd-root">chroot /mnt</div>
+                        <div class="cmd-comment"># Запустите программу от суперпользователя</div>
+                        <div class="cmd cmd-root">su -</div>
+                        <div class="cmd cmd-root">timeshift</div>
+                        <div class="cmd-comment"># Посмотрите список точек восстановления:</div>
+                        <div class="cmd cmd-root">timeshift --list</div>
+                        <div class="cmd-comment"># 2020-01-26_12-42-07</div>
+                        <div class="cmd-comment"># Восстановите необходимую точку на необходимый раздел:</div>
+                        <div class="cmd cmd-root">timeshift --restore --snapshot '2020-01-26_12-42-07' --target /dev/sda3</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="timeshift-cmd">
+                <h2>Список команд</h2>
+                <ul>
+                    <li>Запустить графический режим: <ode>timeshift-launcher</ode></li>
+                    <li>Создание снимка вручную: <code>sudo timeshift --create --comments "Описание"</code></li>
+                    <li>Список снимков: <code>sudo timeshift --list</code></li>
+                    <li>Восстановление системы: <code>sudo timeshift --restore --snapshot "ИМЯ_СНИМКА"</code></li>
+                    <li>Удаление снимка: <code>sudo timeshift --delete --snapshot "ИМЯ_СНИМКА"</code></li>
+                    <li>Снимки хранятся: <code>/run/timeshift</code></li>
+                </ul>
             </section>
         </section>
 
