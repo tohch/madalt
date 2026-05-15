@@ -3533,19 +3533,33 @@
                         <div class="cmd cmd-root">timeshift --create</div>
                     </div>
                 </div>
-                <p>Создания снимка ежемесячно в автоматическом режиме через cron</p>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Снимки хранятся: <code>/run/timeshift/</code></p>
+                    </div>
+                </div>
+                <p>Поставить задачу на автоматическое создание снимков ежемесячно через cron</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd-comment">Перед автоматизацией убедитесь, что timeshift уже знает, куда сохранять снимки. Запустите --create</div>
+                        <div class="cmd-comment"># Перед автоматизацией убедитесь, что timeshift уже знает, куда сохранять снимки. Запустите --create</div>
                         <div class="cmd cmd-root">timeshift --create --comments "Первоначальная настройка"</div>
                         <div class="cmd-comment"># Установить правило в TimeShift для регулирования ежемесячного снимка</div>
-                        <div class="cmd cmd-root">jq '.schedule_monthly = true' /etc/timeshift.json</div>
+                        <div class="cmd cmd-root">jq '.schedule_monthly = "true"' /etc/timeshift/timeshift.json</div>
                         <div class="cmd-comment"># Создать задачу в crontab для ежемесячного запуска timshift</div>
                         <div class="cmd cmd-root">(crontab -l 2>/dev/null | grep -v 'timeshift --create'; echo "0 13 1 * * /usr/bin/timeshift --create --scripted --comments 'Monthly' --tags M >> /var/log/timeshift.log 2>&1") | crontab -</div>
                         <div class="cmd-comment"># Проверить установленную задачу</div>
                         <div class="cmd cmd-root">crontab -l</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Чтобы удалить установленную задачу наберите: <code>crontab -e</code></p>
                     </div>
                 </div>
             </section>
@@ -3588,10 +3602,11 @@
                 <h2>Список команд</h2>
                 <ul>
                     <li>Запустить графический режим: <ode>timeshift-launcher</ode></li>
-                    <li>Создание снимка вручную: <code>sudo timeshift --create --comments "Описание"</code></li>
-                    <li>Список снимков: <code>sudo timeshift --list</code></li>
-                    <li>Восстановление системы: <code>sudo timeshift --restore --snapshot "ИМЯ_СНИМКА"</code></li>
-                    <li>Удаление снимка: <code>sudo timeshift --delete --snapshot "ИМЯ_СНИМКА"</code></li>
+                    <li>Создание снимка вручную: <code>timeshift --create --comments "Описание"</code></li>
+                    <li>Список снимков: <code>timeshift --list</code></li>
+                    <li>Восстановление системы: <code>timeshift --restore --snapshot "ИМЯ_СНИМКА"</code></li>
+                    <li>Удаление снимка по имени: <code>timeshift --delete --snapshot "ИМЯ_СНИМКА"</code></li>
+                    <li>Удаление снимка в интерактивном режиме: <code>timeshift --delete</code></li>
                     <li>Снимки хранятся: <code>/run/timeshift</code></li>
                 </ul>
             </section>
