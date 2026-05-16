@@ -3549,19 +3549,13 @@
                         <p class="alert-text">Снимки хранятся: <code>/timeshift/snapshots/</code></p>
                     </div>
                 </div>
-                <p>Поставить задачу на автоматическое создание снимков ежемесячно через cron (Макс. ежемесячных снимков: 2 шт.)</p>
+                <p>Поставить задачу на автоматическое создание снимков ежемесячно:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd-comment"># Перед автоматизацией убедитесь, что timeshift уже знает, куда сохранять снимки. Запустите --create</div>
-                        <div class="cmd cmd-root">timeshift --create --comments "Первоначальная настройка"</div>
                         <div class="cmd-comment"># Установить правило в TimeShift для регулирования ежемесячного снимка</div>
                         <div class="cmd cmd-root">jq '.schedule_monthly = true' /etc/timeshift/timeshift.json</div>
-                        <div class="cmd-comment"># Создать задачу в crontab для ежемесячного запуска timshift (Макс. 2 снимка)</div>
-                        <div class="cmd cmd-root">(crontab -l 2>/dev/null | grep -v 'timeshift --create'; echo "0 13 1 * * /usr/bin/timeshift --create --scripted --comments 'Monthly' --tags M >> /var/log/timeshift.log 2>&1 && /usr/bin/timeshift --list | grep '\[M\]' | awk '{print \$1}' | sort | head -n -2 | xargs -r -I {} /usr/bin/timeshift --delete --snapshot {} --assume-yes >> /var/log/timeshift-rotate.log 2>&1") | crontab -</div>
-                        <div class="cmd-comment"># Проверить установленную задачу</div>
-                        <div class="cmd cmd-root">crontab -l</div>
                     </div>
                 </div>
                 <!-- Подсказка -->
