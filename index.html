@@ -3557,7 +3557,7 @@
                         <div class="cmd-comment"># Перед автоматизацией убедитесь, что timeshift уже знает, куда сохранять снимки. Запустите --create</div>
                         <div class="cmd cmd-root">timeshift --create --comments "Первоначальная настройка"</div>
                         <div class="cmd-comment"># Установить правило в TimeShift для регулирования ежемесячного снимка</div>
-                        <div class="cmd cmd-root">jq '.schedule_monthly = "true"' /etc/timeshift/timeshift.json</div>
+                        <div class="cmd cmd-root">jq '.schedule_monthly = true' /etc/timeshift/timeshift.json</div>
                         <div class="cmd-comment"># Создать задачу в crontab для ежемесячного запуска timshift</div>
                         <div class="cmd cmd-root">(crontab -l 2>/dev/null | grep -v 'timeshift --create'; echo "0 13 1 * * /usr/bin/timeshift --create --scripted --comments 'Monthly' --tags M >> /var/log/timeshift.log 2>&1") | crontab -</div>
                         <div class="cmd-comment"># Проверить установленную задачу</div>
