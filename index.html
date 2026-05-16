@@ -3554,6 +3554,8 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
+                        <div class="cmd-comment"># Перед автоматизацией убедитесь, что timeshift уже знает, куда сохранять снимки. Запустите --create</div>
+                        <div class="cmd cmd-root">timeshift --create --comments "Первоначальная настройка"</div>
                         <div class="cmd-comment"># Установить правило в TimeShift для регулирования ежемесячного снимка</div>
                         <div class="cmd cmd-root">jq '.schedule_monthly = true' /etc/timeshift/timeshift.json</div>
                     </div>
