@@ -206,7 +206,7 @@
                     <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
                 <span>Последнее обновление:</span>
-                <time datetime="2026-05-13">13 мая 2026</time>
+                <time datetime="2026-05-16">16 мая 2026</time>
             </div>
 
             <!-- Изображение -->
@@ -3537,7 +3537,7 @@
                 <div class="alert alert-note">
                     <div class="alert-content">
                         <div class="alert-title">Примечание</div>
-                        <p class="alert-text">Снимки хранятся: <code>/run/timeshift/</code></p>
+                        <p class="alert-text">Снимки хранятся: <code>/timeshift/snapshots/</code></p>
                     </div>
                 </div>
                 <p>Поставить задачу на автоматическое создание снимков ежемесячно через cron</p>
@@ -3566,7 +3566,8 @@
             <!-- Глава -->
             <section id="timeshift-restore">
                 <h2>Восстановление системы</h2>
-                <p>Если система загружается, то используте терминал или графический режим timeshift-launcher</p>
+                <h3>Вариант 1. Система загружается</h3>
+                <p>Если система загружается, то используйте терминал или графический режим <code>timeshift-launcher</code></p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -3574,26 +3575,16 @@
                         <div class="cmd cmd-root">timeshift --restor</div>
                     </div>
                 </div>
-                <p>Если система не загружается, то используйте Rescue-диск</p>
-                <p>Вставьте установочный диск и загрузитесь в режиме восстановления</p>
+                <h3>Вариант 2. Система не загружается</h3>
+                <p>Если система не загружается, то используйте Rescue-диск:</p>
+                <p>Вставьте установочный диск и загрузитесь с Спасательного LiveCD.</p>
+                <!-- Картинка -->
+                <img src="img/timeshift/img-timeshift-1.png" alt="Спасательный LiveCD">
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd-comment"># Просмотрите список дисков/разделов</div>
-                        <div class="cmd cmd-root">fdisk -l</div>
-                        <div class="cmd-comment"># Определите ваш системный диск (ext4). Если у вас несколько систем, то можете попробовать выполнить, например:</div>
-                        <div class="cmd cmd-root">mount /dev/sda3 /mnt</div>
-                        <div class="cmd-comment"># Перейдите в корень системы</div>
-                        <div class="cmd cmd-root">chroot /mnt</div>
-                        <div class="cmd-comment"># Запустите программу от суперпользователя</div>
-                        <div class="cmd cmd-root">su -</div>
-                        <div class="cmd cmd-root">timeshift</div>
-                        <div class="cmd-comment"># Посмотрите список точек восстановления:</div>
-                        <div class="cmd cmd-root">timeshift --list</div>
-                        <div class="cmd-comment"># 2020-01-26_12-42-07</div>
-                        <div class="cmd-comment"># Восстановите необходимую точку на необходимый раздел:</div>
-                        <div class="cmd cmd-root">timeshift --restore --snapshot '2020-01-26_12-42-07' --target /dev/sda3</div>
+                        <div class="cmd cmd-root">timeshift --restore</div>
                     </div>
                 </div>
             </section>
@@ -3601,7 +3592,8 @@
             <section id="timeshift-cmd">
                 <h2>Список команд</h2>
                 <ul>
-                    <li>Запустить графический режим: <code>timeshift-launcher</ode></li>
+                    <li>Просмотрите список дисков/разделов: <code>lsblk -f</code></li>
+                    <li>Запустить графический режим: <code>timeshift-launcher</code></li>
                     <li>Создание снимка вручную с комментарием: <code>timeshift --create --comments "Описание"</code></li>
                     <li>Создание снимка вручную без комментариея: <code>timeshift --create</code></li>
                     <li>Список снимков: <code>timeshift --list</code></li>
@@ -3609,7 +3601,7 @@
                     <li>Восстановление системы в интерактивном режиме: <code>timeshift --restore</code></li>
                     <li>Удаление снимка по имени: <code>timeshift --delete --snapshot "ИМЯ_СНИМКА"</code></li>
                     <li>Удаление снимка в интерактивном режиме: <code>timeshift --delete</code></li>
-                    <li>Снимки хранятся: <code>/run/timeshift</code></li>
+                    <li>Снимки хранятся: <code>/timeshift/snapshots/</code></li>
                 </ul>
             </section>
         </section>
