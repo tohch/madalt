@@ -53,9 +53,11 @@
             </li>
             <li><a href="#intall-them-windows">Установка темы "Windows"</a></li>
             <li><a href="#xfce4">Окружение Xfce4</a>
-                <ul><li><a href="#xfce4-install">Установка окружения Xfce4</a></li></ul>
-                <ul><li><a href="#xfce4-theme">Настройка темы</a></li></ul>
-                <ul><li><a href="#xfce4-beep">Отключить звуковой сигнал встроенного динамика</a></li></ul>
+                <ul>
+                    <li><a href="#xfce4-install">Установка окружения Xfce4</a></li>
+                    <li><a href="#xfce4-theme">Настройка темы</a></li>
+                    <li><a href="#xfce4-beep">Отключить звуковой сигнал встроенного динамика</a></li>
+                </ul>
             </li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#share">Сетевые папки</a>
@@ -152,7 +154,14 @@
                     <li><a href="#drweb-guard">Настройка исключений для SpIDer Guard</a></li>
                 </ul>
             </li>
-            <li><a href="#timeshift">TimeShift</a></li>
+            <li><a href="#timeshift">TimeShift</a>
+                <ul>
+                    <li><a href="#timeshift-install">Установка</a></li>
+                    <li><a href="#timeshift-create">Создание снимков</a></li>
+                    <li><a href="#timeshift-restore">Восстановление системы</a></li>
+                    <li><a href="#timeshift-cmd">Список команд</a></li>
+                </ul>
+            </li>
             <li><a href="#clone">Клонирование</a>
                 <ul>
                     <li><a href="#tar-get-os">Создание образа системы Альт Линукс</a></li>
@@ -3560,6 +3569,7 @@
                     <div class="alert-content">
                         <div class="alert-title">Подсказка</div>
                         <p class="alert-text">Чтобы удалить установленную задачу наберите: <code>crontab -e</code></p>
+                        <p class="alert-text">Чтобы удалить снимок: <code>timeshift --delete</code></p>
                     </div>
                 </div>
             </section>
