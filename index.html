@@ -140,7 +140,7 @@
                 </ul>
             </li>
             <li><a href="#bridge">Сетевой мост</a></li>
-            <li><a href="#catharsis">Катарсис</a></li>
+            <li><a href="#katarsis">Катарсис</a></li>
             <li><a href="#notify-listener">NotifyListener - уведомление о создании файлов</a></li>
             <li><a href="#lan-chat">Локальный чат</a>
                 <ul>
@@ -169,6 +169,7 @@
                     <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
                 </ul>
             </li>
+            <li><a href="#port-redirect">Проброс портов</a></li>
             <li><a href="#repo">Управление репозиториями</a></li>
             <li><a href="#rules">Права</a></li>
             <li><a href="#sh">Создание sh скриптов</a></li>
@@ -2965,7 +2966,7 @@
         </section>
 
         <!-- Глава -->
-        <section id="catharsis">
+        <section id="katarsis">
             <h1>Катарсис</h1>
             <p>Установка</p>
             <!-- Примечание -->
@@ -2980,7 +2981,7 @@
             <div class="alert alert-tip">
                 <div class="alert-content">
                     <div class="alert-title">Подсказка</div>
-                    <p class="alert-text">Есть скрипт для установки см. <code>dist/catharsis/Install_Environment.sh</code></p>
+                    <p class="alert-text">Есть скрипт для установки см. <code>dist/katarsis/Install_Environment.sh</code></p>
                 </div>
             </div>
             <!-- Команды -->
@@ -3003,14 +3004,14 @@
             <div class="alert alert-tip">
                 <div class="alert-content">
                     <div class="alert-title">Подсказка</div>
-                    <p class="alert-text">Есть скрипт для установки компонентов см. <code>dist/catharsis/Install_PK_AltLinux.sh</code></p>
+                    <p class="alert-text">Есть скрипт для установки компонентов см. <code>dist/katarsis/Install_PK_AltLinux.sh</code></p>
                 </div>
             </div>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">WINEPREFIX=~/.catharsis WINEARCH=win32 wineboot</div>
+                    <div class="cmd cmd-user">WINEPREFIX=~/.katarsis WINEARCH=win32 wineboot</div>
                 </div>
             </div>
             <p>Установка компонентов</p>
@@ -3022,11 +3023,11 @@
                     <div class="cmd cmd-serial">dotnet48 corefonts \</div>
                     <div class="cmd cmd-serial">win7 gdiplus glsl=disabled ddr=gdi corefonts; \</div>
                     <div class="cmd cmd-serial">do</div>
-                    <div class="cmd cmd-serial">    WINEPREFIX=~/.catharsis winetricks -q "$pkg" || echo "== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">    WINEPREFIX=~/.katarsis winetricks -q "$pkg" || echo "== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
                     <div class="cmd cmd-serial">done</div>
                 </div>
             </div>
-            <p id="list-catharsis-groups">Распределение подразделений по установкам</p>
+            <p id="list-katarsis-groups">Распределение подразделений по установкам</p>
             <ul>
                 <li>Группа Краснодар</li>
                 <ul>
@@ -3104,7 +3105,7 @@
             <div class="alert alert-warning">
                 <div class="alert-content">
                     <div class="alert-title">Внимание</div>
-                    <p class="alert-text">При скачивании в атрибуте команды wget указывать ip своей группы (см. <a href="#list-catharsis-groups">Распределение подразделений по установкам</a>)</p>
+                    <p class="alert-text">При скачивании в атрибуте команды wget указывать ip своей группы (см. <a href="#list-katarsis-groups">Распределение подразделений по установкам</a>)</p>
                 </div>
             </div>
             <!-- Команды -->
@@ -3113,7 +3114,7 @@
                 <div class="code-block">
                     <div class="cmd cmd-user">cd ~/Загрузки/</div>
                     <div class="cmd cmd-user">wget http://192.168.23.58/spclient/SP.Client.application</div>
-                    <div class="cmd cmd-user">WINEPREFIX=~/.catharsis wine SP.Client.application</div>
+                    <div class="cmd cmd-user">WINEPREFIX=~/.katarsis wine SP.Client.application</div>
                 </div>
             </div>
             <!-- Примечание -->
@@ -3127,7 +3128,7 @@
             <div class="alert alert-important">
                 <div class="alert-content">
                     <div class="alert-title">Важно</div>
-                    <p class="alert-text">По умолчанию создается ссылка без префикса (<code>Exec=wine...</code>), но т.к. мы указывали префикс catharsis, то надо прописать в env полный путь до префикса (например,  <code>Exec=env WINEPREFIX=/home/admin/.catharsis wine...</code>).</p>
+                    <p class="alert-text">По умолчанию создается ссылка без префикса (<code>Exec=wine...</code>), но т.к. мы указывали префикс katarsis, то надо прописать в env полный путь до префикса (например,  <code>Exec=env WINEPREFIX=/home/admin/.katarsis wine...</code>).</p>
                     <p class="alert-text">Так же заменить <code>user1</code> на имя своей учетной записи.</p>
                 </div>
             </div>
@@ -3141,8 +3142,8 @@
                     <div class="cmd cmd-user">if [ -f "$DESKTOP" ]; then mv -f "$DESKTOP" "$DESKTOP.backup"; fi</div>
                     <div class="cmd cmd-user">echo '[Desktop Entry]' > "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Comment=ПК Катарсис: '"$GROUP" >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Exec=env WINEPREFIX=/home/'$USER'/.catharsis wine start "C:\\users\\'$USER'\\AppData\\Roaming\\Katharsis\\Клиент Катарсис '"$GROUP"'.exe.wine.tmp\\ПК Катарсис  '"$GROUP"'.appref-ms"' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Icon=/home/'$USER'/.catharsis/dosdevices/c:/users/'$USER'/AppData/Roaming/Katharsis/Клиент Катарсис '"$GROUP"'.exe.wine.tmp/AppIcon.png' >> "$DESKTOP"</div>
+                    <div class="cmd cmd-user">echo 'Exec=env WINEPREFIX=/home/'$USER'/.katarsis wine start "C:\\users\\'$USER'\\AppData\\Roaming\\Katharsis\\Клиент Катарсис '"$GROUP"'.exe.wine.tmp\\ПК Катарсис  '"$GROUP"'.appref-ms"' >> "$DESKTOP"</div>
+                    <div class="cmd cmd-user">echo 'Icon=/home/'$USER'/.katarsis/dosdevices/c:/users/'$USER'/AppData/Roaming/Katharsis/Клиент Катарсис '"$GROUP"'.exe.wine.tmp/AppIcon.png' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Name=ПК Катарсис: '"$GROUP" >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'StartupNotify=true' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Terminal=false' >> "$DESKTOP"</div>
@@ -4049,6 +4050,59 @@
                         <div class="cmd cmd-root">ssh-keygen -A</div>
                     </div>
                 </div>
+            </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="port-redirect">
+            <h1>Проброс портов</h1>
+            <!-- Глава -->
+            <section id="port-redirect-client">
+                <h2>Клиент</h2>
+                <!-- Картинка -->
+                <img src="img/port-redirect/img-port-redirect-1.png" alt="Установка Альт СП 10 Рабочая Станция">
+            </section>
+            <!-- Глава -->
+            <section id="port-redirect-client">
+                <h2>Прокси сервер (компьютере с ViPNet)</h2>
+                #!/usr/bin/env bash
+                set -euo pipefail
+
+                # === НАСТРОЙКИ ===
+                LISTEN_PORT="${1:-6202}"           # Порт, на котором будет слушать socat
+                DEST_IP="${2:?Укажите IP сервера Катарсиса}"
+                DEST_PORT="${3:-80}"             # Порт сервера Катарсиса
+                BIND_IP="0.0.0.0"                  # 0.0.0.0 = слушать все интерфейсы (LAN)
+                SERVICE_NAME="socat-katarsis-${LISTEN_PORT}"
+
+                echo "[*] Устанавливаю socat..."
+                sudo apt install -y socat 2>/dev/null || sudo yum install -y socat 2>/dev/null
+
+                echo "[*] Создаю systemd-юнит ${SERVICE_NAME}..."
+                sudo tee /etc/systemd/system/${SERVICE_NAME}.service > /dev/null <<EOF
+                [Unit]
+                Description=Socat TCP Proxy: ${BIND_IP}:${LISTEN_PORT} -> ${DEST_IP}:${DEST_PORT}
+                After=network.target vipnet-client.service vipnetd.service
+                Wants=network.target
+
+                [Service]
+                Type=simple
+                ExecStart=/usr/bin/socat TCP-LISTEN:${LISTEN_PORT},bind=${BIND_IP},fork,reuseaddr TCP:${DEST_IP}:${DEST_PORT}
+                Restart=on-failure
+                RestartSec=3
+                StandardOutput=journal
+                StandardError=journal
+
+                [Install]
+                WantedBy=multi-user.target
+                EOF
+
+                sudo systemctl daemon-reload
+                sudo systemctl enable --now ${SERVICE_NAME}
+
+                echo "[✓] Готово. Socat запущен."
+                echo "🌐 На клиенте Катарсиса укажите адрес: $(hostname -I | awk '{print $1}'):${LISTEN_PORT}"
+                sudo systemctl status ${SERVICE_NAME} --no-pager -l
             </section>
         </section>
 
