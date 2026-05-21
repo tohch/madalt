@@ -129,13 +129,37 @@ check apt-get update
 # Запустить от имени пользователя
 #===============================================================================
 urun(){
-    su "$ORIG_USER" -c "$*" || return 1
-    success "$* выполнен успешно"
-    return 0
+    # 1. Если ORIG_USER пуст, запрашиваем и валидируем
+    if [[ -z "$ORIG_USER" ]]; then
+        read -rp "Введите имя пользователя для запуска: " ORIG_USER
+        [[ -z "$ORIG_USER" ]] && { error "Имя пользователя не указано"; return 1; }
+        if ! id "$ORIG_USER" &>/dev/null; then
+            error "Пользователь '$ORIG_USER' не существует в системе"
+            return 1
+        fi
+    fi
+
+    # 2. su -c ожидает ОДНУ строку-команду, поэтому "$*" здесь корректно
+    local cmd="$*"
+    
+    # 3. Запуск с выводом ошибок в поток su
+    if su - "$ORIG_USER" -c "$cmd" 2>&1; then
+        success "$cmd выполнен успешно"
+        return 0
+    else
+        error "Не удалось выполнить: $cmd"
+        return 1
+    fi
 }
 
 # Пример
-urun "WINEPREFIX=~/.talsql" "WINEARCH=win32" "wineboot"
+create-prefix(){
+    confirm "Создать Префикс .talsql?" || return 0
+    local base_cmd="$WINEPREFIX WINEARCH=win32 wineboot"
+
+    urun "$base_cmd" || return 1
+    return 0
+}
 
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
@@ -143,6 +167,33 @@ show_preview(){
     echo -e "${GREEN}Логирование:                               ${NC}"
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}===========================================${NC}"
+}
+
+#===============================================================================
+# Backup
+#===============================================================================
+backup() {
+    local file="$1"
+    local backup_dir="${2:-/root/backup_t}"  # 2-й аргумент = кастомный путь, иначе /root/backup_t
+    
+    [[ -z "$file" ]] && { echo "Не указан файл для бэкапа." >&2; return 1; }
+    [[ ! -f "$file" ]] && { echo "Файл '$file' не существует или не является файлом." >&2; return 1; }
+    [[ ! -r "$file" ]] && { echo "Нет прав на чтение '$file'." >&2; return 1; }
+
+    local filename="${file##*/}"
+    local timestamp
+    timestamp=$(date +%Y%m%d_%H%M%S)
+    local dest="$backup_dir/${filename}.${timestamp}"
+
+    mkdir -p "$backup_dir" 2>/dev/null || { error "Не удалось создать $backup_dir" >&2; return 1; }
+
+    if cp -p "$file" "$dest" 2>/dev/null; then
+        info "Бэкап создан: $dest" >&2
+        return 0
+    else
+        error "Бэкап '$file' не создан (проверьте права/место/ФС)." >&2
+        return 1
+    fi
 }
 
 #===============================================================================
