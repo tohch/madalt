@@ -168,6 +168,75 @@ backup() {
     fi
 }
 
+# Удаляет элементы из глобального массива SHARES по индексам
+_remove_from_shares() {
+    [[ ${#SHARES[@]} -eq 0 ]] && { echo "   Список SHARES пуст."; return 0; }
+    
+    echo "Удаление шар из списка:"
+    for i in "${!SHARES[@]}"; do
+        echo "   [$i] ${SHARES[$i]}"
+    done
+    echo "   [q] Отмена"
+    echo "   Введите номера через запятую: 0,2,3"
+    
+    while true; do
+        read -p "   Удалить: " choice
+        choice="${choice,,}"
+        
+        # Отмена
+        [[ "$choice" == "q" ]] && { echo "   Отменено."; return 1; }
+        
+        # Парсинг ввода
+        choice="${choice// /}"  # убираем пробелы
+        IFS=',' read -ra parts <<< "$choice"
+        
+        local -a to_remove=()
+        local valid=true
+        
+        for part in "${parts[@]}"; do
+            [[ -z "$part" ]] && continue
+            if ! [[ "$part" =~ ^[0-9]+$ ]]; then
+                echo "   '$part' — не число."
+                valid=false; break
+            fi
+            if (( part < 0 || part >= ${#SHARES[@]} )); then
+                echo "   Номер $part вне диапазона (0–$((${#SHARES[@]}-1)))."
+                valid=false; break
+            fi
+            # Проверка дублей в рамках ввода
+            local dup=false
+            for r in "${to_remove[@]}"; do [[ "$r" == "$part" ]] && { dup=true; break; }; done
+            $dup || to_remove+=("$part")
+        done
+        
+        $valid || continue
+        [[ ${#to_remove[@]} -eq 0 ]] && { echo "   Введите номер или 'q'."; continue; }
+        
+        # === Удаление: собираем новый массив без указанных индексов ===
+        local -a new_shares=()
+        for i in "${!SHARES[@]}"; do
+            local skip=false
+            for idx in "${to_remove[@]}"; do
+                (( i == idx )) && { skip=true; break; }
+            done
+            $skip || new_shares+=("${SHARES[$i]}")
+        done
+        
+        # Показываем, что удаляем
+        echo "   Будет удалено:"
+        for idx in "${to_remove[@]}"; do
+            echo "      • ${SHARES[$idx]}"
+        done
+        
+        # Подтверждение (опционально, можно убрать)
+        # confirm "Подтвердить удаление?" || continue
+        
+        SHARES=("${new_shares[@]}")
+        echo "   Удалено. Осталось: ${#SHARES[@]} шар(а/ов)"
+        return 0
+    done
+}
+
 #===============================================================================
 # Функция обнаружения и выбора шары
 #===============================================================================
@@ -180,7 +249,7 @@ discover_and_select_share() {
     SHARES=()  # Сброс результата при новом вызове
 
     # --- Ввод сервера ---
-    read -p "Введите IP или имя сервера: " SERVER
+    read -p "Введите IP или имя сервера (Например: 192.168.1.100): " SERVER
     [[ -z "$SERVER" ]] && { warn "Сервер не указан."; return 1; }
 
     # --- Проверка smbclient ---
@@ -233,29 +302,95 @@ discover_and_select_share() {
         local -n _list=$1  # nameref на массив (Bash ≥4.3)
         local _prompt="$2"
         local _choice
-        
-        echo "$_prompt"
-        for i in "${!_list[@]}"; do
-            echo "   [$i] ${_list[$i]}"
-        done
-        echo "   [q] Выход"
-        
+        local -a _selected=()
+
         while true; do
+
+            echo "$_prompt"
+            for i in "${!_list[@]}"; do
+                echo "   [$i] ${_list[$i]}"
+            done
+            echo "   [d] Удалить [q] Выход"
+
             read -p "   Ваш выбор: " _choice
             _choice="${_choice,,}"
             
             if [[ "$_choice" == "q" ]]; then
-                echo "Выбор отменён пользователем."
-                return 1
+                info "Выбор отменён пользователем."
+                return 0
             fi
             
-            if [[ "$_choice" =~ ^[0-9]+$ ]] && (( _choice >= 0 && _choice < ${#_list[@]} )); then
-                _SELECTED_ITEM="${_list[$_choice]}"  # Возврат через глобальную переменную
-                echo "Выбрано: $_SELECTED_ITEM"
-                return 0
-            else
-                echo "   Введите номер от 0 до $((${#_list[@]}-1)) или 'q' для выхода."
+            if [[ "$_choice" == "d" ]]; then
+                info "Выбран режим удаления из списка."
+                for share in "${SHARES[@]}"; do
+                    echo "$share"
+                done
+                _remove_from_shares
             fi
+
+            # === Парсинг ввода через запятую ===
+            # Убираем пробелы, разбиваем по запятой
+            _choice="${_choice// /}"  # удаляем все пробелы
+            IFS=',' read -ra _parts <<< "$_choice"
+            _selected=()  # сброс
+            local _valid=true
+            
+            for part in "${_parts[@]}"; do
+                # Пропускаем пустые элементы (на случай ",," или "0,,2")
+                [[ -z "$part" ]] && continue
+                [[ "$part" == "d" ]] && continue
+
+                # Проверка: только цифры
+                if ! [[ "$part" =~ ^[0-9]+$ ]]; then
+                    warn "   '$part' — некорректный номер. Введите числа или 'd' 'q'."
+                    _valid=false
+                    break
+                fi
+                
+                # Проверка диапазона
+                if (( part < 0 || part >= ${#_list[@]} )); then
+                    warn "   Номер $part вне диапазона (0–$((${#_list[@]}-1)))."
+                    _valid=false
+                    break
+                fi
+                
+                # Проверка на дубликаты в рамках одного ввода
+                local is_dup=false
+                for already in "${_selected[@]}"; do
+                    [[ "$already" == "$part" ]] && { is_dup=true; break; }
+                done
+                if $is_dup; then
+                    warn "   Номер $part уже выбран (пропущен дубль)."
+                    continue
+                fi
+                
+                _selected+=("$part")
+            done
+
+            # Если были ошибки — повторяем цикл
+            $valid || continue
+            [[ ${#_selected[@]} -eq 0 ]] && { info "   Введите хотя бы один номер или 'q'."; continue; }
+
+            # === Добавляем выбранные элементы в глобальный SHARES ===
+            for idx in "${_selected[@]}"; do
+                local item="${_list[$idx]}"
+                # Проверка на дубликаты в глобальном массиве (на всякий случай)
+                local already_added=false
+                for existing in "${SHARES[@]}"; do
+                    [[ "$existing" == "$item" ]] && { already_added=true; break; }
+                done
+                if ! $already_added; then
+                    SHARES+=("$item")
+                    echo "   Добавлено: $item"
+                fi
+            done
+
+            echo "Всего выбрано: ${#SHARES[@]} шар(а/ов)"
+            for share in "${SHARES[@]}"; do
+                success "$share"
+            done
+            confirm "Подтвердить выбор?" || continue
+            return 0
         done
     }
 
@@ -275,9 +410,8 @@ discover_and_select_share() {
     fi
 
     echo "Целевые шары (${TARGET_SHARES[*]}) не найдены."
-    _SELECTED_ITEM=""
-    if _select_share_from_list ALL_DISK_SHARES "📋 Все доступные дисковые шары — выберите вручную:"; then
-        SHARES=("$_SELECTED_ITEM")  # Записываем выбранный путь в массив
+
+    if _select_share_from_list ALL_DISK_SHARES "Все доступные дисковые шары — выберите вручную через запятую (Например: 1,2,3):"; then
         return 0
     else
         return 1
@@ -285,6 +419,7 @@ discover_and_select_share() {
 }
 
 mount_talsql(){
+    confirm "Подключится к серверу Талисмана SQL?" || return 0
     # Константы
     local CRED_FILE="/root/.cifstalsql"      # Единый путь для credentials
     local BASE_MOUNT="/mnt/talsql"         # Базовая директория для всех шар
@@ -311,7 +446,8 @@ EOF
         echo "Файл учётных данных создан: $CRED_FILE"
     else
         # Для анонимного доступа создаём пустой файл (guest)
-        echo "guest" > "$CRED_FILE"
+        echo "username=guest" > "$CRED_FILE"
+        echo "password=" >> "$CRED_FILE"
         chmod 600 "$CRED_FILE"
     fi
     
@@ -323,6 +459,8 @@ EOF
         # Извлекаем имя шары из UNC: //192.168.205.4/strah → strah
         local share_name="${share_unc##*/}"
         local mount_point="$BASE_MOUNT/$share_name"
+        local share_unc_fstab="${share_unc// /\\040}"
+        local mount_point_fstab="${mount_point// /\\040}"
         
         echo ""
         echo "Обработка: $share_unc → $mount_point"
@@ -331,9 +469,9 @@ EOF
         mkdir -p "$mount_point"
         
         # 2. Добавляем запись в /etc/fstab (если ещё нет)
-        if ! grep -q "^$share_unc[[:space:]]*$mount_point" /etc/fstab 2>/dev/null; then
-            echo "$share_unc $mount_point cifs $FSTAB_OPTS 0 0" | tee -a /etc/fstab >/dev/null
-            echo "   $mount_point Добавлено в /etc/fstab"
+        if ! grep -qF "$share_unc_fstab $mount_point_fstab" /etc/fstab 2>/dev/null; then
+            echo "$share_unc_fstab $mount_point_fstab cifs $FSTAB_OPTS 0 0" | tee -a /etc/fstab >/dev/null
+            echo "   $mount_point_fstab Добавлено в /etc/fstab"
         else
             echo "   Запись уже есть в /etc/fstab"
         fi
@@ -382,10 +520,10 @@ EOF
 }
 
 create_unc_links() {
-    confirm "Создать ссылки c шарами для Wine?"
+    confirm "Создать ссылки c шарами для Wine?" || return 0
     # 1. Если SERVER не задан, запрашиваем интерактивно
     if [[ -z "$SERVER" ]]; then
-        read -rp "Введите IP или имя сервера для UNC-путей: " SERVER
+        read -rp "Введите IP или имя сервера для UNC-путей (Например: 192.168.1.100): " SERVER
         [[ -z "$SERVER" ]] && { error "Сервер не указан."; return 1; }
     fi
 
@@ -484,6 +622,28 @@ install-components(){
     return 0
 }
 
+check-talsql(){
+    confirm "Проверить наличие установочного файла Талисман SQL?" || return 0
+    local workpath=$(pwd)
+    local safe_workpath=$(printf '%q' "$workpath")
+    local installertalsql="Reinstall_Tal3.1.52.exe"
+    if [[ -f "$safe_workpath/$installertalsql" ]]; then
+        success "$installertalsql существует. Продолжаем установку..."
+    else
+
+        confirm "$installertalsql нет такого файла! Для скачивания потребуется установить модуль python3-module-pip, ydiskarc tqdm. Установить модули и Скачать $installertalsql?" || return 1
+        apt-get install -y python3-module-pip || { error "Ошибка установки python3-module-pip"; return 1; }
+        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка установки ydiskarc"; return 1; }
+        urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка установки tqdm"; return 1; }
+        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || { error "ydiskarc: ошибка скачивания $installertalsql"; return 1; }
+        if [[ -f "$safe_workpath/$installertalsql" ]]; then
+            error "Не удалось скачать!"
+            return 1
+        fi
+    fi
+    return 0
+}
+
 main() {
     show_preview
     check_root
@@ -494,6 +654,7 @@ main() {
     check install-components
     check mount_talsql
     check create_unc_links
+    check check-talsql
 }
 
 main "$@"

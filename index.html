@@ -557,7 +557,18 @@
                 <div class="code-block">
                     <div class="cmd cmd-user">pip3 install ydiskarc && \</div>
                     <div class="cmd cmd-user">pip3 install tqdm && \</div>
-                    <div class="cmd cmd-user">ydiskarc sync https://disk.yandex.ru/d/MtKNzEzZKz7qhg -o ~/altlinux</div>
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/MtKNzEzZKz7qhg -o ~/altlinux</div>
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Чтобы все приложения из ~/.local/bin запускать без указания путей, выполните:</p>
+                    <p class="alert-text"><code>touch ~/.bash_profile</code></p>
+                    <p class="alert-text"><code>grep -qF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bash_profile || \</code></p>
+                    <p class="alert-text"><code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bash_profile</code></p>
+                    <p class="alert-text"><code>source ~/.bash_profile</code></p>
                 </div>
             </div>
         </section>
