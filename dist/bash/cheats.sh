@@ -10,6 +10,15 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# === Обработка флагов запуска ===
+AUTO_YES=false
+while getopts "y" opt; do
+    case $opt in
+        y) AUTO_YES=true ;;
+        \?) echo "Недопустимая опция: -$OPTARG" >&2; exit 1 ;;
+    esac
+done
+shift $((OPTIND - 1))
 
 #===============================================================================
 # Функции логирования и вывода
@@ -37,6 +46,11 @@ fi
 # Подтверждение действия пользователем
 #===============================================================================
 confirm() {
+    # Если запущено с -y, всегда возвращаем "Да" без запроса
+    if [[ "$AUTO_YES" == "true" ]]; then
+        return 0
+    fi
+
     local prompt="$1"
     local response
     
@@ -67,7 +81,19 @@ check_root() {
     if [ "$(id -u)" -ne 0 ]; then
         ORIG_USER=$(whoami)      
         echo "[!] Требуются права root. Введите пароль:"
-        exec su - root -c "ORIG_USER='$ORIG_USER' bash \"$(realpath "$0")\" \"$*\""
+        
+        # Собираем флаги для повторной передачи
+        local flags=""
+        [[ "$AUTO_YES" == "true" ]] && flags="-y"
+        
+        # Безопасное экранирование аргументов для su -c
+        local escaped_args=()
+        for arg in "$@"; do
+            escaped_args+=("$(printf '%q' "$arg")")
+        done
+        
+        # Перезапуск с сохранением окружения и аргументов
+        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
     fi
 }
 # без сбросом окружения

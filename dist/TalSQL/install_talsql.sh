@@ -10,11 +10,21 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# === Обработка флагов запуска ===
+AUTO_YES=false
+while getopts "y" opt; do
+    case $opt in
+        y) AUTO_YES=true ;;
+        \?) echo "Недопустимая опция: -$OPTARG" >&2; exit 1 ;;
+    esac
+done
+shift $((OPTIND - 1))
+
 #===============================================================================
 # Функции логирования и вывода
 #===============================================================================
 LOG_FILE="/var/log/install_talsql_$(date +%Y%m%d_%H%M%S).log"
-WINEPREFIX="WINEPREFIX=~/.talsql"
+WINEPREFIX="WINEPREFIX=$HOME/.talsql"
 SHARES=()
 USER="" PASS=""
 SERVER=""
@@ -32,7 +42,19 @@ check_root() {
     if [ "$(id -u)" -ne 0 ]; then
         ORIG_USER=$(whoami)      
         echo "[!] Требуются права root. Введите пароль:"
-        exec su root -c "ORIG_USER='$ORIG_USER' bash \"$(realpath "$0")\" \"$*\""
+        
+        # Собираем флаги для повторной передачи
+        local flags=""
+        [[ "$AUTO_YES" == "true" ]] && flags="-y"
+        
+        # Безопасное экранирование аргументов для su -c
+        local escaped_args=()
+        for arg in "$@"; do
+            escaped_args+=("$(printf '%q' "$arg")")
+        done
+        
+        # Перезапуск с сохранением окружения и аргументов
+        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
     fi
 }
 
@@ -48,6 +70,11 @@ show_preview(){
 # Подтверждение действия пользователем
 #===============================================================================
 confirm() {
+    # Если запущено с -y, всегда возвращаем "Да" без запроса
+    if [[ "$AUTO_YES" == "true" ]]; then
+        return 0
+    fi
+
     local prompt="$1"
     local response
     
@@ -602,7 +629,6 @@ create-prefix(){
 install-components(){
     confirm "Установить дополнительные компоненты?" || return 0
 
-    # Формируем базовую команду с правильной передачей окружения
     local base_cmd="$WINEPREFIX winetricks -q"
 
     # --- Применение настроек ---
@@ -616,9 +642,37 @@ install-components(){
                riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \
                vcrun2012 vcrun2013; do
         echo "Установка: $pkg"
-        urun "$base_cmd $pkg" || { confirm "Продолжить?" || return 1; }
-    done
+        
+        local max_retries=3    # Количество повторов
+        local attempt=0        # Счётчик текущей попытки
+        local success=false
 
+        while [ $attempt -le $max_retries ]; do
+            # 1. Запускаем установку
+            if urun "$base_cmd $pkg"; then
+                success=true
+                break  # Успех → выходим из цикла
+            fi
+            
+            attempt=$((attempt + 1))
+            
+            # 2. Если попытки закончились → выходим
+            if [ $attempt -gt $max_retries ]; then
+                echo "[!] Превышен лимит попыток ($max_retries) для $pkg. Пропускаю."
+                break
+            fi
+            
+            # 3. Спрашиваем пользователя
+            local remaining=$((max_retries - attempt + 1))
+            if ! confirm "Повторить попытку установки $pkg? (Осталось: $remaining)"; then
+                echo "[!] Отменено пользователем. Пропускаю $pkg."
+                break
+            fi
+            info "Повторная попытка через 10 секунд..."
+            sleep 10
+        done
+    done
+    
     return 0
 }
 
@@ -630,8 +684,8 @@ check-talsql(){
     if [[ -f "$safe_workpath/$installertalsql" ]]; then
         success "$installertalsql существует. Продолжаем установку..."
     else
-
-        confirm "$installertalsql нет такого файла! Для скачивания потребуется установить модуль python3-module-pip, ydiskarc tqdm. Установить модули и Скачать $installertalsql?" || return 1
+        warn "$installertalsql не найдет!"
+        confirm "Для скачивания потребуется установить модуль python3-module-pip, ydiskarc tqdm. Установить модули и Скачать $installertalsql?" || return 1
         apt-get install -y python3-module-pip || { error "Ошибка установки python3-module-pip"; return 1; }
         urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка установки ydiskarc"; return 1; }
         urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка установки tqdm"; return 1; }
@@ -642,6 +696,96 @@ check-talsql(){
         fi
     fi
     return 0
+}
+
+copy_talsql_files(){
+    confirm "Скопировать файлы Талисмана SQL из /mnt/talsql/out/ в ~/.talsql/drive_c/Talisman_SQL/ACenter/TalSQL и скопировать библиотеки midas.dll, gds32.dll и fbclient.dll в system32?" || return 0
+
+    local wine_prefix="${WINEPREFIX//WINEPREFIX=/}"  # ~/.talsql
+    local tal_dir="$wine_prefix/drive_c/Talisman_SQL/ACenter/TalSQL"
+    local src_dir="/mnt/talsql/out"
+    local system32="$wine_prefix/drive_c/windows/system32"
+    local dlls=("midas.dll" "gds32.dll" "fbclient.dll")
+
+    # 1. Проверка исходной директории
+    if [[ ! -d "$src_dir" ]]; then
+        error "Директория источника не найдена: $src_dir"
+        warn "Убедитесь, что шары смонтированы: mount | grep talsql"
+        return 1
+    fi
+
+    # 2. Проверка целевой директории
+    if [[ ! -d "$tal_dir" ]]; then
+        error "Директория установки не найдена: $tal_dir"
+        warn "Возможно, установка не завершена или путь отличается от C:\\Talisman_SQL"
+        
+        if confirm "Создать директорию $tal_dir?"; then
+            # Используем безопасное экранирование пути
+            if ! urun "mkdir -p $(printf '%q' "$tal_dir")"; then
+                error "Не удалось создать $tal_dir (проверьте права)"
+                return 1
+            fi
+            success "Директория создана: $tal_dir"
+        else
+            # Пользователь отказался создавать → нельзя продолжать
+            warn "Пропуск копирования: целевая директория не создана"
+            return 0
+        fi
+    fi
+
+    info "Копирование файлов из $src_dir → $tal_dir"
+
+    # 3. Копирование основных файлов (через urun, так как владелец — пользователь)
+    if urun "yes | cp -rf '$src_dir'/* '$tal_dir/'"; then
+        success "Файлы скопированы в $tal_dir"
+    else
+        error "Ошибка копирования файлов в $tal_dir"
+        # Не прерываем скрипт, пробуем скопировать DLL
+    fi
+
+    # 4. Копирование DLL в system32
+    info "Копирование DLL в $system32"
+    local dll_errors=0
+    for dll in "${dlls[@]}"; do
+        local src="$src_dir/$dll"
+        local dst="$system32/$dll"
+        
+        if [[ -f "$src" ]]; then
+            if urun "yes | cp -fv '$src' '$dst'"; then
+                success "   $dll → $system32"
+            else
+                error "   Не удалось скопировать $dll"
+                ((dll_errors++))
+            fi
+        else
+            warn "   Файл $dll не найден в $src_dir (пропускаем)"
+        fi
+    done
+
+    # 5. Итоговый отчёт
+    if [[ $dll_errors -eq ${#dlls[@]} ]]; then
+        error "Не скопирован ни один DLL. Проверьте права и наличие файлов."
+        return 1
+    elif [[ $dll_errors -gt 0 ]]; then
+        warn "Часть DLL не скопирована ($dll_errors из ${#dlls[@]}). Приложение может работать нестабильно."
+    else
+        success "Все файлы успешно скопированы."
+    fi
+
+    return 0
+}
+
+install-talsql(){
+    info "Во время установки укажите C:\Talisman_SQL для установки."
+
+    confirm "Запустить установку Талисмана SQL (Reinstall_Tal3.1.52.exe)" || return 0
+
+    local workpath=$(pwd)
+    local safe_workpath=$(printf '%q' "$workpath")
+    local installertalsql="Reinstall_Tal3.1.52.exe"
+    local base_cmd="$WINEPREFIX wine $safe_workpath/$installertalsql"
+
+    urun "$base_cmd" || return 1
 }
 
 main() {
@@ -655,6 +799,8 @@ main() {
     check mount_talsql
     check create_unc_links
     check check-talsql
+    check install-talsql
+    check copy_talsql_files
 }
 
 main "$@"
