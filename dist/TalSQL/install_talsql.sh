@@ -725,14 +725,8 @@ install-components(){
 
     local base_cmd="$WINEPREFIX winetricks -q"
 
-    # --- Применение настроек ---
-    for setting in win2k8 glsl=disabled ddr=gdi; do
-        echo "Настройка: $setting"
-        urun "$base_cmd $setting" || { confirm "Продолжить?" || return 1; }
-    done
-
     # --- Установка пакетов ---
-    for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \
+    for pkg in win2k8 glsl=disabled ddr=gdi dotnet452 msxml3 msxml6 msftedit corefonts tahoma \
                riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \
                vcrun2012 vcrun2013; do
         echo "Установка: $pkg"
