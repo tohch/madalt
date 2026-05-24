@@ -61,8 +61,25 @@ check_root() {
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
     echo -e "${GREEN}        Установка Талисмана SQL            ${NC}"
+    echo -e "${GREEN}Этапы установки:                           ${NC}"
+    echo -e "${GREEN}- Установка Wine                           ${NC}"
+    echo -e "${GREEN}- Настройка сетевых папок                  ${NC}"
+    echo -e "${GREEN}- Установка Талисмана SQL                  ${NC}"
+    echo -e "${GREEN}- Копирование из out в TalSQL              ${NC}"
+    echo -e "${GREEN}- Копирование библиотек в system32         ${NC}"
+    echo -e "${GREEN}- Установка Designfr                       ${NC}"
+    echo -e "${GREEN}- Установка BDE для импорта питания        ${NC}"
     echo -e "${GREEN}Логирование:                               ${NC}"
     echo -e "${GREEN}$LOG_FILE ${NC}"
+    echo -e "${GREEN}Архив fstab:                               ${NC}"
+    echo -e "${GREEN}/root/backup_t                             ${NC}"
+    echo -e "${GREEN}===========================================${NC}"
+}
+
+show_success(){
+    echo -e "${GREEN}===========================================${NC}"
+    echo -e "${GREEN}Поздравляю!                                ${NC}"
+    echo -e "${GREEN}"Талисман SQL успешно установлен!"         ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -449,7 +466,6 @@ mount_talsql(){
     confirm "Подключится к серверу Талисмана SQL?" || return 0
     # Константы
     local CRED_FILE="/root/.cifstalsql"      # Единый путь для credentials
-    local BASE_MOUNT="/mnt/talsql"         # Базовая директория для всех шар
     local FSTAB_OPTS="noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
     
     # Запускаем обнаружение и выбор шар
@@ -457,6 +473,8 @@ mount_talsql(){
         echo "Операция прервана."
         return 1
     fi
+    
+    local BASE_MOUNT="/mnt/$SERVER"         # Базовая директория для всех шар
     
     echo "Готово. В массиве SHARES:"
     for s in "${SHARES[@]}"; do
@@ -518,7 +536,7 @@ EOF
         local share_name="${share_unc##*/}"
         local mount_point="$BASE_MOUNT/$share_name"
         
-        # Конвертируем путь в имя юнита: /mnt/talsql/strah → mnt-talsql-strah
+        # Конвертируем путь в имя юнита: /mnt/$SERVER/strah → mnt-$SERVER-strah
         local unit_name
         unit_name=$(systemd-escape --path "$mount_point")
         local automount_unit="${unit_name}.automount"
@@ -542,20 +560,25 @@ EOF
     echo "Все шары обработаны."
     echo "Проверка:   mount | grep talsql"
     echo "Статус юнитов:   systemctl list-units | grep talsql"
-    echo "Тест автомонта:   ls /mnt/talsql/out  # должно подмонтировать автоматически"
+    echo "Тест автомонта:   ls /mnt/$SERVER/out  # должно подмонтировать автоматически"
     return 0
 }
 
 create_unc_links() {
-    confirm "Создать ссылки c шарами для Wine?" || return 0
+    # Проверка AUTO_YES для пропуска вопроса
+    if [[ "$AUTO_YES" != "true" ]]; then
+        confirm "Создать ссылки с шарами для Wine?" || return 0
+    fi
+
     # 1. Если SERVER не задан, запрашиваем интерактивно
     if [[ -z "$SERVER" ]]; then
         read -rp "Введите IP или имя сервера для UNC-путей (Например: 192.168.1.100): " SERVER
         [[ -z "$SERVER" ]] && { error "Сервер не указан."; return 1; }
     fi
 
-    local unc_dir="~/.talsql/dosdevices/unc/$SERVER"
-    local mount_base="/mnt/talsql"
+    # Раскрываем ~ в пути, чтобы не создавать ссылки в /root/
+    local unc_dir="${WINEPREFIX#WINEPREFIX=}/dosdevices/unc/$SERVER"
+    local mount_base="/mnt/$SERVER"
 
     # 2. Проверка, что шары действительно смонтированы
     if [[ ! -d "$mount_base" || -z "$(ls -A "$mount_base" 2>/dev/null)" ]]; then
@@ -563,41 +586,112 @@ create_unc_links() {
         return 1
     fi
 
-    # 3. Создаём структуру UNC
-    urun "mkdir -p $unc_dir" || { error "Ошибка создания $unc_dir"; return 1; }
+    # 3. Создаём структуру UNC (проверяем существование перед созданием)
+    if [[ ! -d "$unc_dir" ]]; then
+        urun "mkdir -p $(printf '%q' "$unc_dir")" || { error "Ошибка создания $unc_dir"; return 1; }
+    fi
 
     info "Создание UNC-ссылок для //$SERVER..."
 
     local count=0
+    local skipped=0
+    
     # Проходим по всем папкам в точке монтирования
     for share_path in "$mount_base"/*/; do
         [[ -d "$share_path" ]] || continue  # Пропуск, если glob не сработал
 
-        # Извлекаем чистое имя шары (убираем / и путь)
+        # Извлекаем чистое имя шары
         local share_name="${share_path%/}"
         share_name="${share_name##*/}"
 
-        # Создаём/обновляем симлинк (-f перезапишет старую ссылку)
-        # printf %q сам добавит нужные кавычки и экранирование
+        local link_path="$unc_dir/$share_name"
+        
+        # === ПРОВЕРКА: Существует ли уже ссылка? ===
+        # -L проверяет именно символическую ссылку
+        if [[ -L "$link_path" ]]; then
+            # Проверяем, куда она ведёт (читаем цель ссылки)
+            local current_target
+            current_target=$(readlink "$link_path")
+            
+            # Сравниваем с желаемым путём (нормализуем для сравнения)
+            if [[ "$current_target" == "$share_path" ]]; then
+                info "   [SKIP] $share_name: ссылка уже существует и верна"
+                ((skipped++))
+                continue  # Переходим к следующей, не создаём заново
+            else
+                warn "   [UPDATE] $share_name: ссылка ведёт на '$current_target', обновляем..."
+                # Если ссылка есть, но ведёт не туда — удалим старую перед созданием новой
+                urun "rm -f $(printf '%q' "$link_path")"
+            fi
+        elif [[ -e "$link_path" ]]; then
+            # Если это не ссылка, а файл или папка (конфликт имён)
+            error "   [CONFLICT] $link_path существует, но не является ссылкой. Пропускаем."
+            ((skipped++))
+            continue
+        fi
+        # =========================================
+
+        # Создаём/обновляем симлинк
         local safe_path safe_dest
         safe_path=$(printf '%q' "$share_path")
         safe_dest=$(printf '%q' "$share_name")
+        
         if urun "ln -sf $safe_path $unc_dir/$safe_dest"; then
-            info "   $share_name -> $unc_dir/$share_name"
+            info "   [OK] $share_name -> $share_path"
             ((count++))
         else
-            error "   Ошибка создания ссылки для $share_name"
+            error "   [ERROR] Ошибка создания ссылки для $share_name"
         fi
     done
 
-    if [[ $count -eq 0 ]]; then
+    if [[ $count -eq 0 && $skipped -eq 0 ]]; then
         warn "В $mount_base не найдено доступных папок."
         return 1
     fi
 
-    success "Готово. Создано ссылок: $count"
-    success "Теперь в Wine доступны пути: \\\\$SERVER\\<имя_шары>"
+    success "Готово. Создано: $count, пропущено: $skipped"
+    success "В Wine доступны пути: \\\\$SERVER\\<имя_шары>"
     return 0
+}
+
+#===============================================================================
+# Вспомогательная функция: поиск папки "out" в дереве каталогов (глубина 2)
+#===============================================================================
+find_out_directory() {
+    local base_path="$1"
+    local -a candidates=()
+    
+    # 1. Сначала проверяем очевидные варианты в корне и на 1 уровне вложенности
+    local known_patterns=("out" "Out" "OUT" "Talisman_sql/out" "Talismansql/out" "talisman_sql/out" "Talisman_SQL/out" "talismansql/out")
+    for pattern in "${known_patterns[@]}"; do
+        if [[ -d "$base_path/$pattern" && -n "$(ls -A "$base_path/$pattern" 2>/dev/null)" ]]; then
+            echo "$base_path/$pattern"
+            return 0
+        fi
+    done
+    
+    # 2. Рекурсивный поиск с ограничением глубины 2 уровня
+    # -mindepth 2: пропускаем саму base_path и её прямые подкаталоги (они уже проверены выше)
+    # -maxdepth 2: не уходим глубже второго уровня
+    while IFS= read -r -d '' dir; do
+        # Проверяем, что папка не пустая
+        if [[ -n "$(ls -A "$dir" 2>/dev/null)" ]]; then
+            candidates+=("$dir")
+        fi
+    done < <(find "$base_path" -mindepth 2 -maxdepth 2 -type d -name "out" -print0 2>/dev/null)
+    
+    # 3. Обработка результатов
+    if [[ ${#candidates[@]} -eq 0 ]]; then
+        return 1  # Не найдено
+    elif [[ ${#candidates[@]} -eq 1 ]]; then
+        echo "${candidates[0]}"  # Найдено ровно одно
+        return 0
+    else
+        # Найдено несколько — выводим список для выбора
+        # printf '%s\n' "${candidates[@]}"
+        echo "${candidates[0]}"
+        return 0
+    fi
 }
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -677,33 +771,131 @@ install-components(){
 }
 
 check-talsql(){
-    confirm "Проверить наличие установочного файла Талисман SQL?" || return 0
-    local workpath=$(pwd)
-    local safe_workpath=$(printf '%q' "$workpath")
+    confirm "Проверить наличие установочного файла Талисмана SQL (Reinstall_Tal3.1.52.exe)?" || return 0
+    
+    # === 1. Путь к скрипту (для внутренних операций) ===
+    local script_dir
+    script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    
     local installertalsql="Reinstall_Tal3.1.52.exe"
-    if [[ -f "$safe_workpath/$installertalsql" ]]; then
-        success "$installertalsql существует. Продолжаем установку..."
+    local installer_path="$script_dir/$installertalsql"  # ← Обычный путь, без экранирования
+    
+    # === 2. Проверка существования (используем обычный путь!) ===
+    if [[ -f "$installer_path" ]]; then
+        success "$installer_path существует. Продолжаем установку..."
     else
-        warn "$installertalsql не найдет!"
+        warn "$installer_path не найден!"
+        
+        # === 3. Для команд, передаваемых в urun — экранируем ОТДЕЛЬНО ===
+        local safe_workpath
+        safe_workpath=$(printf '%q' "$script_dir")  # ← Только здесь!
+        
         confirm "Для скачивания потребуется установить модуль python3-module-pip, ydiskarc tqdm. Установить модули и Скачать $installertalsql?" || return 1
+        
         apt-get install -y python3-module-pip || { error "Ошибка установки python3-module-pip"; return 1; }
         urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка установки ydiskarc"; return 1; }
         urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка установки tqdm"; return 1; }
+        
+        # Здесь используем $safe_workpath, т.к. это часть команды для su -c
         urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || { error "ydiskarc: ошибка скачивания $installertalsql"; return 1; }
-        if [[ -f "$safe_workpath/$installertalsql" ]]; then
-            error "Не удалось скачать!"
+        
+        # === 4. Проверка после скачивания (снова обычный путь!) ===
+        if [[ ! -f "$installer_path" ]]; then
+            error "Не удалось скачать $installertalsql!"
             return 1
+        else
+            success "Файл успешно скачан в $script_dir"
+        fi
+    fi
+    return 0
+}
+
+check_designfr(){
+    confirm "Проверить наличие установочного файла Designfr" || return 0
+    
+    # === 1. Путь к скрипту (для внутренних операций) ===
+    local script_dir
+    script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    
+    local installertalsql="designfr.exe"
+    local installer_path="$script_dir/$installertalsql"  # ← Обычный путь, без экранирования
+    
+    # === 2. Проверка существования (используем обычный путь!) ===
+    if [[ -f "$installer_path" ]]; then
+        success "$installer_path существует. Продолжаем установку..."
+    else
+        warn "$installer_path не найден!"
+        
+        # === 3. Для команд, передаваемых в urun — экранируем ОТДЕЛЬНО ===
+        local safe_workpath
+        safe_workpath=$(printf '%q' "$script_dir")  # ← Только здесь!
+        
+        confirm "Для скачивания потребуется установить модуль python3-module-pip, ydiskarc tqdm. Установить модули и Скачать $installertalsql?" || return 1
+        
+        apt-get install -y python3-module-pip || { error "Ошибка установки python3-module-pip"; return 1; }
+        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка установки ydiskarc"; return 1; }
+        urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка установки tqdm"; return 1; }
+        
+        # Здесь используем $safe_workpath, т.к. это часть команды для su -c
+        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || { error "ydiskarc: ошибка скачивания $installertalsql"; return 1; }
+        
+        # === 4. Проверка после скачивания (снова обычный путь!) ===
+        if [[ ! -f "$installer_path" ]]; then
+            error "Не удалось скачать $installertalsql!"
+            return 1
+        else
+            success "Файл успешно скачан в $script_dir"
+        fi
+    fi
+    return 0
+}
+
+check_bde(){
+    confirm "Проверить наличие установочного файла BDE" || return 0
+    
+    # === 1. Путь к скрипту (для внутренних операций) ===
+    local script_dir
+    script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    
+    local installertalsql="bdex64.exe"
+    local installer_path="$script_dir/$installertalsql"  # ← Обычный путь, без экранирования
+    
+    # === 2. Проверка существования (используем обычный путь!) ===
+    if [[ -f "$installer_path" ]]; then
+        success "$installer_path существует. Продолжаем установку..."
+    else
+        warn "$installer_path не найден!"
+        
+        # === 3. Для команд, передаваемых в urun — экранируем ОТДЕЛЬНО ===
+        local safe_workpath
+        safe_workpath=$(printf '%q' "$script_dir")  # ← Только здесь!
+        
+        confirm "Для скачивания потребуется установить модуль python3-module-pip, ydiskarc tqdm. Установить модули и Скачать $installertalsql?" || return 1
+        
+        apt-get install -y python3-module-pip || { error "Ошибка установки python3-module-pip"; return 1; }
+        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка установки ydiskarc"; return 1; }
+        urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка установки tqdm"; return 1; }
+        
+        # Здесь используем $safe_workpath, т.к. это часть команды для su -c
+        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || { error "ydiskarc: ошибка скачивания $installertalsql"; return 1; }
+        
+        # === 4. Проверка после скачивания (снова обычный путь!) ===
+        if [[ ! -f "$installer_path" ]]; then
+            error "Не удалось скачать $installertalsql!"
+            return 1
+        else
+            success "Файл успешно скачан в $script_dir"
         fi
     fi
     return 0
 }
 
 copy_talsql_files(){
-    confirm "Скопировать файлы Талисмана SQL из /mnt/talsql/out/ в ~/.talsql/drive_c/Talisman_SQL/ACenter/TalSQL и скопировать библиотеки midas.dll, gds32.dll и fbclient.dll в system32?" || return 0
+    confirm "Скопировать файлы Талисмана SQL из /mnt/$SERVER/out/ в ~/.talsql/drive_c/Talisman_SQL/ACenter/TalSQL и скопировать библиотеки midas.dll, gds32.dll и fbclient.dll в system32?" || return 0
 
     local wine_prefix="${WINEPREFIX//WINEPREFIX=/}"  # ~/.talsql
     local tal_dir="$wine_prefix/drive_c/Talisman_SQL/ACenter/TalSQL"
-    local src_dir="/mnt/talsql/out"
+    local src_dir=$(find_out_directory "/mnt/$SERVER")
     local system32="$wine_prefix/drive_c/windows/system32"
     local dlls=("midas.dll" "gds32.dll" "fbclient.dll")
 
@@ -776,31 +968,151 @@ copy_talsql_files(){
 }
 
 install-talsql(){
-    info "Во время установки укажите C:\Talisman_SQL для установки."
+    info "Во время установки укажите папку C:\Talisman_SQL"
 
     confirm "Запустить установку Талисмана SQL (Reinstall_Tal3.1.52.exe)" || return 0
 
-    local workpath=$(pwd)
-    local safe_workpath=$(printf '%q' "$workpath")
+    local script_dir
+    script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local safe_workpath=$(printf '%q' "$script_dir")
     local installertalsql="Reinstall_Tal3.1.52.exe"
     local base_cmd="$WINEPREFIX wine $safe_workpath/$installertalsql"
 
     urun "$base_cmd" || return 1
 }
 
+install_designfr(){
+    confirm "Запустить установку Designfr" || return 0
+
+    local script_dir
+    script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local safe_workpath=$(printf '%q' "$script_dir")
+    local installertalsql="designfr.exe"
+    local base_cmd="$WINEPREFIX wine $safe_workpath/$installertalsql"
+
+    urun "$base_cmd" || return 1
+}
+
+install_bde(){
+    confirm "Запустить установку BDE" || return 0
+
+    local script_dir
+    script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local safe_workpath=$(printf '%q' "$script_dir")
+    local installertalsql="bdex64.exe"
+    local base_cmd="$WINEPREFIX wine $safe_workpath/$installertalsql"
+
+    urun "$base_cmd" || return 1
+}
+
+#===============================================================================
+# Создание ярлыка на рабочем столе
+#===============================================================================
+create_desktop_shortcut(){
+    
+    # === 1. Определяем путь к рабочему столу пользователя ===
+    local desktop_dir=""
+    
+    if [[ -d "/home/$ORIG_USER/Рабочий стол" ]]; then
+        desktop_dir="/home/$ORIG_USER/Рабочий стол"
+    elif [[ -d "/home/$ORIG_USER/Desktop" ]]; then
+        desktop_dir="/home/$ORIG_USER/Desktop"
+    fi
+    
+    local shortcut_path="$desktop_dir/ТалSQL.desktop"
+    
+    # === 2. Проверка: существует ли уже ярлык? ===
+    # Проверяем от имени пользователя, так как файлы на его рабочем столе
+    if [[ -f "$shortcut_path" ]]; then
+        touch "$shortcut_path"
+        update-desktop-database "$desktop_dir" 2>/dev/null || true
+        info "Ярлык уже существует: $shortcut_path"
+        return 0
+    else
+        confirm "Создать ярлык ТалSQL на рабочем столе?" || return 0
+    fi
+    
+    info "Создаю ярлык: $shortcut_path"
+    
+    # === 3. Формируем содержимое .desktop файла ===
+    # Важно: в Exec пути для Wine требуют двойного экранирования обратных слешей
+    local wine_prefix="${WINEPREFIX#WINEPREFIX=}"
+    local exe_path="C:\\\\Talisman_SQL\\\\ACenter\\\\TalSQL\\\\TalClient.exe"
+
+urun "cat > '$shortcut_path' << 'DESKTOP_EOF'
+[Desktop Entry]
+Name=ТалSQL
+Exec=env \"WINEPREFIX=$wine_prefix\" wine \"$exe_path\" \"\"
+Type=Application
+StartupNotify=true
+Icon=D5C0_TalClient.0
+StartupWMClass=talclient.exe
+DESKTOP_EOF"
+
+    # === 4. Копируем ярлык на рабочий стол от имени пользователя ===
+    if [[ -f "$shortcut_path" ]]; then
+        success "Ярлык создан: $shortcut_path"
+        
+        # === 5. Делаем ярлык исполняемым (обязательно для запуска) ===
+        if urun "chmod +x '$shortcut_path'"; then
+            info "Ярлык сделан исполняемым"
+        fi
+        
+        # === 6. Меняем владельца на оригинального пользователя (если создавали из-под root) ===
+        if [[ -n "$ORIG_USER" && "$(id -u)" -eq 0 ]]; then
+            if chown "$ORIG_USER:$ORIG_USER" "$shortcut_path" 2>/dev/null; then
+                info "Владелец изменён на $ORIG_USER"
+            fi
+        fi
+        
+        # === 7. Обновляем базу десктоп-файлов (опционально, для появления в меню) ===
+        if command -v update-desktop-database &>/dev/null; then
+            update-desktop-database "$desktop_dir" 2>/dev/null || true
+        fi
+        
+    else
+        error "Не удалось создать ярлык в $desktop_dir"
+        rm -f "$tmp_file"
+        return 1
+    fi
+    
+    # Убираем временный файл
+    rm -f "$tmp_file"
+    
+    # === 8. Подсказка для пользователя (если не авто-режим) ===
+    if [[ "$AUTO_YES" != "true" ]]; then
+        echo ""
+        info "Совет: если ярлык не запускается, кликните по нему правой кнопкой → Свойства → Разрешения → Разрешить выполнение файла как программы"
+    fi
+    
+    return 0
+}
+
 main() {
+    local HAS_ERRORS=0
     show_preview
     check_root
     clear
     show_preview
-    check install_wine
-    check create-prefix
-    check install-components
-    check mount_talsql
-    check create_unc_links
-    check check-talsql
-    check install-talsql
-    check copy_talsql_files
+
+    check install_wine       || $HAS_ERRORS=1
+    check create-prefix      || $HAS_ERRORS=1
+    check install-components || $HAS_ERRORS=1
+    check mount_talsql       || $HAS_ERRORS=1
+    check create_unc_links   || $HAS_ERRORS=1
+    check check-talsql       || $HAS_ERRORS=1
+    check install-talsql     || $HAS_ERRORS=1
+    check copy_talsql_files  || $HAS_ERRORS=1
+    check check_designfr     || $HAS_ERRORS=1
+    check install_designfr   || $HAS_ERRORS=1
+    check check_bde          || $HAS_ERRORS=1
+    check install_bde        || $HAS_ERRORS=1
+    create_desktop_shortcut  || $HAS_ERRORS=1
+    if [[ $HAS_ERRORS -eq 0 ]]; then
+        show_success
+    else
+        warn "Установка завершена с ошибками/пропусками. Проверьте лог: $LOG_FILE"
+    fi
 }
 
 main "$@"

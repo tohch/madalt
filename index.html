@@ -71,6 +71,7 @@
             <li><a href="#mdns">mDNS</a></li>
             <li><a href="#talisman-sql">Талисман-SQL</a>
                 <ul>
+                    <li><a href="#talisman-sql-autoinstall">Автоматическая установка</a></li>
                     <li><a href="#talisman-sql-install-wine">Установка Wine</a></li>
                     <li><a href="#talisman-sql-setting-share">Настройка сетевых папок</a></li>
                     <li><a href="#talisman-sql-install-talsql">Установка Талисмана SQL</a></li>
@@ -1388,6 +1389,46 @@
         <!-- Глава -->
         <section id="talisman-sql">
             <h1>Талисман-SQL</h1>
+            <!-- Глава -->
+            <section id="talisman-sql-autoinstall">
+                <h2>Автоматическая установка</h2>
+                <p><code>instal_talsql.sh</code> - это баш скрипт автоматической установки Талисмана SQL. Он выполнит все действия, которые описаны в ниже стоящих главах, а именно:
+                <ul>
+                    <li>Установка Wine и создание 32-х битного префикса .talsql</li>
+                    <li>Настройка сетевых папок (Автомонтирование по запросу через fstab)</li>
+                    <li>Установка Талисмана SQL (Reinstall_Tal3.1.52.exe)</li>
+                    <li>Установка designfr</li>
+                    <li>Установка BDE</li>
+                </ul>
+                </p>
+                <p>Для монтирования сетевых папок Талисмана-SQL вам будет предложено ввести IP адрес или сетевое имя сервера, логин и пароль для подключения. Скрипт попытается найти сетевые папки: <code>Talisman-SQL out pochta strah</code>. Если их нет или вы нажмете "n" в момент подтверждения выбранных сетевых папок, то скрипт предложит выбрать самостоятельно имена через ввод цифр (выбрать можно несколько папок через запитую, например: 1,3,4).</p>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">В установщике Талисмана-SQL указывайте путь: <code>C:\Talisman_SQL</code></p>
+                        <p class="alert-text">Используйте атрибут <code>-y</code>, чтобы ответить положительно на все вопросы: <code>./install_talsql.sh -y</code></p>
+                        <p class="alert-text">Обратите внимание, что атрибут <code>-y</code> не избавит вас от необходимости нажимать Далее в диалоговых окнах и ввода данных для сетевого подключения к расшаренным папкам сервера Талисмана-SQL.</p>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Лог файл: /var/log/install_talsql_дата_время.log</p>
+                        <p class="alert-text">Архив fstab: /root/backup_t</p>
+                    </div>
+                </div>
+                <p>Для автоматической установки Талисмана-SQL сделайте скрипт исполняемым и запустите его:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">chmod +x ~/altlinux/dist/TalSQL/install_talsql.sh</div>
+                        <div class="cmd cmd-user">~/altlinux/dist/TalSQL/install_talsql.sh</div>
+                    </div>
+                </div>
+            </section>
             <section id="talisman-sql-install-wine">
                 <h2>Установка Wine</h2>
                 <p>Проверить что репозитории добавлены</p>
