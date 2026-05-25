@@ -1003,7 +1003,7 @@ install_bde(){
 # Создание ярлыка на рабочем столе
 #===============================================================================
 create_desktop_shortcut(){
-    
+    confirm "Проверить наличе ярлыка?" || return 0
     # === 1. Определяем путь к рабочему столу пользователя ===
     local desktop_dir=""
     
@@ -1019,7 +1019,6 @@ create_desktop_shortcut(){
     # Проверяем от имени пользователя, так как файлы на его рабочем столе
     if [[ -f "$shortcut_path" ]]; then
         touch "$shortcut_path"
-        update-desktop-database "$desktop_dir" 2>/dev/null || true
         info "Ярлык уже существует: $shortcut_path"
         return 0
     else
@@ -1045,6 +1044,7 @@ DESKTOP_EOF"
 
     # === 4. Копируем ярлык на рабочий стол от имени пользователя ===
     if [[ -f "$shortcut_path" ]]; then
+        touch "$shortcut_path"
         success "Ярлык создан: $shortcut_path"
         
         # === 5. Делаем ярлык исполняемым (обязательно для запуска) ===
@@ -1057,21 +1057,11 @@ DESKTOP_EOF"
             if chown "$ORIG_USER:$ORIG_USER" "$shortcut_path" 2>/dev/null; then
                 info "Владелец изменён на $ORIG_USER"
             fi
-        fi
-        
-        # === 7. Обновляем базу десктоп-файлов (опционально, для появления в меню) ===
-        if command -v update-desktop-database &>/dev/null; then
-            update-desktop-database "$desktop_dir" 2>/dev/null || true
-        fi
-        
+        fi 
     else
         error "Не удалось создать ярлык в $desktop_dir"
-        rm -f "$tmp_file"
         return 1
     fi
-    
-    # Убираем временный файл
-    rm -f "$tmp_file"
     
     # === 8. Подсказка для пользователя (если не авто-режим) ===
     if [[ "$AUTO_YES" != "true" ]]; then

@@ -937,6 +937,15 @@
                     <div class="cmd cmd-user">mate-session-save --logout</div>
                 </div>
             </div>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Если ранее был установлен Автоматический вход в систему, то обязательно отключите его перед переключение в сессию Xfce, иначе будет ошибка: XFCE PolicyKit Agent: An authentication agent already exists for the given subject</p>
+                    <p class="alert-text"><code>Центр управления системой -> Режим эксперта -> Локальные учётные записи -> Выбрать пользователя -> Снять галочку Автоматический вход в систему</code></p>
+                    <p class="alert-text">Ссылка на ALT Linux Wiki <a href="https://www.altlinux.org/Alterator-users#%D0%90%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B2%D1%85%D0%BE%D0%B4_%D0%B2_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%83">Alterator-users</a></p>
+                </div>
+            </div>
             <h2 id="xfce4-theme">Настройка темы</h2>
             <p>Поставить Светлую тему</p>
             <!-- Команды -->
@@ -1392,21 +1401,37 @@
             <!-- Глава -->
             <section id="talisman-sql-autoinstall">
                 <h2>Автоматическая установка</h2>
-                <p><code>instal_talsql.sh</code> - это баш скрипт автоматической установки Талисмана SQL. Он выполнит все действия, которые описаны в ниже стоящих главах, а именно:
+                <p>Для автоматической установки Талисмана-SQL сделайте скрипт исполняемым и запустите его:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">chmod +x ~/altlinux/dist/TalSQL/install_talsql.sh</div>
+                        <div class="cmd cmd-user">~/altlinux/dist/TalSQL/install_talsql.sh</div>
+                    </div>
+                </div>
+                <p><code>instal_talsql.sh</code> - это баш скрипт автоматической установки Талисмана SQL. Он выполнит все действия, которые описаны в ниже стоящих главах, а именно:</p>
                 <ul>
-                    <li>Установка Wine и создание 32-х битного префикса .talsql</li>
-                    <li>Настройка сетевых папок (Автомонтирование по запросу через fstab)</li>
-                    <li>Установка Талисмана SQL (Reinstall_Tal3.1.52.exe)</li>
-                    <li>Установка designfr</li>
-                    <li>Установка BDE</li>
+                    <li>Установка Wine и создание 32-х битного префикса .talsql;</li>
+                    <li>Установка дополнительных компонентов для префикса .talsql;</li>
+                    <li>Настройка сетевых папок (Автомонтирование по запросу через fstab);</li>
+                    <li>Установка Талисмана SQL (Reinstall_Tal3.1.52.exe);</li>
+                    <li>Копирования файлов из сетевой папки out в TalSQL для актуализации версии и настроек подключения к базе;</li>
+                    <li>Установка designfr (для просмотра выгруженных отчетов);</li>
+                    <li>Установка BDE (требуется для импорта питания из Талисмана 2.0).</li>
                 </ul>
-                </p>
                 <p>Для монтирования сетевых папок Талисмана-SQL вам будет предложено ввести IP адрес или сетевое имя сервера, логин и пароль для подключения. Скрипт попытается найти сетевые папки: <code>Talisman-SQL out pochta strah</code>. Если их нет или вы нажмете "n" в момент подтверждения выбранных сетевых папок, то скрипт предложит выбрать самостоятельно имена через ввод цифр (выбрать можно несколько папок через запитую, например: 1,3,4).</p>
                 <!-- Подсказка -->
                 <div class="alert alert-tip">
                     <div class="alert-content">
                         <div class="alert-title">Подсказка</div>
                         <p class="alert-text">В установщике Талисмана-SQL указывайте путь: <code>C:\Talisman_SQL</code></p>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
                         <p class="alert-text">Используйте атрибут <code>-y</code>, чтобы ответить положительно на все вопросы: <code>./install_talsql.sh -y</code></p>
                         <p class="alert-text">Обратите внимание, что атрибут <code>-y</code> не избавит вас от необходимости нажимать Далее в диалоговых окнах и ввода данных для сетевого подключения к расшаренным папкам сервера Талисмана-SQL.</p>
                     </div>
@@ -1417,15 +1442,6 @@
                         <div class="alert-title">Примечание</div>
                         <p class="alert-text">Лог файл: /var/log/install_talsql_дата_время.log</p>
                         <p class="alert-text">Архив fstab: /root/backup_t</p>
-                    </div>
-                </div>
-                <p>Для автоматической установки Талисмана-SQL сделайте скрипт исполняемым и запустите его:</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">chmod +x ~/altlinux/dist/TalSQL/install_talsql.sh</div>
-                        <div class="cmd cmd-user">~/altlinux/dist/TalSQL/install_talsql.sh</div>
                     </div>
                 </div>
             </section>
