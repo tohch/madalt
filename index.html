@@ -1401,6 +1401,16 @@
             <!-- Глава -->
             <section id="talisman-sql-autoinstall">
                 <h2>Автоматическая установка</h2>
+                <p>Скачайте скрипт</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
+                        <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
+                        <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~altlinux</div>
+                    </div>
+                </div>
                 <p>Для автоматической установки Талисмана-SQL сделайте скрипт исполняемым и запустите его:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
@@ -1434,6 +1444,7 @@
                         <div class="alert-title">Подсказка</div>
                         <p class="alert-text">Используйте атрибут <code>-y</code>, чтобы ответить положительно на все вопросы: <code>./install_talsql.sh -y</code></p>
                         <p class="alert-text">Обратите внимание, что атрибут <code>-y</code> не избавит вас от необходимости нажимать Далее в диалоговых окнах и ввода данных для сетевого подключения к расшаренным папкам сервера Талисмана-SQL.</p>
+                        <p class="alert-text">Запустите без атрибута <code>-y</code>, чтобы отвечать самостоятельно: <code>./install_talsql</code></p>
                     </div>
                 </div>
                 <!-- Примечание -->
