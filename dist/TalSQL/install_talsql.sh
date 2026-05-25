@@ -73,13 +73,15 @@ show_preview(){
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}Архив fstab:                               ${NC}"
     echo -e "${GREEN}/root/backup_t                             ${NC}"
+    echo -e "${GREEN}Отвечать Да на все вопросы:                ${NC}"
+    echo -e "${GREEN}./install_talsql.sh -y                     ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
 show_success(){
     echo -e "${GREEN}===========================================${NC}"
     echo -e "${GREEN}Поздравляю!                                ${NC}"
-    echo -e "${GREEN}"Талисман SQL успешно установлен!"         ${NC}"
+    echo -e "${GREEN}Талисман SQL успешно установлен!           ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
