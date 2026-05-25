@@ -43,7 +43,12 @@
             <li><a href="#vim">Vim</a></li>
             <li><a href="#useradd">Управление пользователями</a></li>
             <li><a href="#sudo">sudo</a></li>
-            <li><a href="#preparation">Подготовка altlinux</a></li>
+            <li><a href="#preparation">Подготовка altlinux</a>
+                <ul>
+                    <li><a href="#preparation-full">Скачать Все</a></li>
+                    <li><a href="#preparation-instr-sh">Скачать только Скрипты и Инструкцию</a></li>
+                </ul>
+            </li>
             <li><a href="#update-kernel">Обновление Альт СП релиз 10 до версии 10.2</a>
                 <ul>
                     <li><a href="#auto-update-kernel">Автоматическое обновление</a></li>
@@ -526,7 +531,8 @@
         <!-- Глава -->
         <section id="preparation">
             <h1>Подготовка altlinux</h1>
-            <p>Для удобства скачайте дистрибутивы и инструкцию в домашнюю директорию ~/</p>
+            <h2 id="preparation-full">Скачать Все</h2>
+            <p>Для удобства скачайте дистрибутивы, скрипты и инструкцию в домашнюю директорию ~/</p>
             <!-- Примечание -->
             <div class="alert alert-note">
                 <div class="alert-content">
@@ -572,6 +578,18 @@
                     <p class="alert-text"><code>source ~/.bash_profile</code></p>
                 </div>
             </div>
+            <h2 id="preparation-instr-sh">Скачать только Скрипты и Инструкцию</h2>
+            <p>Для скачивания только скриптов и инструкции выполните:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
+                    <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
+                    <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~/altlinux</div>
+                </div>
+            </div>
+            <p>Идеально подходит для обновления скриптов, т.к. скрипты меняются часто, а дистрибутивы редко.</p>
         </section>
 
         <!-- Глава -->
