@@ -3568,6 +3568,9 @@
                         <div class="cmd cmd-root">drweb-ctl cfset linuxgui.excludedpath -a /mnt/talsql</div>
                         <div class="cmd-comment"># Добавить в исключение lan-messenger</div>
                         <div class="cmd cmd-root">drweb-ctl cfset linuxfirewall.excludedproc -a /usr/bin/lan-messenger</div>
+                        <div class="cmd-comment"># Добавить в исключения браузеры, иначе плагин saby не будет работать</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxfirewall.excludedproc -a /opt/chromium-gost/chrome</div>
+                        <div class="cmd cmd-root">drweb-ctl cfset linuxfirewall.excludedproc -a /usr/lib64/yandex/browser/yandex_browser</div>
                         <div class="cmd-comment"># Проверить настройки исключений</div>
                         <div class="cmd cmd-root">drweb-ctl cfshow linuxspider.excludedpath</div>
                         <div class="cmd cmd-root">drweb-ctl cfshow linuxgui.excludedpath</div>
@@ -3599,6 +3602,20 @@
                         <p class="alert-text">LinuxFirewall.ExcludedProc = /usr/sbin/NetworkManager</p>
                         <p class="alert-text">Если нет, то добавьте:</p>
                         <p class="alert-text"><code>drweb-ctl cfset linuxfirewall.excludedproc -a /usr/sbin/NetworkManager</code></p>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Включить Debug Log:</p>
+                        <p class="alert-text"><code>drweb-ctl cfset Root.log /var/log/drweb-debug.log</code></p>
+                        <p class="alert-text"><code>drweb-ctl cfset root.defaultloglevel DEBUG</code></p>
+                        <p class="alert-text">Выключить Debug Log:</p>
+                        <p class="alert-text"><code>drweb-ctl cfset Root.Log -r</code></p>
+                        <p class="alert-text"><code>drweb-ctl cfset Root.DefaultLogLevel -r</code></p>
+                        <p class="alert-text">Просмотреть лог</p>
+                        <p class="alert-text">s<code>udo pluma /var/log/drweb-debug.log</code></p>
                     </div>
                 </div>
                 <p>Ввести лицензию</p>
