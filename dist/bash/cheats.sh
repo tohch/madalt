@@ -76,7 +76,7 @@ confirm() {
 #===============================================================================
 # Проверка прав доступа
 #===============================================================================
-# со сбросом окружения
+# Без сбросом окружения
 check_root() {
     if [ "$(id -u)" -ne 0 ]; then
         ORIG_USER=$(whoami)      
@@ -96,12 +96,12 @@ check_root() {
         exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
     fi
 }
-# без сбросом окружения
+# С сбросом окружения
 check_root() {
     if [ "$(id -u)" -ne 0 ]; then
         ORIG_USER=$(whoami)      
         echo "[!] Требуются права root. Введите пароль:"
-        exec su root -c "ORIG_USER='$ORIG_USER' bash \"$(realpath "$0")\" \"$*\""
+        exec su - root -c "ORIG_USER='$ORIG_USER' bash \"$(realpath "$0")\" \"$*\""
     fi
 }
 
