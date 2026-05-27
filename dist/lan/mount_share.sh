@@ -12,18 +12,38 @@ NC='\033[0m' # No Color
 
 # === Обработка флагов запуска ===
 AUTO_YES=false
-while getopts "y" opt; do
+"{$SMB_VERSION:=}"
+while getopts "yhv:" opt; do
     case $opt in
         y) AUTO_YES=true ;;
+        v) SMB_VERSION="$OPTARG" ;;
+        h)  echo "-y - автоответ Да на вопросы"
+            echo "-v: - выбор версии smb (-v 1 - SMB1, -v 2 - SMB2, -v 3 - SMB3)"
+            echo "-h - подсказка"
+            echo "Пример использования скрипта:"
+            echo "chmod +x mount_share.sh"
+            echo "./mount_share.sh -y -v 3"
+            exit 0;;
         \?) echo "Недопустимая опция: -$OPTARG" >&2; exit 1 ;;
+        :)  echo "Опция -$OPTARG требует аргумент 1,2 или 3" >&2; exit 1 ;;
     esac
 done
 shift $((OPTIND - 1))
+
+# === Валидация SMB_VERSION ===
+case "$SMB_VERSION" in
+    1|2|3|"") ;;  # OK
+    *)
+        echo "Ошибка: -v принимает только 1, 2 или 3 (получено: '$SMB_VERSION')" >&2
+        exit 1
+        ;;
+esac
 
 SHARES=()
 UNC_DIRS=()
 USER="" PASS=""
 SERVER=""
+SMB=""
 
 #===============================================================================
 # Функции логирования и вывода
@@ -117,7 +137,7 @@ check_root() {
         done
         
         # Перезапуск с сохранением окружения и аргументов
-        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
+        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' SMB_VERSION='$SMB_VERSION' bash -- \"$(realpath "$0")\" $flags ${escaped_args[*]}"
     fi
 }
 
@@ -155,6 +175,50 @@ backup() {
     else
         error "Бэкап '$file' не создан (проверьте права/место/ФС)." >&2
         return 1
+    fi
+}
+
+#===============================================================================
+# Попытки выполнить команду и проверка
+#===============================================================================
+check() {
+    local func="$1"; shift
+    local max_attempts=3
+    local attempt=0
+
+    while (( attempt < max_attempts )); do
+        ((attempt++))
+        if (( attempt > 1 )); then
+            info "Попытка #$attempt/$max_attempts выполнить '$func'..."
+        fi
+
+        # Запуск функции
+        "$func" "$@" 2>&1
+        local status=${PIPESTATUS[0]}  # ← Статус именно функции, а не tee
+
+        if [[ $status -eq 0 ]]; then
+            if (( attempt == 1 )); then
+                success "Шаг '$func' выполнен успешно"
+            else
+                success "Шаг '$func' выполнен успешно со $attempt-й попытки"
+            fi
+            return 0  # ← Сразу выходим, не доходя до confirm
+        fi
+
+        warn "Ошибка выполнения '$func' (код: $status)"
+        if (( attempt < max_attempts )); then
+            info "Повторная попытка через 10 секунд..."
+            sleep 10
+        fi
+    done
+
+    error "Не удалось выполнить шаг '$func' после $max_attempts попыток"
+    if confirm "Продолжить выполнение скрипта?"; then
+        warn "Пользователь согласился игнорировать ошибку"
+        return 0
+    else
+        warn "Пользователь прервал выполнение скрипта"
+        exit 1
     fi
 }
 
@@ -227,25 +291,37 @@ _remove_from_shares() {
     done
 }
 
-SMB=""
-
 discover_and_select_share() {
-    confirm "Подключиться к серверу?" || return 0
-
     info "Подключение к серверу."
     local ALL_DISK_SHARES=()
-    local smbv=""
+    local smbv=()
 
-    info "${YELLOW}y${NC} - SMB3"
-    info "${YELLOW}n${NC} - SMB1"
-    if confirm "При подключении использовать дефолтную настройку SMB?"; then
-        SMB=""
-        smbv=""
-    else
+    # === Определение параметров SMB с обходом ограничений клиента ===
+    if [[ "$SMB_VERSION" == "1" ]]; then
         SMB="vers=1.0,"
-        smbv="-mNT1"
+        # Обходим защиту: явно разрешаем NT1 через опции клиента
+        smbv=(
+            --option='client min protocol=NT1'
+            --option='client max protocol=NT1'
+        )
+    elif [[ "$SMB_VERSION" == "2" ]]; then
+        SMB="vers=2.0,"
+        smbv=(
+            --option='client min protocol=SMB2_02'
+            --option='client max protocol=SMB2_10'
+        )
+    elif [[ "$SMB_VERSION" == "3" ]]; then
+        SMB="vers=3.0,"
+        smbv=(
+            --option='client min protocol=SMB3'
+            --option='client max protocol=SMB3_11'
+        )
+    else
+        # Авто-согласование (по умолчанию клиент сам выберет)
+        SMB=""
+        smbv=()
     fi
-    
+
     SHARES=()  # Сброс результата при новом вызове
 
     # --- Ввод сервера ---
@@ -264,17 +340,80 @@ discover_and_select_share() {
     # --- Попытка анонимного доступа ---
     local AUTH="-N"
     local RAW
-    RAW=$(smbclient -L "//$SERVER" $AUTH -g $smbv 2>/dev/null)
+    RAW=$(smbclient -L "//$SERVER" $AUTH -g "${smbv[@]}" 2>/dev/null)
+    local auth_status=$?
 
-    # --- Если анонимно не вышло — запрашиваем учётку ---
-    if [[ $? -ne 0 || -z "$RAW" ]]; then
+    # === Если анонимно не вышло — запрашиваем учётку с повторами ===
+    if [[ $auth_status -ne 0 || -z "$RAW" ]]; then
         info "   Анонимный доступ запрещён или сервер не отвечает."
-        info "   Введите логин и пароль для подключения к серверу:"
-        read -p "   Логин (Enter для пропуска): " USER
-        if [[ -n "$USER" ]]; then
+        
+        local max_attempts=3
+        local attempt=0
+        local auth_success=false
+        
+        while (( attempt < max_attempts )) && ! $auth_success; do
+            ((attempt++))
+            
+            if (( attempt > 1 )); then
+                echo ""
+                warn "Попытка #$attempt/$max_attempts"
+            fi
+            
+            info "Введите учётные данные для подключения к серверу:"
+            read -p "   Логин (Enter для пропуска): " USER
+            
+            # Если пользователь нажал Enter без логина — выходим из цикла
+            if [[ -z "$USER" ]]; then
+                info "   Пропущено. Возвращаемся к предыдущему шагу."
+                break
+            fi
+            
             read -sp "   Пароль: " PASS; echo
+            
+            # Формируем аргументы авторизации
             AUTH="-U $USER%$PASS"
-            RAW=$(smbclient -L "//$SERVER" $AUTH -g $smbv 2>/dev/null)
+            
+            # Пытаемся подключиться с учёткой
+            RAW=$(smbclient -L "//$SERVER" $AUTH -g "${smbv[@]}" 2>&1)
+            auth_status=$?
+            
+            # === Проверка результата ===
+            # 1. Код возврата 0 И есть данные = успех
+            # 2. Если в выводе есть "NT_STATUS_LOGON_FAILURE" или "access denied" = неверный пароль
+            if [[ $auth_status -eq 0 && -n "$RAW" ]] && \
+            ! echo "$RAW" | grep -qiE "NT_STATUS_LOGON_FAILURE|access denied|permission denied"; then
+                auth_success=true
+                success "   Аутентификация успешна"
+            else
+                # Определяем тип ошибки для понятного сообщения
+                if echo "$RAW" | grep -qiE "NT_STATUS_LOGON_FAILURE|access denied"; then
+                    error "   Неверный логин или пароль"
+                elif echo "$RAW" | grep -qiE "NT_STATUS_ACCOUNT_LOCKED"; then
+                    error "   Учётная запись заблокирована"
+                elif echo "$RAW" | grep -qiE "NT_STATUS_ACCOUNT_DISABLED"; then
+                    error "   Учётная запись отключена"
+                else
+                    warn "   Ошибка подключения (код: $auth_status). Проверьте данные или доступность сервера."
+                fi
+                
+                # Если это не последняя попытка — спрашиваем, повторять ли
+                if (( attempt < max_attempts )); then
+                    if ! confirm "   Попробовать ещё раз?"; then
+                        info "   Ввод отменён пользователем"
+                        break
+                    fi
+                else
+                    error "   Превышено максимальное количество попыток ($max_attempts)"
+                fi
+            fi
+        done
+        
+        # Если после всех попыток авторизация не удалась
+        if ! $auth_success; then
+            warn "   Не удалось подключиться с учётными данными. Попробуйте проверить доступность сервера."
+            # Очищаем чувствительные данные
+            unset PASS
+            return 1
         fi
     fi
 
@@ -394,8 +533,7 @@ discover_and_select_share() {
     fi
 }
 
-mount_talsql(){
-    confirm "Настроить fstab для подключения к сетевым папкам по запросу?" || return 0
+mount_share(){
     # Константы
     local CRED_FILE="/root/.cifstalsql"      # Единый путь для credentials
     local FSTAB_OPTS="${SMB}noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
@@ -510,7 +648,7 @@ create_unc_links() {
     local mount_base="/mnt/$SERVER"
 
     info "Если нажмете ${YELLOW}n${NC} будет предложено ввести путь для ярлыков"
-    if confirm "Создать на рабочем столе ?"; then 
+    if confirm "Создать ярлыки на рабочем столе?"; then 
         unc_dir="/home/$ORIG_USER/Рабочий стол"
     else
         read -p "Введите путь для создания ссылок: " unc_dir
@@ -600,22 +738,31 @@ show_shares(){
 }
 
 main() {
+    local HAS_ERRORS=0
     show_preview
     check_root
     clear
     show_preview
     while true; do
-        mount_talsql
-        create_unc_links
+        check mount_share || $HAS_ERRORS=1
+        check create_unc_links || $HAS_ERRORS=1
 
         if confirm "Выйти?"; then
-            success "Шары успешно подключены!"
+            
+            if [[ $HAS_ERRORS -eq 0 ]]; then
+                success "Шары успешно подключены!"
+            else
+                warn "Есть ошибки в подключении. Проверьте лог: $LOG_FILE"
+            fi
+
             show_shares
+            unset PASS
             exit 0
         else
             UNC_DIRS=()
             SHARES=()
             SERVER=""
+            unset PASS
             continue
         fi
     done

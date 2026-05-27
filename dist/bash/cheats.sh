@@ -101,7 +101,7 @@ check_root() {
     if [ "$(id -u)" -ne 0 ]; then
         ORIG_USER=$(whoami)      
         echo "[!] Требуются права root. Введите пароль:"
-        exec su - root -c "ORIG_USER='$ORIG_USER' bash \"$(realpath "$0")\" \"$*\""
+        exec su - root -c "ORIG_USER='$ORIG_USER' bash -- \"$(realpath "$0")\" \"$*\""
     fi
 }
 
@@ -119,8 +119,8 @@ check() {
             info "Попытка #$attempt/$max_attempts выполнить '$func'..."
         fi
 
-        # Запуск функции с логированием stdout и stderr
-        "$func" "$@" 2>&1 | tee -a "$LOG_FILE"
+        # Запуск функции
+        "$func" "$@" 2>&1
         local status=${PIPESTATUS[0]}  # ← Статус именно функции, а не tee
 
         if [[ $status -eq 0 ]]; then
