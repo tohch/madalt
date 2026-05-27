@@ -144,10 +144,19 @@ check_root() {
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
     echo -e "${GREEN}        Монтирование сетевых папок         ${NC}"
+    echo -e "${GREEN}Этапы работы скрипта:                      ${NC}"
+    echo -e "${GREEN}- поиск сервера под IP или сетевому имени; ${NC}"
+    echo -e "${GREEN}- выбор сетевых папок;                     ${NC}"
+    echo -e "${GREEN}- запись подключения в fstab;              ${NC}"
+    echo -e "${GREEN}- подключение по запросу через cifs;       ${NC}"
+    echo -e "${GREEN}- создания ярлыков.                        ${NC}"
     echo -e "${GREEN}Логирование:                               ${NC}"
     echo -e "${GREEN}$LOG_FILE ${NC}"
-    echo -e "${GREEN}Архив fstab:                               ${NC}"
-    echo -e "${GREEN}/root/backup_t                             ${NC}"
+    echo -e "${GREEN}Архив fstab: /root/backup_t                ${NC}"
+    echo -e "${GREEN}Атрибуты: -h помощь;                       ${NC}"
+    echo -e "${GREEN}-v 1, 2 или 3 версии smb                   ${NC}"
+    echo -e "${GREEN}-y автосогласие на вопросы.                ${NC}"
+    echo -e "${GREEN}Пример: ./mount_share -y -v 1              ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -342,10 +351,15 @@ discover_and_select_share() {
     local RAW
     RAW=$(smbclient -L "//$SERVER" $AUTH -g "${smbv[@]}" 2>/dev/null)
     local auth_status=$?
+    local user_anon="false"
 
+    if [[ $auth_status -eq 0 && -n "$RAW" ]]; then
+        user_anon="true"
+        success "Выполнено анонимное подключение к серверу"
+        confirm "Хотите оставить анонимного пользователя для подключения?" || user_anon="false"
+    fi
     # === Если анонимно не вышло — запрашиваем учётку с повторами ===
-    if [[ $auth_status -ne 0 || -z "$RAW" ]]; then
-        info "   Анонимный доступ запрещён или сервер не отвечает."
+    if [[ "$user_anon" == "false" && ( $auth_status -ne 0 || -z "$RAW" ) ]]; then
         
         local max_attempts=3
         local attempt=0
@@ -359,7 +373,8 @@ discover_and_select_share() {
                 warn "Попытка #$attempt/$max_attempts"
             fi
             
-            info "Введите учётные данные для подключения к серверу:"
+            echo "${YELLOW}=================================================${NC}"
+            echo "Введите учётные данные для подключения к серверу:"
             read -p "   Логин (Enter для пропуска): " USER
             
             # Если пользователь нажал Enter без логина — выходим из цикла
@@ -535,7 +550,7 @@ discover_and_select_share() {
 
 mount_share(){
     # Константы
-    local CRED_FILE="/root/.cifstalsql"      # Единый путь для credentials
+    local CRED_FILE="/root/.cifs${SERVER}"      # Единый путь для credentials
     local FSTAB_OPTS="{$SMB}noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
 
     # Запускаем обнаружение и выбор шар
