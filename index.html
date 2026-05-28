@@ -226,7 +226,7 @@
                     <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
                 <span>Последнее обновление:</span>
-                <time datetime="2026-05-18">18 мая 2026</time>
+                <time datetime="2026-05-28">28 мая 2026</time>
             </div>
 
             <!-- Изображение -->
@@ -366,6 +366,15 @@
                             <p class="alert-text"><code>i</code> - ввод до курсора; <code>a</code> - ввод после курсора; <code>o</code> - ввод с новой строки</p>
                             <p class="alert-text">Для сохранения и выхода войдите в режим команды нажав Esc затем наберите: <code>:wq</code></p>
                             <p class="alert-text">Затем нажмите Enter</p>
+                        </div>
+                    </div>
+                    <p>Примените настройки fstab (можно просто сделать reboot)</p>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-root">mount -o remount /tmp</div>
+                            <div class="cmd cmd-root">mount -o remount /home</div>
                         </div>
                     </div>
                     <p>Для СП фиксация для исключения деградации</p>

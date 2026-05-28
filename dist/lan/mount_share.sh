@@ -145,7 +145,7 @@ show_preview(){
     echo -e "${GREEN}===========================================${NC}"
     echo -e "${GREEN}        Монтирование сетевых папок         ${NC}"
     echo -e "${GREEN}Этапы работы скрипта:                      ${NC}"
-    echo -e "${GREEN}- поиск сервера под IP или сетевому имени; ${NC}"
+    echo -e "${GREEN}- поиск сервера по IP или сетевому имени;  ${NC}"
     echo -e "${GREEN}- выбор сетевых папок;                     ${NC}"
     echo -e "${GREEN}- запись подключения в fstab;              ${NC}"
     echo -e "${GREEN}- подключение по запросу через cifs;       ${NC}"
@@ -156,7 +156,8 @@ show_preview(){
     echo -e "${GREEN}Атрибуты: -h помощь;                       ${NC}"
     echo -e "${GREEN}-v 1, 2 или 3 версии smb                   ${NC}"
     echo -e "${GREEN}-y автосогласие на вопросы.                ${NC}"
-    echo -e "${GREEN}Пример: ./mount_share -y -v 1              ${NC}"
+    echo -e "${GREEN}Пример для smb1: ./mount_share -y -v 1     ${NC}"
+    echo -e "${GREEN}Без -v ставится smb по умолчанию (smb3)    ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -373,7 +374,7 @@ discover_and_select_share() {
                 warn "Попытка #$attempt/$max_attempts"
             fi
             
-            echo "${YELLOW}=================================================${NC}"
+            echo -e "${BLUE}=================================================${NC}"
             echo "Введите учётные данные для подключения к серверу:"
             read -p "   Логин (Enter для пропуска): " USER
             
@@ -551,13 +552,14 @@ discover_and_select_share() {
 mount_share(){
     # Константы
     local CRED_FILE="/root/.cifs${SERVER}"      # Единый путь для credentials
-    local FSTAB_OPTS="{$SMB}noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
 
     # Запускаем обнаружение и выбор шар
     if ! discover_and_select_share; then
         echo "Операция прервана."
         return 1
     fi
+    
+    local FSTAB_OPTS="${SMB}noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
     
     local BASE_MOUNT="/mnt/$SERVER"         # Базовая директория для всех шар
     
@@ -680,7 +682,7 @@ create_unc_links() {
         urun "mkdir -p $(printf '%q' "$unc_dir")" || { error "Ошибка создания $unc_dir"; return 1; }
     fi
 
-    info "Создание UNC-ссылок для //$SERVER..."
+    info "Создание ссылок для //$SERVER..."
 
     local count=0
     local skipped=0
@@ -730,10 +732,10 @@ create_unc_links() {
         UNC_DIRS+=("$unc_dir/$share_name")
 
         if urun "$cmd"; then
-            info "   [OK] $share_name -> $share_path"
+            success "$share_name -> $share_path"
             ((count++))
         else
-            error "   [ERROR] Ошибка создания ссылки для $share_name"
+            error "Ошибка создания ссылки для $share_name"
         fi
     done
 
@@ -763,6 +765,7 @@ main() {
         check create_unc_links || $HAS_ERRORS=1
 
         if confirm "Выйти?"; then
+            show_shares
             
             if [[ $HAS_ERRORS -eq 0 ]]; then
                 success "Шары успешно подключены!"
@@ -770,7 +773,6 @@ main() {
                 warn "Есть ошибки в подключении. Проверьте лог: $LOG_FILE"
             fi
 
-            show_shares
             unset PASS
             exit 0
         else

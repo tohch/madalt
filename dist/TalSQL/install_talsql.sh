@@ -311,16 +311,86 @@ discover_and_select_share() {
     local AUTH="-N"
     local RAW
     RAW=$(smbclient -L "//$SERVER" $AUTH -g 2>/dev/null)
+    local auth_status=$?
+    local user_anon="false"
 
-    # --- Если анонимно не вышло — запрашиваем учётку ---
-    if [[ $? -ne 0 || -z "$RAW" ]]; then
-        info "   Анонимный доступ запрещён или сервер не отвечает."
-        info "   Введите логин и пароль для подключения к серверу:"
-        read -p "   Логин (Enter для пропуска): " USER
-        if [[ -n "$USER" ]]; then
+    if [[ $auth_status -eq 0 && -n "$RAW" ]]; then
+        user_anon="true"
+        success "Выполнено анонимное подключение к серверу"
+        confirm "Хотите оставить анонимного пользователя для подключения?" || user_anon="false"
+    fi
+
+    # === Если анонимно не вышло — запрашиваем учётку с повторами ===
+    if [[ "$user_anon" == "false" && ( $auth_status -ne 0 || -z "$RAW" ) ]]; then
+        
+        local max_attempts=3
+        local attempt=0
+        local auth_success=false
+        
+        while (( attempt < max_attempts )) && ! $auth_success; do
+            ((attempt++))
+            
+            if (( attempt > 1 )); then
+                echo ""
+                warn "Попытка #$attempt/$max_attempts"
+            fi
+            
+            echo -e "${BLUE}=================================================${NC}"
+            echo "Введите учётные данные для подключения к серверу:"
+            read -p "   Логин (Enter для пропуска): " USER
+            
+            # Если пользователь нажал Enter без логина — выходим из цикла
+            if [[ -z "$USER" ]]; then
+                info "   Пропущено. Возвращаемся к предыдущему шагу."
+                break
+            fi
+            
             read -sp "   Пароль: " PASS; echo
+            
+            # Формируем аргументы авторизации
             AUTH="-U $USER%$PASS"
-            RAW=$(smbclient -L "//$SERVER" $AUTH -g 2>/dev/null)
+            
+            # Пытаемся подключиться с учёткой
+            RAW=$(smbclient -L "//$SERVER" $AUTH -g "${smbv[@]}" 2>&1)
+            auth_status=$?
+            
+            # === Проверка результата ===
+            # 1. Код возврата 0 И есть данные = успех
+            # 2. Если в выводе есть "NT_STATUS_LOGON_FAILURE" или "access denied" = неверный пароль
+            if [[ $auth_status -eq 0 && -n "$RAW" ]] && \
+            ! echo "$RAW" | grep -qiE "NT_STATUS_LOGON_FAILURE|access denied|permission denied"; then
+                auth_success=true
+                success "   Аутентификация успешна"
+            else
+                # Определяем тип ошибки для понятного сообщения
+                if echo "$RAW" | grep -qiE "NT_STATUS_LOGON_FAILURE|access denied"; then
+                    error "   Неверный логин или пароль"
+                elif echo "$RAW" | grep -qiE "NT_STATUS_ACCOUNT_LOCKED"; then
+                    error "   Учётная запись заблокирована"
+                elif echo "$RAW" | grep -qiE "NT_STATUS_ACCOUNT_DISABLED"; then
+                    error "   Учётная запись отключена"
+                else
+                    warn "   Ошибка подключения (код: $auth_status). Проверьте данные или доступность сервера."
+                fi
+                
+                # Если это не последняя попытка — спрашиваем, повторять ли
+                if (( attempt < max_attempts )); then
+                    if ! confirm "   Попробовать ещё раз?"; then
+                        info "   Ввод отменён пользователем"
+                        break
+                    fi
+                else
+                    error "   Превышено максимальное количество попыток ($max_attempts)"
+                fi
+            fi
+        done
+        
+        # Если после всех попыток авторизация не удалась
+        if ! $auth_success; then
+            warn "   Не удалось подключиться с учётными данными. Попробуйте проверить доступность сервера."
+            # Очищаем чувствительные данные
+            unset PASS
+            return 1
         fi
     fi
 
