@@ -348,12 +348,13 @@
                     <div class="code-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                         <div class="code-block">
-                            <div class="vim-line vim-string">proc         /proc       proc                nosuid,noexec,gid=proc          0 0</div>
-                            <div class="vim-line vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620  0 0</div>
-                            <div class="vim-line vim-string">tmpfs        <span class="mark">/tmp</span>        tmpfs               <span class="mark">nosuid</span>                          0 0</div>
-                            <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime       1 1</div>
-                            <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults       0 0</div>
-                            <div class="vim-line vim-string">tmpfs        /tmp/.private/root     tmpfs                     defaults       0 0</div>
+                            <div class="vim-line vim-string">proc         /proc       proc                nosuid,noexec,gid=proc            0 0</div>
+                            <div class="vim-line vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620    0 0</div>
+                            <div class="vim-line vim-string">tmpfs        <span class="mark">/tmp</span>        tmpfs               <span class="mark">nosuid</span>                            0 0</div>
+                            <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime         1 1</div>
+                            <div class="vim-line vim-string">UUID=16669fd2-821f-4fe6-87be-255aca71576b    <span class="mark">/home</span>  ext4      <span class="mark">nosuid,relatime</span>  1 2</div>
+                            <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults         0 0</div>
+                            <div class="vim-line vim-string">tmpfs        /tmp/.private/root     tmpfs                     defaults         0 0</div>
                             <div class="vim-line vim-string">/dev/sr0    /media/ALTLinux   udf,iso9660   ro,noauto,user,utf8,nofail,comment=x-gvfs-show 0 0</div>
                         </div>
                     </div>
@@ -584,6 +585,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
+                    <div class="cmd cmd-user">mkdir -p ~/Загрузки</div>
                     <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
                     <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
                     <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~/altlinux</div>
@@ -596,7 +598,19 @@
         <section id="update-kernel">
             <h1>Обновление Альт СП релиз 10 до версии 10.2</h1>
             <h2 id="auto-update-kernel">Автоматическое обновление</h2>
-            <p>Для простоты обновления был написан bash скрипт  update-kernel_10.2.sh. Данный скрипт выполняет все действия, которые описаны в нижестоящих главах, а именно: переход на ветку c10f2, обновление ядра и проверка с фиксацией. Путь до скрипта: <code>dist/update_kernel/update_kernel_10.2.sh</code></p>
+            <p>Для простоты обновления был написан bash скрипт  update-kernel_10.2.sh. Данный скрипт выполняет все действия, которые описаны в нижестоящих главах, а именно: переход на ветку c10f2, обновление ядра и проверка с фиксацией. Путь до скрипта: <code>altlinux/dist/update_kernel/update_kernel_10.2.sh</code></p>
+            <p>Скачайте скрипты и инструкцию:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">mkdir -p ~/Загрузки</div>
+                    <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
+                    <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
+                    <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~/altlinux</div>
+                </div>
+            </div>
+            <p>Запустите скрипт автоматического обновления:</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
