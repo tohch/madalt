@@ -551,13 +551,14 @@ discover_and_select_share() {
 
 mount_share(){
     # Константы
-    local CRED_FILE="/root/.cifs${SERVER}"      # Единый путь для credentials
 
     # Запускаем обнаружение и выбор шар
     if ! discover_and_select_share; then
         echo "Операция прервана."
         return 1
     fi
+    
+    local CRED_FILE="/root/.cifs${SERVER}"      # Единый путь для credentials
     
     local FSTAB_OPTS="${SMB}noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
     
