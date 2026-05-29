@@ -44,7 +44,6 @@ mkdir -p /mnt/tal/trash
 mkdir -p /mnt/tal/mail
 mkdir -p /mnt/tal/mailout
 mkdir -p /mnt/tal/scan
-mkdir -p /mnt/tal/talisman_bde
 
 create_link() {
     local target="$1"
@@ -82,8 +81,6 @@ domain=RCBUSO
 EOF
 chmod 600 "$CRED_FILE"
 
-chmod 600 "$CRED_FILE_TALSQL"
-
 FSTAB_ENTRY="//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
 //192.168.205.254/mail /mnt/tal/mail cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
 //192.168.205.254/mailout /mnt/tal/mailout cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
@@ -119,7 +116,7 @@ echo "    при первом обращении к папкам."
 echo "========================================"
 
 # Очищаем пароли из памяти
-unset PASSWORD PASSWORDTALSQL USERNAME USERNAMETALSQL
+unset PASSWORD USERNAME
 
 
 
