@@ -67,6 +67,8 @@
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#share">Сетевые папки</a>
                 <ul>
+                    <li><a href="#share-sh">Автоматическое монтирование</a></li>
+                    <li><a href="#share-autofs">Вариант 1. Монтирование через AutoFS</a></li>
                     <li><a href="#require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</a></li>
                     <li><a href="#smb1">Вариант 2. SMB1</a></li>
                     <li><a href="#button-mount">Вариант 3. Простое подключение сетевой папки через кнопку</a></li>
@@ -1021,13 +1023,14 @@
                 </div>
             </div>
             <h2 id="xfce4-theme">Настройка темы</h2>
-            <p>Поставить Светлую тему</p>
+            <p>Выберите и установите одну из трех тем: Светлую, Темную или Windows 10</p>
+            <p>Светлая тема</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Тема интерфейса (GTK)</div>
-                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "Greybird" --create</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "BlueMenta" --create</div>
                     <div class="cmd-comment"># Тема иконок</div>
                     <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/IconThemeName -t string -s "Papirus-Light" --create</div>
                     <div class="cmd-comment"># Тема заголовков окон (xfwm4)</div>
@@ -1038,7 +1041,7 @@
                     <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/openSUSE Leap 15.x.tar.bz2"</div>
                 </div>
             </div>
-            <p>Поставить Темную тему</p>
+            <p>Темная тема</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1055,7 +1058,7 @@
                     <div class="cmd cmd-user">xfce4-panel-profiles load "/usr/share/xfce4-panel-profiles/layouts/openSUSE Leap 15.x.tar.bz2"</div>
                 </div>
             </div>
-            <p>Поставить Тему Windows 10</p>
+            <p>Тема Windows 10</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1146,9 +1149,33 @@
                 </div>
             </div>
             <p>Выберите один из вариантов подключения к сетевым ресурсам.</p>
-            apt-get install -y autofs
             <!-- Глава -->
-            <section id="intro">
+            <section id="share-sh">
+                <h2>Автоматическое монтирование</h2>
+                <p><code>mount_share</code> - скрипт автомонтирования сетевых папок на основе AutoFS. Данный скрипт позволит вам в интерактивном режиме подключиться к серверу и выбрать папки. Выбранные папки будут автоматически подключены через механизм AutoFS.</p>
+                <p>Скачайте скрипты и инструкцию:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
+                        <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
+                        <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~/altlinux</div>
+                    </div>
+                </div>
+                <p>Сделайте скрипт исполняемым и запустите его:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">chmod +x ~/altlinux/dist/lan/mount_share.sh</div>
+                        <div class="cmd cmd-user">~/altlinux/dist/lan/mount_share.sh</div>
+                    </div>
+                </div>
+                <p><a href="#mdns">Перейти к следующей главе.</a></p>
+            </section>
+            <!-- Глава -->
+            <section id="share-autofs">
                 <h2>Вариант 1. Монтирование через AutoFS</h2>
                 <p>AutoFS даёт возможность автоматического монтирования съёмных носителей и сетевых ресурсов при вставке или обращении к ним.</p>
                 <p>В отличие от cifs в fstab AutoFS восстанавливает монтирования после обрыва, т.к. у него нет счетчика попыток подключения.</p>
@@ -1156,15 +1183,15 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        su -
+                        <div class="cmd cmd-user">su -</div>
                     </div>
                 </div>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        apt-get update
-                        apt-get install -y autofs
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y autofs</div>
                     </div>
                 </div>
                 <p>Создать файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
@@ -1205,15 +1232,15 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        vim /etc/auto.192.168.205.4
+                        <div class="cmd cmd-root">vim /etc/auto.192.168.205.4</div>
                     </div>
                 </div>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        share -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/share
-                        "отдел кадров" -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/"отдел кадров"
+                        <div class="vim-line vim-string">share -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/share</div>
+                        <div class="vim-line vime-string">"отдел кадров" -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/"отдел кадров"</div>
                     </div>
                 </div>
                 <p>Настройте подключение конфигурационных файлов</p>
@@ -1221,7 +1248,14 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        /mnt/192.168.205.4 /etc/auto.192.168.205.4 --ghost,--timeout=60
+                        <div class="cmd cmd-root">vim /etc/auto.master</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">/mnt/192.168.205.4 /etc/auto.192.168.205.4 --ghost,--timeout=60</div>
                     </div>
                 </div>
                 <p>Запустите сервис</p>
@@ -1229,9 +1263,9 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        systemctl enable autofs
-                        systemctl start autofs
-                        exit
+                        <div class="cmd cmd-root">systemctl enable autofs</div>
+                        <div class="cmd cmd-root">systemctl start autofs</div>
+                        <div class="cmd cmd-root">exit</div>
                     </div>
                 </div>
                 <!-- Подсказка -->
@@ -1417,7 +1451,7 @@
                     <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</p>
                 </div>
             </div>
-            <h2 id="smb1">Вариант 2. SMB1</h2>
+            <h2 id="smb1">Вариант 3. SMB1</h2>
             <p>Чтобы Samba могла работать по протоколу smb1 надо явно указать в <code>/etc/samba/smb.conf</code> протокол NT1</p>
             <!-- Важно -->
             <div class="alert alert-important">
@@ -1487,7 +1521,7 @@
             <p>Подключение через оконный проводник</p>
             <!-- Картинка -->
             <img src="img/share/img-share-2.png" alt="smb">
-            <h2 id="button-mount">Вариант 3. Простое подключение сетевой папки через кнопку</h2>
+            <h2 id="button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</h2>
             <p>ПКМ - "Создать кнопку запуска…" или "Создать значок запуска..." Тип: Расположение, Название: любое, Команда: smb://tal/trash</p>
             <!-- Картинка -->
             <img src="img/share/img-share-1.png" alt="Простое подключение сетевой папки через кнопку">
