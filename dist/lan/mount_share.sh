@@ -560,7 +560,7 @@ mount_share(){
     
     local CRED_FILE="/root/.cifs${SERVER}"      # Единый путь для credentials
     
-    local FSTAB_OPTS="${SMB}noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
+    local FSTAB_OPTS="${SMB}noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
     
     local BASE_MOUNT="/mnt/$SERVER"         # Базовая директория для всех шар
     

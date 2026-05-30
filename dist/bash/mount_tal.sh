@@ -81,10 +81,10 @@ domain=RCBUSO
 EOF
 chmod 600 "$CRED_FILE"
 
-FSTAB_ENTRY="//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
-//192.168.205.254/mail /mnt/tal/mail cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
-//192.168.205.254/mailout /mnt/tal/mailout cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
-//192.168.205.254/scan /mnt/tal/scan cifs vers=1.0,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0"
+FSTAB_ENTRY="//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
+//192.168.205.254/mail /mnt/tal/mail cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
+//192.168.205.254/mailout /mnt/tal/mailout cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
+//192.168.205.254/scan /mnt/tal/scan cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0"
 
 if ! grep -qF "$FSTAB_ENTRY" /etc/fstab; then
 	echo "$FSTAB_ENTRY" >> /etc/fstab

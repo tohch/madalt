@@ -1243,7 +1243,7 @@
                 <div class="code-block">
                     <div class="vim-comment"># без указания vers используется по умолчанию smb3</div>
                     <div class="vim-comment"># без file_mode и dir_mode - только чтение</div>
-                    <div class="vim-line vim-string">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                    <div class="vim-line vim-string">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
                 </div>
             </div>
             <p>Активируйте автомонтирования (можно просто сделать <code>reboot</code>)</p>
@@ -1270,7 +1270,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
+                    <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
                     <p class="cmd-comment">1. Что монтируем и куда</p>
                     <p class="vim-line vim-string"><span class="vim-command">//192.168.205.4/share</span> - сетевая папка к которой хотите получить доступ. Можно указывать и сетевые имена вместо ip если сервер под Windows, то если сервер под Линуксом, но надо настроить DNS перед тем как использовать сетевое имя сервера.</p>
                     <p class="vim-line vim-string"><span class="vim-command">/mnt/share</span> - точка монтирования (локальная папка, в которой будет доступна шара. (Должна существовать)).</p>
@@ -1279,6 +1279,7 @@
                     <p class="cmd-comment">Параметр	Объяснение</p>
                     <p class="vim-line vim-string"><span class="vim-command">noauto</span> - не монтировать автоматически при загрузке (только по явной команде mount или по требованию).  Если удалить noauto и x-systemd.automount то шара будет монтироваться сразу при старте ОС</p>
                     <p class="vim-line vim-string"><span class="vim-command">x-systemd.automount</span> - в паре с noauto - при первом обращении к /mnt/share система сама выполнит монтирование «на лету». Экономит ресурсы и не ждет сети.</p>
+                    <p class="vim-line vim-string"><span class="vim-command">x-systemd.idle-timeout=60</span> - отмонтировать через 60 секунд бездействия</p>
                     <p class="vim-line vim-string"><span class="vim-command">_netdev</span> - говорит системе, что это сетевое устройство. При загрузке монтировать только после поднятия сети (важно для CIFS/NFS).</p>
                     <p class="vim-line vim-string"><span class="vim-command">rw</span> - монтировать в режиме чтения и записи (Read-Write).</p>
                     <p class="vim-line vim-string"><span class="vim-command">nofail</span> - если шара недоступна (например, нет сети), не прерывать загрузку системы и не вызывать ошибку.</p>
@@ -1664,9 +1665,9 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="vim-line vim-string">//192.168.205.4/strah /mnt/talsql/strah cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                        <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                        <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,soft,nofail 0 0</div>
+                        <div class="vim-line vim-string">//192.168.205.4/strah /mnt/talsql/strah cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                        <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
+                        <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,soft,nofail 0 0</div>
                     </div>
                 </div>
                 <p>Активируйте автомонтирования (можно просто сделать <code>reboot</code>)</p>

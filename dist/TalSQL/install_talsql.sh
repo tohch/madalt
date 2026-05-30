@@ -538,7 +538,7 @@ mount_talsql(){
     confirm "Подключится к серверу Талисмана SQL?" || return 0
     # Константы
     local CRED_FILE="/root/.cifstalsql"      # Единый путь для credentials
-    local FSTAB_OPTS="noauto,x-systemd.automount,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
+    local FSTAB_OPTS="noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=$CRED_FILE,soft,file_mode=0777,dir_mode=0777,nofail"
     
     # Запускаем обнаружение и выбор шар
     if ! discover_and_select_share; then
