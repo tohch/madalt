@@ -1146,7 +1146,112 @@
                 </div>
             </div>
             <p>Выберите один из вариантов подключения к сетевым ресурсам.</p>
-            <h2 id="require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</h2>
+            apt-get install -y autofs
+            <!-- Глава -->
+            <section id="intro">
+                <h2>Вариант 1. Монтирование через AutoFS</h2>
+                <p>AutoFS даёт возможность автоматического монтирования съёмных носителей и сетевых ресурсов при вставке или обращении к ним.</p>
+                <p>В отличие от cifs в fstab AutoFS восстанавливает монтирования после обрыва, т.к. у него нет счетчика попыток подключения.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        su -
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        apt-get update
+                        apt-get install -y autofs
+                    </div>
+                </div>
+                <p>Создать файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /root/.cifsmnt</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">username=administrator</div>
+                        <div class="vim-line vim-string">password=mir9Ckflrbq</div>
+                        <div class="vim-comment"># Параметр domain необязателен в сетях без домена</div>
+                        <div class="vim-line vim-string">domain=RCBUSO</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">chmod 600 /root/.cifsmnt</div>
+                    </div>
+                </div>
+                <p>Создать папку с именем сервера</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir /mnt/192.168.205.4</div>
+                    </div>
+                </div>
+                <p>Создайте конфигурационный файл</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        vim /etc/auto.192.168.205.4
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        share -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/share
+                        "отдел кадров" -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/"отдел кадров"
+                    </div>
+                </div>
+                <p>Настройте подключение конфигурационных файлов</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        /mnt/192.168.205.4 /etc/auto.192.168.205.4 --ghost,--timeout=60
+                    </div>
+                </div>
+                <p>Запустите сервис</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        systemctl enable autofs
+                        systemctl start autofs
+                        exit
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Перезапустить: <code>systemctl restart autofs</code></p>
+                    </div>
+                </div>
+                <p>Создать ссылки на Рабочий стол для удобства</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">ln -s /mnt/192.168.205.4/share ~/Рабочий\ стол/share</div>
+                        <div class="cmd cmd-user">ln -s /mnt/192.168.205.4/отдел\ кадров ~/Рабочий\ стол/отдел\ кадров</div>
+                    </div>
+                </div>
+            </section>
+            <h2 id="require-mount">Вариант 2. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</h2>
             <p>Создать папки для монтирования</p>
             <!-- Команды -->
             <div class="code-wrapper">

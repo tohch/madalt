@@ -15,6 +15,7 @@ fi
 # === Теперь мы root, используем переданное имя ===
 # Если переменная не передана — используем запасное значение
 NAME="${CURRENT_USER:-user}"
+SERVER="192.168.205.254"
 
 echo "Запуск от имени root, целевой пользователь: $NAME"
 
@@ -40,10 +41,7 @@ fi
 echo "[✓] Учётные данные приняты"
 # === Конец ввода ===
 
-mkdir -p /mnt/tal/trash
-mkdir -p /mnt/tal/mail
-mkdir -p /mnt/tal/mailout
-mkdir -p /mnt/tal/scan
+mkdir -p /mnt/"$SERVER"
 
 create_link() {
     local target="$1"
@@ -68,10 +66,89 @@ create_link() {
     fi
 }
 
-create_link "/mnt/tal/trash" "/home/$NAME/Рабочий стол/Общая папка"
-create_link "/mnt/tal/mail" "/home/$NAME/Рабочий стол/Почта"
-create_link "/mnt/tal/mailout" "/home/$NAME/Рабочий стол/Отправить Почту"
-create_link "/mnt/tal/scan" "/home/$NAME/Рабочий стол/Скан"
+#===============================================================================
+# Backup файлов конфигурации
+#===============================================================================
+backup() {
+    local file="$1"
+    local backup_dir="${2:-/root/backup_t}"
+    
+    [[ -z "$file" ]] && { echo "Не указан файл для бэкапа." >&2; return 1; }
+    [[ ! -f "$file" ]] && { echo "Файл '$file' не существует." >&2; return 1; }
+    [[ ! -r "$file" ]] && { echo "Нет прав на чтение '$file'." >&2; return 1; }
+
+    local filename="${file##*/}"
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local dest="$backup_dir/${filename}.${timestamp}"
+
+    mkdir -p "$backup_dir" 2>/dev/null || { echo "Не удалось создать $backup_dir" >&2; return 1; }
+
+    if cp -p "$file" "$dest" 2>/dev/null; then
+        echo "Бэкап создан: $dest" >&2
+        return 0
+    else
+        echo "Бэкап '$file' не создан." >&2
+        return 1
+    fi
+}
+
+AUTOFUS_MASTER="/etc/auto.master"
+# Добавление записи в auto.master
+add_to_auto_master() {
+    local mount_point="$1"
+    local map_file="$2"
+    
+    # Проверяем, есть ли уже запись для этой точки монтирования
+    if grep -qE "^[[:space:]]*${mount_point}[[:space:]]+" "$AUTOFUS_MASTER" 2>/dev/null; then
+        echo "Запись для $mount_point уже есть в $AUTOFUS_MASTER"
+        return 0
+    fi
+    
+    # Добавляем новую запись
+    # Формат: /mnt/auto/server_name -fstype=autofs,--ghost,--timeout=60 /etc/auto.d/auto.server
+    echo "$mount_point $map_file --ghost,--timeout=60" >> "$AUTOFUS_MASTER"
+    echo "Добавлено в $AUTOFUS_MASTER: $mount_point -> $map_file"
+}
+
+#===============================================================================
+# Создание/обновление map-файла для сервера (с проверкой дубликатов)
+#===============================================================================
+create_autofs_map() {
+    local map_file="$1"
+    
+    mkdir -p "$(dirname "$map_file")"
+    
+    # Бэкап существующего файла перед модификацией
+    [[ -f "$map_file" ]] && backup "$map_file"
+    
+    # Если файл не существует — создаём с заголовком
+    if [[ ! -f "$map_file" ]]; then
+        cat > "$map_file" <<EOF
+# Autofs map для SMB-шар сервера: $SERVER
+# Сгенерировано: $(date '+%Y-%m-%d %H:%M:%S')
+# Формат: share_name -fstype=cifs,опции ://сервер/шара
+# ----------------------------------------------------------------
+EOF
+        chmod 644 "$map_file"
+    fi
+    
+    # Формируем опции монтирования для autofs
+    local autofs_opts="trash -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/trash
+mail -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/mail
+mailout -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/mailout
+scan -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/scan"
+
+        
+    # Проверяем, есть ли уже запись для этой шары
+    if grep -qE "$autofs_opts" "$map_file" 2>/dev/null; then
+        echo "Запись уже существует. Пропускаю добавление!"
+    else
+        # Записи нет — добавляем новую
+        echo "$autofs_opts" >> "$map_file"
+        echo "$autofs_opts добавлен в $map_file"
+    fi
+    echo "Конфигурация создана."
+}
 
 CRED_FILE="/root/.usermnt"
 cat > "$CRED_FILE" <<EOF
@@ -81,32 +158,26 @@ domain=RCBUSO
 EOF
 chmod 600 "$CRED_FILE"
 
-FSTAB_ENTRY="//192.168.205.254/trash /mnt/tal/trash cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
-//192.168.205.254/mail /mnt/tal/mail cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
-//192.168.205.254/mailout /mnt/tal/mailout cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0
-//192.168.205.254/scan /mnt/tal/scan cifs vers=1.0,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.usermnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0"
 
-if ! grep -qF "$FSTAB_ENTRY" /etc/fstab; then
-	echo "$FSTAB_ENTRY" >> /etc/fstab
-else
-	echo "[!] Запись уже существует в /etc/fstab"
-fi
+ # 6. Создаём/обновляем map-файл
+create_autofs_map "/etc/auto.d/auto.$SERVER"
+
+add_to_auto_master "/mnt/$SERVER" "/etc/auto.d/auto.$SERVER"
+
+create_link "/mnt/$SERVER/trash" "/home/$NAME/Рабочий стол/Общая папка"
+create_link "/mnt/$SERVER/mail" "/home/$NAME/Рабочий стол/Почта"
+create_link "/mnt/$SERVER/mailout" "/home/$NAME/Рабочий стол/Отправить Почту"
+create_link "/mnt/$SERVER/scan" "/home/$NAME/Рабочий стол/Скан"
+
 
 # === Применяем изменения и активируем автомонтирование ===
-echo "[✓] Обновляю конфигурацию systemd..."
-systemctl daemon-reload
+echo "[✓] Включаю autofs..."
+echo "[✓] Активирую autofs..."
+echo "[✓] Перезапускаю autofs..."
+systemctl enable autofs
+systemctl start autofs
+systemctl restart autofs
 
-echo "[✓] Активирую юниты автомонтирования..."
-# Список всех automount-юнитов, которые мы добавили в fstab
-for unit in mnt-tal-{trash,mail,mailout,scan}.automount; do
-    
-    # Запускаем юнит (переводит в состояние active/waiting)
-    if systemctl start "$unit" 2>/dev/null; then
-        echo "  [✓] $unit → ожидает обращения"
-    else
-        echo "  [!] $unit → не удалось активировать (проверьте логи)" >&2
-    fi
-done
 
 echo ""
 echo "========================================"
