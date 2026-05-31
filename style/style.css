@@ -415,6 +415,48 @@ th {
 .hero-image img:hover { transform: scale(1.02); }
 .image-caption { font-size: 0.9rem; color: var(--text-muted); font-style: italic; }
 
+/* === КНОПКА "СЛЕДУЮЩАЯ ГЛАВА" === */
+.next-chapter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.25);
+    border-radius: 6px;
+    color: var(--link);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    margin: 2.5em 0;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.next-chapter-btn:hover {
+    background: rgba(88, 166, 255, 0.18);
+    border-color: var(--link);
+    color: var(--link-hover);
+    transform: translateX(6px);
+}
+.next-chapter-btn:active {
+    transform: translateX(3px);
+}
+.next-chapter-btn svg {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+.next-chapter-btn:hover svg {
+    transform: translateX(4px);
+}
+
+/* Выравнивание по правому краю (опционально) */
+.next-chapter-wrapper {
+    text-align: right;
+    margin: 3em 0 0;
+}
+
 /* =========================================
    8. АДАПТИВНОСТЬ (MEDIA QUERIES)
    ========================================= */
@@ -467,6 +509,14 @@ th {
     .subtitle { font-size: 1.15rem; }
     .code-block { padding: 12px; font-size: 0.85em; }
     .dist-link { width: 100%; justify-content: center; }
+
+        .next-chapter-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 0.95rem;
+    }
+    .next-chapter-wrapper { text-align: center; }
 }
 
 /* 💻 ПЛАНШЕТЫ / СРЕДНИЕ ЭКРАНЫ (851px - 1399px) */

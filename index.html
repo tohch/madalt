@@ -45,6 +45,7 @@
             <li><a href="#sudo">sudo</a></li>
             <li><a href="#preparation">Подготовка altlinux</a>
                 <ul>
+                    <li><a href="#preparation-ydiskarc">Установка ydiskarc</a></li>
                     <li><a href="#preparation-full">Скачать Все</a></li>
                     <li><a href="#preparation-instr-sh">Скачать только Скрипты и Инструкцию</a></li>
                 </ul>
@@ -69,10 +70,10 @@
                 <ul>
                     <li><a href="#share-sh">Автоматическое монтирование</a></li>
                     <li><a href="#share-autofs">Вариант 1. Монтирование через AutoFS</a></li>
-                    <li><a href="#require-mount">Вариант 1. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</a></li>
-                    <li><a href="#smb1">Вариант 2. SMB1</a></li>
-                    <li><a href="#button-mount">Вариант 3. Простое подключение сетевой папки через кнопку</a></li>
-                    <li><a href="#sshfs">Вариант 4. Монтирование SSHFS</a></li>
+                    <li><a href="#require-mount">Вариант 2. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</a></li>
+                    <li><a href="#smb1">Вариант 3. SMB1</a></li>
+                    <li><a href="#button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</a></li>
+                    <li><a href="#sshfs">Вариант 5. Монтирование SSHFS</a></li>
                 </ul>
             </li>
             <li><a href="#mdns">mDNS</a></li>
@@ -576,13 +577,13 @@
         <!-- Глава -->
         <section id="preparation">
             <h1>Подготовка altlinux</h1>
-            <h2 id="preparation-full">Скачать Все</h2>
-            <p>Для удобства скачайте дистрибутивы, скрипты и инструкцию в домашнюю директорию ~/</p>
+            <h2 id="preparation-ydiskarc">Установка ydiskarc</h2>
+            <p>Чтобы подготовить все пакеты и инструкцию, их надо скачать на ваш компьютер, для этого будет использовать ydiskarc.</p>
             <!-- Примечание -->
             <div class="alert alert-note">
                 <div class="alert-content">
                     <div class="alert-title">Примечание</div>
-                    <p class="alert-text">Для скачивания будет использоваться Python3, т.к. Яндекс Диск не предоставляет прямых ссылок для скачивания</p>
+                    <p class="alert-text">Для работы ydiskarc будет использоваться Python3, т.к. Яндекс Диск не предоставляет прямых ссылок для скачивания</p>
                 </div>
             </div>
             <p>Установите pip3 (стандартная система управления пакетами для Python3)</p>
@@ -602,25 +603,44 @@
                     <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
-            <p>Установите модель ydiskarc для скачивания с Яндекс Диска и скачайте altlinux в домашнюю папку ~/</p>
+            <p>Установите модель ydiskarc для скачивания с Яндекс Диска:</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-user">pip3 install ydiskarc && \</div>
                     <div class="cmd cmd-user">pip3 install tqdm && \</div>
-                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/MtKNzEzZKz7qhg -o ~/altlinux</div>
                 </div>
             </div>
-            <!-- Подсказка -->
-            <div class="alert alert-tip">
+            <p>Чтобы все приложения, в том числе и ydiskarc, из ~/.local/bin запускать без указания путей, выполните:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">touch ~/.bash_profile</div>
+                    <div class="cmd cmd-user">grep -qF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bash_profile || \</div>
+                    <div class="cmd cmd-user">echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bash_profile</div>
+                    <div class="cmd cmd-user">source ~/.bash_profile</div>
+                </div>
+            </div>
+            <h2 id="preparation-full">Скачать Все</h2>
+            <p>Для удобства скачайте дистрибутивы, скрипты и инструкцию в домашнюю директорию ~/</p>
+            
+            <!-- Примечание -->
+            <div class="alert alert-note">
                 <div class="alert-content">
-                    <div class="alert-title">Подсказка</div>
-                    <p class="alert-text">Чтобы все приложения из ~/.local/bin запускать без указания путей, выполните:</p>
-                    <p class="alert-text"><code>touch ~/.bash_profile</code></p>
-                    <p class="alert-text"><code>grep -qF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bash_profile || \</code></p>
-                    <p class="alert-text"><code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bash_profile</code></p>
-                    <p class="alert-text"><code>source ~/.bash_profile</code></p>
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Пакет весит 1.7 Гб. Яндекс диск не предоставляет широкий канал для скачивания. Процесс скачивания займет около 40 минут, что достаточно долго.</p>
+                    <p class="alert-text">Я рекомендую ограничится установкой ydiskarc и не качать всь пакет, а по необходимости докачивать только необходимые пакеты, в каждой главе будет пометка для скачивания.</p>
+                    <p class="alert-text">Также рекомендую скачать Скрипты и Инструкцию (описано ниже). Скачивание мгновенно, т.к. скачивания идет с github и сам объем не превышает 10 Мб.</p>
+                </div>
+            </div>
+            <p>Скачайте altlinux в домашнюю папку ~/</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/MtKNzEzZKz7qhg -o ~/altlinux</div>
                 </div>
             </div>
             <h2 id="preparation-instr-sh">Скачать только Скрипты и Инструкцию</h2>
@@ -1152,7 +1172,7 @@
             <!-- Глава -->
             <section id="share-sh">
                 <h2>Автоматическое монтирование</h2>
-                <p><code>mount_share</code> - скрипт автомонтирования сетевых папок на основе AutoFS. Данный скрипт позволит вам в интерактивном режиме подключиться к серверу и выбрать папки. Выбранные папки будут автоматически подключены через механизм AutoFS.</p>
+                <p><code>mount_share.sh</code> - скрипт автомонтирования сетевых папок на основе AutoFS. Данный скрипт позволит вам в интерактивном режиме подключиться к серверу и выбрать папки. Выбранные папки будут автоматически подключены через механизм AutoFS.</p>
                 <p>Скачайте скрипты и инструкцию:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
@@ -1172,13 +1192,23 @@
                         <div class="cmd cmd-user">~/altlinux/dist/lan/mount_share.sh</div>
                     </div>
                 </div>
-                <p><a href="#mdns">Перейти к следующей главе.</a></p>
+                <!-- Далее -->
+                <div class="next-chapter-wrapper">
+                    <a href="#mdns" class="next-chapter-btn">
+                        mDNS
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
             </section>
             <!-- Глава -->
             <section id="share-autofs">
                 <h2>Вариант 1. Монтирование через AutoFS</h2>
-                <p>AutoFS даёт возможность автоматического монтирования съёмных носителей и сетевых ресурсов при вставке или обращении к ним.</p>
+                <p>AutoFS даёт возможность автоматического монтирования съёмных носителей и сетевых ресурсов при вставке или обращении к ним. AutoFS предустановлена в Альт Линукс СП 10 Рабочая станция.</p>
                 <p>В отличие от cifs в fstab AutoFS восстанавливает монтирования после обрыва, т.к. у него нет счетчика попыток подключения.</p>
+                <p>Статья <a href="https://www.altlinux.org/Autofs">Autofs</a> на ALT Linux Wiki.</p>
+                <p>Перед подключением сетевых папок проверти установлен ли autofs:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1194,7 +1224,7 @@
                         <div class="cmd cmd-root">apt-get install -y autofs</div>
                     </div>
                 </div>
-                <p>Создать файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
+                <p>Создайте файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1219,7 +1249,7 @@
                         <div class="cmd cmd-root">chmod 600 /root/.cifsmnt</div>
                     </div>
                 </div>
-                <p>Создать папку с именем сервера</p>
+                <p>Создайте папку с именем сервера</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -2456,7 +2486,66 @@
         <!-- Глава -->
         <section id="msoffice2007">
             <h1>Microsoft Office 2007</h1>
-            <p>Установите <a href="#wine">Wine</a>.</p>
+            <p>Для скачивания установите ydiskarc: см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
+            <p>Скачайте MS Office 2010</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/yF7r4A-K7-uPBw -o ~/altlinux/dist</div>
+                </div>
+            </div>
+            <p>Установите Wine</a>.</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y i586-wine && \</div>
+                    <div class="cmd cmd-root">apt-get install -y winetricks && \</div>
+                    <div class="cmd cmd-root">apt-get install -y wine-mono-8.1.0 && \</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Создание префикса</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">wineboot</div>
+                </div>
+            </div>
+            <p>Установка дополнительных компонентов</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
+                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
+                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
+                    <div class="cmd cmd-serial">winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p>Установите MS Office 2010</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># монтируйте iso</div>
+                    <div class="cmd cmd-user">udisksctl loop-setup -f ~/altlinux/dist/SW_DVD5_Office_2010_64Bit_Russian_MLF_X16-52113.ISO</div>
+                    <div class="cmd-comment"># запустите установку</div>
+                    <div class="cmd cmd-user">wine "/run/media/$USER/SW_DVD5_Office_2010_64Bit_Russian_MLF_X16-52113.ISO/setup.exe"</div>
+                </div>
+            </div>
+
             <p>Установите msoffice2007.</p>
             <!-- Команды -->
             <div class="code-wrapper">
