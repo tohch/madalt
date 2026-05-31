@@ -2492,7 +2492,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/yF7r4A-K7-uPBw -o ~/altlinux/dist</div>
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/yF7r4A-K7-uPBw -o ~/altlinux/dist/office2010</div>
                 </div>
             </div>
             <p>Установите Wine</a>.</p>
@@ -2541,6 +2541,7 @@
                 <div class="code-block">
                     <div class="cmd-comment"># монтируйте iso</div>
                     <div class="cmd cmd-user">udisksctl loop-setup -f ~/altlinux/dist/office2010/SW_DVD5_Office_2010_Standard_W32_Russian_MLF_X16-52107.ISO</div>
+                    <div class="cmd cmd-user">udisksctl mount -b /dev/loop0</div>
                     <div class="cmd-comment"># запустите установку</div>
                     <div class="cmd cmd-user">WINEPREFIX=~/.office2010 wine "/run/media/$USER/OFFICE14/setup.exe"</div>
                 </div>
@@ -2550,10 +2551,10 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/Word.desktop'</div>
+                    <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/'Word.desktop'</div>
                     <div class="cmd cmd-user">if [ -f "$DESKTOP" ]; then mv -f "$DESKTOP" "$DESKTOP.backup"; fi</div>
                     <div class="cmd cmd-user">echo '[Desktop Entry]' > "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Comment=Microsoft Word  2010 >> "$DESKTOP"</div>
+                    <div class="cmd cmd-user">echo 'Comment=Microsoft Word  2010' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Exec=env WINEPREFIX=/home/'$USER'/.office2010 wine "C:\\Program Files\\Microsoft Office\\Office14\\WINWORD.EXE"' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Icon=word' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Name=Word '"$GROUP" >> "$DESKTOP"</div>
@@ -2561,10 +2562,10 @@
                     <div class="cmd cmd-user">echo 'Terminal=false' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Type=Application' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">chmod +x "$DESKTOP"</div>
-                    <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/Excel.desktop'</div>
+                    <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/'Excel.desktop'</div>
                     <div class="cmd cmd-user">if [ -f "$DESKTOP" ]; then mv -f "$DESKTOP" "$DESKTOP.backup"; fi</div>
                     <div class="cmd cmd-user">echo '[Desktop Entry]' > "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Comment=Microsoft Excel  2010 >> "$DESKTOP"</div>
+                    <div class="cmd cmd-user">echo 'Comment=Microsoft Excel  2010' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Exec=env WINEPREFIX=/home/'$USER'/.office2010 wine "C:\\Program Files\\Microsoft Office\\Office14\\EXCEL.EXE"' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Icon=Excel' >> "$DESKTOP"</div>
                     <div class="cmd cmd-user">echo 'Name=Excel '"$GROUP" >> "$DESKTOP"</div>
@@ -2574,6 +2575,7 @@
                     <div class="cmd cmd-user">chmod +x "$DESKTOP"</div>
                 </div>
             </div>
+            <p>После первого запуска Word или Excel приложение будет доустанавливаться и попросит вас перезагрузиться. Не игнорируйте перезагрузку, иначе офис не будет работать, пока не перезагрузитесь.</p>
             <p>Установите msoffice2007.</p>
             <!-- Команды -->
             <div class="code-wrapper">
