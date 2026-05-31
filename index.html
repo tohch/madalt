@@ -104,7 +104,7 @@
             <li><a href="#scan">Сканер</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
             <li><a href="#wine">Wine</a></li>
-            <li><a href="#msoffice2007">Microsoft Office 2007</a></li>
+            <li><a href="#msoffice2010">Microsoft Office 2010</a></li>
             <li><a href="#cryptopro5">КриптоПро 5.0</a>
                 <ul>
                     <li><a href="#cryptopro5-install">Установка КриптоПро 5.0</a></li>
@@ -2484,8 +2484,8 @@
         </section>
 
         <!-- Глава -->
-        <section id="msoffice2007">
-            <h1>Microsoft Office 2007</h1>
+        <section id="msoffice2010">
+            <h1>Microsoft Office 2010</h1>
             <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
             <p>Скачайте MS Office 2010</p>
             <!-- Команды -->
@@ -2540,96 +2540,7 @@
                     <div class="cmd cmd-user">WINEPREFIX=~/.office2010 wine "/run/media/$USER/OFFICE14/setup.exe"</div>
                 </div>
             </div>
-            <p>Создание ярлыка. Укажите в GROUP номер своей группы</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/'Word.desktop'</div>
-                    <div class="cmd cmd-user">if [ -f "$DESKTOP" ]; then mv -f "$DESKTOP" "$DESKTOP.backup"; fi</div>
-                    <div class="cmd cmd-user">echo '[Desktop Entry]' > "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Comment=Microsoft Word  2010' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Exec=env "WINEPREFIX=/home/'$USER'/.office2010" wine "C:\\\\Program Files\\\\Microsoft Office\\\\Office14\\\\WINWORD.EXE"' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Icon=word' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Name=Word'>> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'StartupNotify=true' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Terminal=false' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Type=Application' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">chmod +x "$DESKTOP"</div>
-                    <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/'Excel.desktop'</div>
-                    <div class="cmd cmd-user">if [ -f "$DESKTOP" ]; then mv -f "$DESKTOP" "$DESKTOP.backup"; fi</div>
-                    <div class="cmd cmd-user">echo '[Desktop Entry]' > "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Comment=Microsoft Excel  2010' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Exec=env "WINEPREFIX=/home/'$USER'/.office2010" wine "C:\\\\Program Files\\\\Microsoft Office\\\\Office14\\\\EXCEL.EXE"' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Icon=Excel' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Name=Excel' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'StartupNotify=true' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Terminal=false' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">echo 'Type=Application' >> "$DESKTOP"</div>
-                    <div class="cmd cmd-user">chmod +x "$DESKTOP"</div>
-                </div>
-            </div>
-            <p>После первого запуска Word или Excel приложение будет проводить настройку и попросит вас перезагрузиться, нажмите Нет.</p>
-            <p>Установите msoffice2007.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">cd ~/dist/office2007</div>
-                    <div class="cmd cmd-user">wine ./SETUP.EXE</div>
-                    <div class="cmd cmd-user">vim ./excel.sh</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">#!/bin/sh</div>
-                    <div class="vim-line vim-string">QUICKPARLOCATION="C:\Program Files (x86)\Microsoft Office\Office12\EXCEL.EXE"</div>
-                    <div class="vim-line vim-string">PARAM=$(winepath -w "$1")</div>
-                    <div class="vim-line vim-string">echo "$PARAM"</div>
-                    <div class="vim-line vim-string">wine "$QUICKPARLOCATION" "$PARAM"</div>
-                    <div class="vim-line vim-string">exit 0</div>
-                    <div class="vim-comment"># esc</div>
-                    <div class="vim-comment"># :wq</div>
-                </div>
-            </div>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">chmod +x ./excel.sh</div>
-                    <div class="cmd cmd-user">vim ./word.sh</div>
-                </div>
-            </div>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">#!/bin/sh</div>
-                    <div class="vim-line vim-string">QUICKPARLOCATION="C:\Program Files (x86)\Microsoft Office\Office12\WINWORD.EXE"</div>
-                    <div class="vim-line vim-string">PARAM=$(winepath -w "$1")</div>
-                    <div class="vim-line vim-string">echo "$PARAM"</div>
-                    <div class="vim-line vim-string">wine "$QUICKPARLOCATION" "$PARAM"</div>
-                    <div class="vim-line vim-string">exit 0</div>
-                    <div class="vim-comment"># esc</div>
-                    <div class="vim-comment"># :wq</div>
-                </div>
-            </div>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">chmod +x ./word.sh</div>
-                </div>
-            </div>
-            <p>Создание ассоциации по умолчанию для файлов с расширение .doc .docx .xls .xlsx</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="config-line"><span class="config-value">Файл.docx - ПКМ - Открыть с помощью - Другое приложение... - </span></div>
-                    <div class="config-line"><span class="config-value">Использовать собственную команду - Просмотреть... - ‘/home/user1/altlinux/dist/office2007/word.sh’ -</span></div>
-                    <div class="config-line"><span class="config-value">Запомнить это приложение для файлов типа “Документ Word 2007” - Открыть</span></div>
-                </div>
-            </div>
+            <p>После первого запуска Word или Excel приложение будет проводить настройку и предложит вам перезагрузиться, нажмите Нет.</p>
         </section>
 
         <!-- Глава -->
