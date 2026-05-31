@@ -2523,17 +2523,6 @@
                     <div class="cmd cmd-user">WINEPREFIX=~/.office2010 wineboot</div>
                 </div>
             </div>
-            <p>Установка дополнительных компонентов</p>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">for pkg in win7   msxml6 dotnet20 mfc100 gdiplus \</div>
-                    <div class="cmd cmd-serial">riched20 vcrun2005 corefonts tahoma; do</div>
-                    <div class="cmd cmd-serial">WINEPREFIX=~/.office2010 winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
-                    <div class="cmd cmd-serial">done</div>
-                </div>
-            </div>
             <p>Смонтируйте ISO диск</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -2580,7 +2569,7 @@
                     <div class="cmd cmd-user">chmod +x "$DESKTOP"</div>
                 </div>
             </div>
-            <p>После первого запуска Word или Excel приложение будет доустанавливаться и попросит вас перезагрузиться. Не игнорируйте перезагрузку, иначе офис не будет работать, пока не перезагрузитесь.</p>
+            <p>После первого запуска Word или Excel приложение будет проводить настройку и попросит вас перезагрузиться, нажмите Нет.</p>
             <p>Установите msoffice2007.</p>
             <!-- Команды -->
             <div class="code-wrapper">
