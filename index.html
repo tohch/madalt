@@ -102,6 +102,7 @@
                 </ul>
             </li>
             <li><a href="#scan">Сканер</a></li>
+            <li><a href=#tldr>tldr</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
             <li><a href="#wine">Wine</a></li>
             <li><a href="#msoffice2010">Microsoft Office 2010</a></li>
@@ -2371,6 +2372,30 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd cmd-root">apt-get install gscan2pdf</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="tldr">
+            <h1>tldr</h1>
+            <p>Разработка получила название tldr – сокращение от Too Long;Didn’t Read (слишком длинно;не читал). Она сокращает справку к популярным утилитам, делая её более дружелюбной. Очень легко забыть, за что отвечают lsof или tar. И вызов помощника через man tar не очень-то упрощает жизнь.</p>
+            <p>tldr выделяет самую важную информацию из man-страниц и выводит ее на экран.</p>
+            <p>Установка:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su - -c "apt-get update; apt-get install -y python3-module-pip"</div>
+                    <div class="cmd cmd-user">pip3 install tldr</div>
+                </div>
+            </div>
+            <p>Пример использования:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">tldr cp</div>
                 </div>
             </div>
         </section>
