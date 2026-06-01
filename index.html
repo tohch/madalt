@@ -1287,7 +1287,7 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="vim-line vim-string">share -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/share</div>
-                        <div class="vim-line vime-string">"отдел кадров" -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/"отдел кадров"</div>
+                        <div class="vim-line vim-string">"отдел кадров" -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/"отдел кадров"</div>
                     </div>
                 </div>
                 <p>Настройте подключение конфигурационных файлов</p>
@@ -1806,7 +1806,7 @@
             </section>
             <section id="talisman-sql-setting-share">
                 <h2>Настройка сетевых папок</h2>
-                <p>Создайте директории для монтирования</p>
+                <p>Создайте директорию для монтирования</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -1814,13 +1814,20 @@
                         <div class="cmd cmd-user">su -</div>
                     </div>
                 </div>
+                <p>Установить autofs:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">mkdir -p /mnt/talsql/strah</div>
-                        <div class="cmd cmd-root">mkdir -p /mnt/talsql/out</div>
-                        <div class="cmd cmd-root">mkdir -p /mnt/talsql/pochta</div>
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y autofs</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir -p /mnt/192.168.205.4</div>
                     </div>
                 </div>
                 <p>Настройте fstab для автоматического монтирования сетевых папок по запросу</p>
@@ -1844,27 +1851,49 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">vim /etc/fstab</div>
+                        <div class="cmd cmd-root">chmod 600 /root/.cifsmnt</div>
+                    </div>
+                </div>
+                <p>Создайте конфигурационный файл:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/auto.192.168.205.4</div>
                     </div>
                 </div>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="vim-line vim-string">//192.168.205.4/strah /mnt/talsql/strah cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                        <div class="vim-line vim-string">//192.168.205.4/out /mnt/talsql/out cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,soft,file_mode=0777,dir_mode=0777,nofail 0 0</div>
-                        <div class="vim-line vim-string">//192.168.205.4/pochta /mnt/talsql/pochta cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,soft,nofail 0 0</div>
+                        <div class="vim-line vim-string">strah -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/strah</div>
+                        <div class="vim-line vim-string">out -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/out</div>
+                        <div class="vim-line vim-string">pochta -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.4/pochta</div>
                     </div>
                 </div>
-                <p>Активируйте автомонтирования (можно просто сделать <code>reboot</code>)</p>
+                <p>Настройте подключение конфигурационного файла:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">systemctl daemon-reload</div>
-                        <div class="cmd cmd-root">systemctl start mnt-talsql-strah.automount</div>
-                        <div class="cmd cmd-root">systemctl start mnt-talsql-out.automount</div>
-                        <div class="cmd cmd-root">systemctl start mnt-talsql-pochta.automount</div>
+                        <div class="cmd cmd-root">vim /etc/auto.master</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">/mnt/192.168.205.4 /etc/auto.192.168.205.4 --ghost,--timeout=60</div>
+                    </div>
+                </div>
+                <p>Запустите сервис:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl enable autofs</div>
+                        <div class="cmd cmd-root">systemctl start autofs</div>
+                        <div class="cmd cmd-root">exit</div>
                     </div>
                 </div>
                 <p>Дайте сетевой доступ через Wine. Для этого создайте папки в <code>~/.talsql/dosdevices/unc</code> согласно сетевым путям.</p>
@@ -1873,9 +1902,9 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">mkdir -p ~/.talsql/dosdevices/unc/192.168.205.4</div>
-                        <div class="cmd cmd-user">ln -s /mnt/talsql/strah ~/.talsql/dosdevices/unc/192.168.205.4</div>
-                        <div class="cmd cmd-user">ln -s /mnt/talsql/out ~/.talsql/dosdevices/unc/192.168.205.4</div>
-                        <div class="cmd cmd-user">ln -s /mnt/talsql/pochta ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                        <div class="cmd cmd-user">ln -s /mnt/192.168.205.4/strah ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                        <div class="cmd cmd-user">ln -s /mnt/192.168.205.4/out ~/.talsql/dosdevices/unc/192.168.205.4</div>
+                        <div class="cmd cmd-user">ln -s /mnt/192.168.205.4/pochta ~/.talsql/dosdevices/unc/192.168.205.4</div>
                     </div>
                 </div>
             </section>
@@ -2558,13 +2587,6 @@
                 </div>
             </div>
             <p>После первого запуска Word или Excel приложение будет проводить настройку и предложит вам перезагрузиться, нажмите Нет.</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">WINEPREFIX=~/.office2010 wine "/run/media/$USER/OFFICE14/setup.exe"</div>
-                </div>
-            </div>
             <p>MS Office 2010 не будет открывать файлы по умолчанию, даже если вы сделает ассоциацию, чтобы обойти эту проблему скопируйте sh скрипты и ассоциируйте уже с ним, тогда файлы нормально будут открывать по двойному клику.</p>
             <!-- Команды -->
             <div class="code-wrapper">
@@ -2578,7 +2600,7 @@
                 </div>
             </div>
             <!-- Картинка -->
-            <img src="img/img-1.png" alt="Установка Альт СП 10 Рабочая Станция">
+            <img src="img/office2010/img-office2010-1.jpg" alt="MS Office 2010">
         </section>
 
         <!-- Глава -->
