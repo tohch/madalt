@@ -133,10 +133,10 @@ EOF
     fi
     
     # Формируем опции монтирования для autofs
-    local autofs_opts="trash -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/trash
-mail -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/mail
-mailout -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/mailout
-scan -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/scan"
+    local autofs_opts="trash -fstype=cifs,vers=1.0,rw,credentials=/root/.cifs${SERVER},nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/trash
+mail -fstype=cifs,vers=1.0,rw,credentials=/root/.cifs${SERVER},nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/mail
+mailout -fstype=cifs,vers=1.0,rw,credentials=/root/.cifs${SERVER},nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/mailout
+scan -fstype=cifs,vers=1.0,rw,credentials=/root/.cifs${SERVER},nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.254/scan"
 
         
     # Проверяем, есть ли уже запись для этой шары
@@ -150,7 +150,7 @@ scan -fstype=cifs,vers=1.0,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=07
     echo "Конфигурация создана."
 }
 
-CRED_FILE="/root/.usermnt"
+CRED_FILE="/root/.cifs${SERVER}"
 cat > "$CRED_FILE" <<EOF
 username=${USERNAME}
 password=${PASSWORD}
