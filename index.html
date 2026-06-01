@@ -2558,6 +2558,27 @@
                 </div>
             </div>
             <p>После первого запуска Word или Excel приложение будет проводить настройку и предложит вам перезагрузиться, нажмите Нет.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.office2010 wine "/run/media/$USER/OFFICE14/setup.exe"</div>
+                </div>
+            </div>
+            <p>MS Office 2010 не будет открывать файлы по умолчанию, даже если вы сделает ассоциацию, чтобы обойти эту проблему скопируйте sh скрипты и ассоциируйте уже с ним, тогда файлы нормально будут открывать по двойному клику.</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">mkdir -p ~/bin</div>
+                    <div class="cmd cmd-user">cp -f ~/altlinux/dist/office2010/word.sh ~/bin</div>
+                    <div class="cmd cmd-user">cp -f ~/altlinux/dist/office2010/excel.sh ~/bin</div>
+                    <div class="cmd cmd-user">chmod +x ~/bin/word.sh</div>
+                    <div class="cmd cmd-user">chmod +x ~/bin/excel.sh</div>
+                </div>
+            </div>
+            <!-- Картинка -->
+            <img src="img/img-1.png" alt="Установка Альт СП 10 Рабочая Станция">
         </section>
 
         <!-- Глава -->
