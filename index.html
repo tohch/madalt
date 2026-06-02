@@ -569,7 +569,7 @@
                     <div class="vim-comment"># раскомментировать Доступ группе sudo и группе wheel</div>
                     <div class="vim-line vim-string">User_Alias WHEEL_USERS = %wheel</div>
                     <div class="vim-line vim-string">User_Alias SUDO_USERS = %sudo</div>
-                    <div class="vim-line vim-string">WHEEL_USERS ALL(ALL:ALL) ALL</div>
+                    <div class="vim-line vim-string">WHEEL_USERS ALL=(ALL:ALL) ALL</div>
                     <div class="vim-line vim-string">SUDO_USERS ALL=(ALL:ALL) ALL</div>
                 </div>
             </div>
@@ -707,6 +707,15 @@
                     <div class="alert-title">Подсказка</div>
                     <p class="alert-text">Атрибут -y отвечает на все вопросы, корме install kernel, Да: <code>./update_kernel_10.2.sh -y</code></p>
                 </div>
+            </div>
+            <!-- Далее -->
+            <div class="next-chapter-wrapper">
+                <a href="#intall-them-windows" class="next-chapter-btn">
+                    Установка темы "Windows"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
             <h2 id="dist-update-10">Актуализация текущей пакетной базы</h2>
             <p>Закомментировать диск с установщиком Альта в fstab, иначе без установочного диска будет ошибка при обновлении дистрибутивов</p>
@@ -1051,7 +1060,7 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Тема интерфейса (GTK)</div>
-                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "BlueMenta" --create</div>
+                    <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/ThemeName -t string -s "Greybird" --create</div>
                     <div class="cmd-comment"># Тема иконок</div>
                     <div class="cmd cmd-user">xfconf-query -c xsettings -p /Net/IconThemeName -t string -s "Papirus-Light" --create</div>
                     <div class="cmd-comment"># Тема заголовков окон (xfwm4)</div>
