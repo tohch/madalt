@@ -3737,6 +3737,10 @@
                     <div class="cmd cmd-serial">[Install]</div>
                     <div class="cmd cmd-serial">WantedBy=multi-user.target</div>
                     <div class="cmd cmd-serial">EOF</div>
+                    <div class="cmd cmd-comment"># Активировать и запустить сервис</div>
+                    <div class="cmd cmd-serial">systemctl daemon-reload</div>
+                    <div class="cmd cmd-serial">systemctl enable notify_listener.service</div>
+                    <div class="cmd cmd-serial">systemctl start notify_listener.service</div>
                     <div class="cmd cmd-serial">"</div>
                 </div>
             </div>
@@ -3745,24 +3749,6 @@
                 <div class="alert-content">
                     <div class="alert-title">Примечание</div>
                     <p class="alert-text"><code>$USER</code> будет заменен на имя текущего пользователя.</p>
-                </div>
-            </div>
-            <p>Активировать и запустить сервис</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">systemctl daemon-reload</div>
-                    <div class="cmd cmd-root">systemctl enable notify_listener.service</div>
-                    <div class="cmd cmd-root">systemctl start notify_listener.service</div>
-                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
             <p>Управление и логи</p>
