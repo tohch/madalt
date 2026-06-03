@@ -2325,18 +2325,25 @@
                     </div>
                 </div>
             </section>
-            <seciont id="printer-connect">
+            <section id="printer-connect">
                 <h2>Подключение к сетевому принтеру</h2>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">system-config-printer</div>
+                        <div class="cmd cmd-user">system-config-printer</div>
                     </div>
                 </div>
                 <!-- Картинка -->
                 <img src="img/printer/img-printer-1.png" alt="Сетевое подключение принтера">
                 <img src="img/printer/img-printer-2.png" alt="Сетевое подключение принтера">
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Если принтер старый (выпуск до 2010 года) ipp может не работать, то используйте: <code>socket://192.168.205.12:9100</code></p>
+                    </div>
+                </div>
                 <img src="img/printer/img-printer-3.png" alt="Сетевое подключение принтера">
                 <!-- Подсказка -->
                 <div class="alert alert-tip">
@@ -2440,14 +2447,22 @@
                     <div class="cmd cmd-root">cd /home/<span class="mark">user1</span></div>
                 </div>
             </div>
+            <p>Установка МойОфис Текст, Таблица и Презентация:</p>
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd-comment"># Установка МойОфис Текст, Таблица и Презентация</div>
-                    <div class="cmd cmd-root">apt-get install -y ./altlinux/dist/MyOffice/myoffice-standard-documents-3.2-165.x86_64.rpm</div>
-                    <div class="cmd-comment"># Установка МойОфис Почта</div>
-                    <div class="cmd cmd-root">chmod +x ./altlinux/dist/MyOffice/MyOffice_Mail_PSN_Linux_2.8.sh</div>
-                    <div class="cmd cmd-root">./altlinux/dist/MyOffice/MyOffice_Mail_PSN_Linux_2.8.sh</div>
+                    <div class="cmd-comment">su - -c "</div>
+                    <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/MyOffice/myoffice-standard-documents-3.2-165.x86_64.rpm</div>
+                    <div class="cmd cmd-serial">"</div>
+
+                </div>
+            </div>
+            <p>Установка МойОфис Почта:</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod +x /home/$USER/altlinux/dist/MyOffice/MyOffice_Mail_PSN_Linux_2.8.sh</div>
+                    <div class="cmd cmd-user">/home/$USER/altlinux/dist/MyOffice/MyOffice_Mail_PSN_Linux_2.8.sh</div>
                 </div>
             </div>
             <!-- Важно -->
