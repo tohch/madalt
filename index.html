@@ -2960,6 +2960,7 @@
                     <div class="code-block">
                         <div class="cmd cmd-root">apt-get update</div>
                         <div class="cmd cmd-root">apt-get install -y chromium-gost</div>
+                        <div class="cmd cmd-root">exit</div>
                     </div>
                 </div>
             </section>
@@ -2974,16 +2975,8 @@
                     <div class="code-block">
                         <div class="cmd cmd-user">cd ~/Загрузки</div>
                         <div class="cmd cmd-user">wget -O chromium-gost.rpm https://release-assets.githubusercontent.com/github-production-release-asset/80726665/45918557-b4bd-403b-ad6f-aae9ec478b25?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-04-06T08%3A25%3A20Z&rscd=attachment%3B+filename%3Dchromium-gost-146.0.7680.177-linux-amd64.rpm&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-04-06T07%3A25%3A08Z&ske=2026-04-06T08%3A25%3A20Z&sks=b&skv=2018-11-09&sig=4ilnI%2FJgZTeyuYJJmNWy14rez02Cq%2FHSPRNlskxckP0%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3NTQ2NDg5OCwibmJmIjoxNzc1NDYxMjk4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.G3no9qowDROqcw2SvQh1TlC9OozHMAXwf8ZFp6v2KcM&response-content-disposition=attachment%3B%20filename%3Dchromium-gost-146.0.7680.177-linux-amd64.rpm&response-content-type=application%2Foctet-stream</div>
-                        <div class="cmd cmd-user">su -</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">cd /home/user1/Загрузки</div>
-                        <div class="cmd cmd-root">chmod +x chromium-gost.rpm</div>
-                        <div class="cmd cmd-root">apt-get install ./chromium-gost.rpm</div>
+                        <div class="cmd cmd-user">chmod +x ~/Загрузки/chromium-gost.rpm</div>
+                        <div class="cmd cmd-user">su - -c "apt-get install /home/$USER/Загрузки/chromium-gost.rpm"</div>
                     </div>
                 </div>
             </section>
@@ -3586,6 +3579,115 @@
                     <div class="cmd cmd-user">chmod +x "$DESKTOP"</div>
                 </div>
             </div>
+        </section>
+        
+        <!-- Глава -->
+        <section id="port-redirect">
+            <h1>Проброс портов</h1>
+            <p>Для проброса портов будет использовать <code>socat</code></p>
+            <!-- Глава -->
+            <section id="port-redirect-install">
+                <h2>Установка</h2>
+                <p>Установите <code>socat</code></p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y socat</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="port-redirect-server">
+                <h2>Прокси Сервер (компьютер с ViPNet)</h2>
+                <h3>Альт Линукс</h3>
+                <p>Ниже приведен вареант Прокси Сервера на Альт Линуксе.</p>
+                <p>На компьютере с ViPNet создайте systemd юнит с запуском <code>socad</code>.</p>
+                <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера, куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
+                <p>Для удобства создайти переменные с параметрами перенаправления:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Порт, на котором будет слушать socat</div>
+                        <div class="cmd cmd-root">LISTEN_PORT=6202</div>
+                        <div class="cmd-comment"># IP адрес сервера куда перенаправлять запросы</div>
+                        <div class="cmd cmd-root">DEST_IP=192.168.23.58</div>
+                        <div class="cmd-comment"># Порт сервера</div>
+                        <div class="cmd cmd-root">DEST_PORT=80</div>
+                    </div>
+                </div>
+                <p>Создайте юнит с запуском <code>socat</code>:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Создать systemd-юнит с запуском socat"</div>
+                        <div class="cmd cmd-root">tee /etc/systemd/system/socat-${LISTEN_PORT}.service > /dev/null &lt;&lt;EOF</div>
+                        <div class="cmd cmd-serial">[Unit]</div>
+                        <div class="cmd cmd-serial">Description=Socat TCP Proxy: ALL:${LISTEN_PORT} -> ${DEST_IP}:${DEST_PORT}</div>
+                        <div class="cmd cmd-serial">After=network.target</div>
+                        <div class="cmd cmd-serial">Wants=network.target</div>
+                        <div class="cmd cmd-serial">[Service]</div>
+                        <div class="cmd cmd-serial">Type=simple</div>
+                        <div class="cmd cmd-serial">ExecStart=/usr/bin/socat TCP-LISTEN:${LISTEN_PORT},fork,reuseaddr TCP:${DEST_IP}:${DEST_PORT}</div>
+                        <div class="cmd cmd-serial">Restart=on-failure</div>
+                        <div class="cmd cmd-serial">RestartSec=10</div>
+                        <div class="cmd cmd-serial">StandardOutput=journal</div>
+                        <div class="cmd cmd-serial">StandardError=journal</div>
+                        <div class="cmd cmd-serial">[Install]</div>
+                        <div class="cmd cmd-serial">WantedBy=multi-user.target</div>
+                        <div class="cmd cmd-serial">EOF</div>
+                    </div>
+                </div>
+                <p>Запустите юнит:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Запустить юнит</div>
+                        <div class="cmd cmd-root">systemctl daemon-reload</div>
+                        <div class="cmd cmd-root">systemctl enable --now socat-${LISTEN_PORT}</div>
+                        <div class="cmd-comment"># Проверить запуск юнита</div>
+                        <div class="cmd cmd-root">systemctl status socat-${LISTEN_PORT} --no-pager -l</div>
+                    </div>
+                </div>
+                <h3>Windows</h3>
+                <p>Ниже приведен вареант Прокси Сервера на Windows.</p>
+                <p>На компьютере с ViPNet создайте <code>porproxy.bat</code> в автозапуске <code>win+r shell:startup</code></p>
+                <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера, куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd">netsh interface portproxy reset</div>
+                        <div class="cmd">netsh interface portproxy add v4tov4 listenaddress=192.168.23.58 listenport=6202 connectaddress=192.168.23.58 connectport=80</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Зачастую сброс правил (netsh interface portproxy reset) и создание bat файла в автозапуске необходимы, т.к. без него после перезагрузки правила перестают работать. Это происходит из-за бага ОС.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Глава -->
+            <section id="port-redirect-client">
+                <h2>Клиент</h2>
+                <p>На клиенте, в настроках приложения, где требуется проброс портов, указывайте Прокси сервер (ip компьютера с настроенным Проски Сервером)</p>
+                <p>В данном примере показанна настройка клиентской части Катарсиса.</p>
+                <!-- Картинка -->
+                <img src="img/port-redirect/img-port-redirect-1.png" alt="Установка Альт СП 10 Рабочая Станция">
+            </section>
         </section>
 
         <!-- Глава -->
@@ -4502,115 +4604,6 @@
                         <div class="cmd cmd-root">ssh-keygen -A</div>
                     </div>
                 </div>
-            </section>
-        </section>
-
-        <!-- Глава -->
-        <section id="port-redirect">
-            <h1>Проброс портов</h1>
-            <p>Для проброса портов будет использовать <code>socat</code></p>
-            <!-- Глава -->
-            <section id="port-redirect-install">
-                <h2>Установка</h2>
-                <p>Установите <code>socat</code></p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">apt-get update</div>
-                        <div class="cmd cmd-root">apt-get install -y socat</div>
-                    </div>
-                </div>
-            </section>
-            <!-- Глава -->
-            <section id="port-redirect-server">
-                <h2>Прокси Сервер (компьютер с ViPNet)</h2>
-                <h3>Альт Линукс</h3>
-                <p>Ниже приведен вареант Прокси Сервера на Альт Линуксе.</p>
-                <p>На компьютере с ViPNet создайте systemd юнит с запуском <code>socad</code>.</p>
-                <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера, куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
-                <p>Для удобства создайти переменные с параметрами перенаправления:</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd-comment"># Порт, на котором будет слушать socat</div>
-                        <div class="cmd cmd-root">LISTEN_PORT=6202</div>
-                        <div class="cmd-comment"># IP адрес сервера куда перенаправлять запросы</div>
-                        <div class="cmd cmd-root">DEST_IP=192.168.23.58</div>
-                        <div class="cmd-comment"># Порт сервера</div>
-                        <div class="cmd cmd-root">DEST_PORT=80</div>
-                    </div>
-                </div>
-                <p>Создайте юнит с запуском <code>socat</code>:</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd-comment"># Создать systemd-юнит с запуском socat"</div>
-                        <div class="cmd cmd-root">tee /etc/systemd/system/socat-${LISTEN_PORT}.service > /dev/null &lt;&lt;EOF</div>
-                        <div class="cmd cmd-serial">[Unit]</div>
-                        <div class="cmd cmd-serial">Description=Socat TCP Proxy: ALL:${LISTEN_PORT} -> ${DEST_IP}:${DEST_PORT}</div>
-                        <div class="cmd cmd-serial">After=network.target</div>
-                        <div class="cmd cmd-serial">Wants=network.target</div>
-                        <div class="cmd cmd-serial">[Service]</div>
-                        <div class="cmd cmd-serial">Type=simple</div>
-                        <div class="cmd cmd-serial">ExecStart=/usr/bin/socat TCP-LISTEN:${LISTEN_PORT},fork,reuseaddr TCP:${DEST_IP}:${DEST_PORT}</div>
-                        <div class="cmd cmd-serial">Restart=on-failure</div>
-                        <div class="cmd cmd-serial">RestartSec=10</div>
-                        <div class="cmd cmd-serial">StandardOutput=journal</div>
-                        <div class="cmd cmd-serial">StandardError=journal</div>
-                        <div class="cmd cmd-serial">[Install]</div>
-                        <div class="cmd cmd-serial">WantedBy=multi-user.target</div>
-                        <div class="cmd cmd-serial">EOF</div>
-                    </div>
-                </div>
-                <p>Запустите юнит:</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd-comment"># Запустить юнит</div>
-                        <div class="cmd cmd-root">systemctl daemon-reload</div>
-                        <div class="cmd cmd-root">systemctl enable --now socat-${LISTEN_PORT}</div>
-                        <div class="cmd-comment"># Проверить запуск юнита</div>
-                        <div class="cmd cmd-root">systemctl status socat-${LISTEN_PORT} --no-pager -l</div>
-                    </div>
-                </div>
-                <h3>Windows</h3>
-                <p>Ниже приведен вареант Прокси Сервера на Windows.</p>
-                <p>На компьютере с ViPNet создайте <code>porproxy.bat</code> в автозапуске <code>win+r shell:startup</code></p>
-                <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера, куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd">netsh interface portproxy reset</div>
-                        <div class="cmd">netsh interface portproxy add v4tov4 listenaddress=192.168.23.58 listenport=6202 connectaddress=192.168.23.58 connectport=80</div>
-                    </div>
-                </div>
-                <!-- Примечание -->
-                <div class="alert alert-note">
-                    <div class="alert-content">
-                        <div class="alert-title">Примечание</div>
-                        <p class="alert-text">Зачастую сброс правил (netsh interface portproxy reset) и создание bat файла в автозапуске необходимы, т.к. без него после перезагрузки правила перестают работать. Это происходит из-за бага ОС.</p>
-                    </div>
-                </div>
-            </section>
-            <!-- Глава -->
-            <section id="port-redirect-client">
-                <h2>Клиент</h2>
-                <p>На клиенте, в настроках приложения, где требуется проброс портов, указывайте Прокси сервер (ip компьютера с настроенным Проски Сервером)</p>
-                <p>В данном примере показанна настройка клиентской части Катарсиса.</p>
-                <!-- Картинка -->
-                <img src="img/port-redirect/img-port-redirect-1.png" alt="Установка Альт СП 10 Рабочая Станция">
             </section>
         </section>
 
