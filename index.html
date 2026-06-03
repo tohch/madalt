@@ -2431,27 +2431,20 @@
         <!-- Глава -->
         <section id="myoffice">
             <h1>МойОфис</h1>
-            <p>Установка</p>
+            <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
+            <p>Скачайте МойОфис</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Замените user1 на имя своей учетной записи</div>
-                    <div class="cmd cmd-root">cd /home/<span class="mark">user1</span></div>
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/kpnjiwalKt6jqg -o ~/altlinux/dist/MyOffice</div>
                 </div>
             </div>
             <p>Установка МойОфис Текст, Таблица и Презентация:</p>
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd-comment">su - -c "</div>
+                    <div class="cmd cmd-user">su - -c "</div>
                     <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/MyOffice/myoffice-standard-documents-3.2-165.x86_64.rpm</div>
                     <div class="cmd cmd-serial">"</div>
 
