@@ -3710,41 +3710,31 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">vim /etc/systemd/system/notify_listener.service</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="vim-line vim-string">[Unit]</div>
-                    <div class="vim-line vim-string">Description=Notify Listener Python Демон</div>
-                    <div class="vim-line vim-string">After=network.target</div>
-                    <div class="vim-line vim-string">[Service]</div>
-                    <div class="vim-line vim-string">ExecStart=/usr/bin/python3 /home/<span class="mark">user1</span>/bin/notify_listener.py</div>
-                    <div class="vim-line vim-string">WorkingDirectory=/home/<span class="mark">user1</span>/bin</div>
-                    <div class="vim-line vim-string">User=<span class="mark">user1</span></div>
-                    <div class="vim-line vim-string">Group=<span class="mark">user1</span></div>
-                    <div class="vim-line vim-string">Restart=always</div>
-                    <div class="vim-line vim-string">RestartSec=5</div>
-                    <div class="vim-line vim-string">StandardOutput=journal</div>
-                    <div class="vim-line vim-string">StandardError=journal</div>
-                    <div class="vim-line vim-string">[Install]</div>
-                    <div class="vim-line vim-string">WantedBy=multi-user.target</div>
+                    <div class="cmd cmd-user">su - -c "</div>
+                    <div class="cmd cmd-serial">cat << EOF > /etc/systemd/system/notify_listener.service</div>
+                    <div class="cmd cmd-serial">[Unit]</div>
+                    <div class="cmd cmd-serial">Description=Notify Listener Python Демон</div>
+                    <div class="cmd cmd-serial">After=network.target</div>
+                    <div class="cmd cmd-serial">[Service]</div>
+                    <div class="cmd cmd-serial">ExecStart=/usr/bin/python3 /home/<span class="mark">$USER</span>/bin/notify_listener.py</div>
+                    <div class="cmd cmd-serial">WorkingDirectory=/home/<span class="mark">$USER</span>/bin</div>
+                    <div class="cmd cmd-serial">User=<span class="mark">$USER</span></div>
+                    <div class="cmd cmd-serial">Group=<span class="mark">$USER</span></div>
+                    <div class="cmd cmd-serial">Restart=always</div>
+                    <div class="cmd cmd-serial">RestartSec=5</div>
+                    <div class="cmd cmd-serial">StandardOutput=journal</div>
+                    <div class="cmd cmd-serial">StandardError=journal</div>
+                    <div class="cmd cmd-serial">[Install]</div>
+                    <div class="cmd cmd-serial">WantedBy=multi-user.target</div>
+                    <div class="cmd cmd-serial">EOF</div>
+                    <div class="cmd cmd-serial">"</div>
                 </div>
             </div>
             <!-- Примечание -->
             <div class="alert alert-note">
                 <div class="alert-content">
                     <div class="alert-title">Примечание</div>
-                    <p class="alert-text">Замените <code>user1</code> на имя своей учетной записи</p>
+                    <p class="alert-text"><code>$USER</code> будет заменен на имя текущего пользователя.</p>
                 </div>
             </div>
             <p>Активировать и запустить сервис</p>
@@ -3752,9 +3742,17 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
                     <div class="cmd cmd-root">systemctl daemon-reload</div>
                     <div class="cmd cmd-root">systemctl enable notify_listener.service</div>
                     <div class="cmd cmd-root">systemctl start notify_listener.service</div>
+                    <div class="cmd cmd-root">exit</div>
                 </div>
             </div>
             <p>Управление и логи</p>
@@ -3763,13 +3761,13 @@
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
                     <div class="cmd-comment"># Проверить статус:</div>
-                    <div class="cmd cmd-root">systemctl status notify_listener.service</div>
+                    <div class="cmd cmd-user">systemctl status notify_listener.service</div>
                     <div class="cmd-comment"># Остановить:</div>
-                    <div class="cmd cmd-root">systemctl stop notify_listener.service</div>
+                    <div class="cmd cmd-user">systemctl stop notify_listener.service</div>
                     <div class="cmd-comment"># Перезапустить:</div>
-                    <div class="cmd cmd-root">systemctl restart notify_listener.service</div>
+                    <div class="cmd cmd-user">systemctl restart notify_listener.service</div>
                     <div class="cmd-comment"># Просмотр логов: Так как мы настроили вывод в journal, смотреть логи нужно так:</div>
-                    <div class="cmd cmd-root">journalctl -u notify_listener.service -f</div>
+                    <div class="cmd cmd-user">journalctl -u notify_listener.service -f</div>
                 </div>
             </div>
             <p>Журнал уведомлений.</p>
