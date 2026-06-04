@@ -67,13 +67,10 @@
             </li>
             <li><a href="#kerberos">Список билетов Kerberos</a></li>
             <li><a href="#share">Сетевые папки</a>
+            <li><a href="#do-share">Настройка общего доступа к папке</a>
                 <ul>
-                    <li><a href="#share-sh">Автоматическое монтирование</a></li>
-                    <li><a href="#share-autofs">Вариант 1. Монтирование через AutoFS</a></li>
-                    <li><a href="#require-mount">Вариант 2. Монтированние по запросу к сетевому ресурсу по протоколы cifs в fstab</a></li>
-                    <li><a href="#smb1">Вариант 3. SMB1</a></li>
-                    <li><a href="#button-mount">Вариант 4. Простое подключение сетевой папки через кнопку</a></li>
-                    <li><a href="#sshfs">Вариант 5. Монтирование SSHFS</a></li>
+                    <li><a href="#do-share-smb">Через Samba</a></li>
+                    <li><a href="#do-share-smb-group">Доступ для группы через Samba</a></li>
                 </ul>
             </li>
             <li><a href="#mdns">mDNS</a></li>
@@ -151,6 +148,13 @@
             </li>
             <li><a href="#bridge">Сетевой мост</a></li>
             <li><a href="#katarsis">Катарсис</a></li>
+            <li><a href="#port-redirect">Проброс портов</a>
+                <ul>
+                    <li><a href="#port-redirect-install">Установка</a></li>
+                    <li><a href="#port-redirect-server">Прокси Сервер (компьютер с ViPNet)</a></li>
+                    <li><a href="#port-redirect-client">Клиент</a></li>
+                </ul>
+            </li>
             <li><a href="#notify-listener">NotifyListener - уведомление о создании файлов</a></li>
             <li><a href="#lan-chat">Локальный чат</a>
                 <ul>
@@ -178,11 +182,6 @@
                     <li><a href="#tar-set-os-legacy">Восстановление системы Альт Линукс из образа (Legacy(BIOS))</a></li>
                     <li><a href="#tar-set-os-uefi">Восстановление системы Альт Линукс из образа (UEFI)</a></li>
                 </ul>
-            </li>
-            <li><a href="#port-redirect">Проброс портов</a>
-                <ul><li><a href="#port-redirect-install">Установка</a></li></ul>
-                <ul><li><a href="#port-redirect-server">Прокси Сервер (компьютер с ViPNet)</a></li></ul>
-                <ul><li><a href="#port-redirect-client">Клиент</a></li></ul>
             </li>
             <li><a href="#repo">Управление репозиториями</a></li>
             <li><a href="#rules">Права</a></li>
@@ -1600,8 +1599,235 @@
                 </div>
             </div>
         </section>
-
+        
         <!-- Глава -->
+        <section id="do-share">
+            <h1>Настройка общего доступа к папке</h1>
+            <section id="do-share-smb">
+                <h2>Через Samba</h2>
+                <p>Создайте папку для обмена:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">mkdir -p ~/smb/share</div>
+                    </div>
+                </div>
+                <p>Установите необходимые пакеты:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y samba samba-client</div>
+                    </div>
+                </div>
+                <p>Создайте пользователя Samba:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">smbpasswd -a user1</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">У Samba своя база паролей, отдельная от системной. Вам нужно добавить вашего системного пользователя в базу Samba и задать ему пароль (он может отличаться от пароля входа в систему).</p>
+                    </div>
+                </div>
+                <p>Затем активируйте этого пользователя:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">smbpasswd -e user1</div>
+                    </div>
+                </div>
+                <p>Добавьте настройки в файл конфигурации:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/samba/smb.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">[share]</div>
+                        <div class="vim-line vim-string">    comment = Общая папка</div>
+                        <div class="vim-line vim-string">    path = /home/user1/smb/share</div>
+                        <div class="vim-line vim-string">    valid users = user1</div>
+                        <div class="vim-line vim-string">    read only = no</div>
+                        <div class="vim-line vim-string">    browsable = yes</div>
+                        <div class="vim-line vim-string">    create mask = 0660</div>
+                        <div class="vim-line vim-string">    directory mask = 0770</div>
+                        <div class="vim-line vim-string">    force user = user1</div>
+                        <div class="vim-line vim-string">    force group = user1</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text"><code>[share]</code> - это имя, под которым папка будет видна в сети.</p>
+                        <p class="alert-text"><code>valid users</code> - указывает, кому разрешен доступ (только вашему пользователю).</p>
+                        <p class="alert-text"><code>read only = no</code> - разрешает запись в папку.</p>
+                        <p class="alert-text"><code>force user group</code> - присваивает владельца создаваемым по сети файлам и папкам.</p>
+                    </div>
+                </div>
+                <p>Запустите и включите службы Samba:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl enable --now smb nmb</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Перезагрузить службы: <code>systemctl restart smb nmb</code></p>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">При подключении хост не отображает доступные сетевые папки <code>smb://192.168.205.137</code> выдаст ошибку.</p>
+                        <p class="alert-text">Для подключение требуется указывать имя сетевой папки <code>smb://192.168.205.137/share</code></p>
+                    </div>
+                </div>
+            </section>
+            <section id="do-share-smb-group">
+                <h2>Доступ для группы через Samba</h2>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <p>Установите необходимые пакеты:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y samba samba-client</div>
+                    </div>
+                </div>
+                <p>Создайте группу и добавьте пользователя:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">groupadd smbusers</div>
+                        <div class="cmd cmd-root">usermod -aG smbusers user1</div>
+                    </div>
+                </div>
+                <p>Создайте папку и назначьте владельца:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">mkdir -p /home/admin/smb/share</div>
+                        <div class="cmd cmd-root">chown user1:smbusers /home/admin/smb/share</div>
+                        <div class="cmd cmd-root">chmod 770 /home/admin/smb/share</div>
+                    </div>
+                </div>
+                <p>Создайте пользователя Samba:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">smbpasswd -a user1</div>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">У Samba своя база паролей, отдельная от системной. Вам нужно добавить вашего системного пользователя в базу Samba и задать ему пароль (он может отличаться от пароля входа в систему).</p>
+                    </div>
+                </div>
+                <p>Затем активируйте этого пользователя:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">smbpasswd -e user1</div>
+                    </div>
+                </div>
+                <p>Добавьте настройки в файл конфигурации:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/samba/smb.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">[share]</div>
+                        <div class="vim-line vim-string">    comment = Общая папка</div>
+                        <div class="vim-line vim-string">    path = /home/user1/smb/share</div>
+                        <div class="vim-line vim-string">    valid users = @smbusers</div>
+                        <div class="vim-line vim-string">    read only = no</div>
+                        <div class="vim-line vim-string">    browsable = yes</div>
+                        <div class="vim-line vim-string">    create mask = 0660</div>
+                        <div class="vim-line vim-string">    directory mask = 0770</div>
+                        <div class="vim-line vim-string">    force user = user1</div>
+                        <div class="vim-line vim-string">    force group = smbusers</div>
+                    </div>
+                </div>
+                <p>Запустите и включите службы Samba:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl enable --now smb nmb</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Перезагрузить службы: <code>systemctl restart smb nmb</code></p>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Доступ можно дать нескольким группам и пользователям: <code>valid users = @smbusers @wheel user1</code></p>
+                    </div>
+                </div>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">При подключении хост не отображает доступные сетевые папки <code>smb://192.168.205.137</code> выдаст ошибку.</p>
+                        <p class="alert-text">Для подключение требуется указывать имя сетевой папки <code>smb://192.168.205.137/share</code></p>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- Глава -->
+        
         <section id="mdns">
             <h1>mDNS</h1>
             <p>mDNS — это протокол для автоматического разрешения имён в локальной сети без централизованного DNS-сервера. Работает по принципу «спросил соседей — получил ответ».</p>
