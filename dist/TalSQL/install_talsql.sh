@@ -65,7 +65,7 @@ check_root() {
 }
 
 check_user(){
-    if [ "$(id -u)" -eq 0 && ($ORIG_USER == "root") ]; then
+    if [ ("$(id -u)" -eq 0) && ($ORIG_USER == "root") ]; then
         error "Скрипт нельзя запускать от имени root!"
         info "Выйдите из root: exit"
         info "И перезапустите скрипт под пользователем, скрипт сам запросит повышение прав."
