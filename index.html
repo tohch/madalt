@@ -1497,11 +1497,11 @@
                     <p class="vim-line vim-string"><span class="vim-command">0</span> - (шестое поле)	0	Проверка fsck при загрузке — выключена (для сетевых ФС всегда 0).</p>
                     <p class="vim-line">Примеры альтернативных подключений:</p>
                     <p class="cmd-comment">Подключение по SMB1</p>
-                    <p class="vim-line">//192.168.205.254/share /mnt/share cifs <span class="mark">vers=1.0</span>,noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
+                    <p class="vim-line">//192.168.205.254/share /mnt/share cifs <span class="mark">vers=1.0</span>,noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
                     <p class="cmd-comment">Постоянное подключение (сетевая папка будет монтироваться сразу при старте ОС) (удалить <span class="mark">noauto,x-systemd.automount</span>). Для подключения без перезагрузки используйте: <span class="mark">mount -a</span></p>
                     <p class="vim-line">//192.168.205.4/out /mnt/talsql/out cifs _netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777,nofail 0 0</p>
                     <p class="cmd-comment">Подключить сетевую папку только для чтения (удалить <span class="mark">file_mode=0777,dir_mode=0777</span>)</p>
-                    <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</p>
+                    <p class="vim-line">//192.168.205.4/share /mnt/share cifs noauto,x-systemd.automount,x-systemd.idle-timeout=60,_netdev,rw,credentials=/root/.cifsmnt,nobrl,soft,nofail 0 0</p>
                 </div>
             </div>
             <h2 id="smb1">Вариант 3. SMB1</h2>
