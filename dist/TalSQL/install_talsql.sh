@@ -49,7 +49,7 @@ success(){ echo -e "${GREEN}[OK]${NC} $1"; log "OK: $1"; }
 
 check_root() {
     if [ "$(id -u)" -ne 0 ]; then
-        ORIG_USER=$(whoami)      
+        ORIG_USER=$(whoami)   
         echo "[!] Требуются права root. Введите пароль:"
         
         local flags=""
@@ -65,7 +65,7 @@ check_root() {
 }
 
 check_user(){
-    if [ "$(id -u)" -eq 0 ]; then
+    if [ "$(id -u)" -eq 0 && ($ORIG_USER == "root") ]; then
         error "Скрипт нельзя запускать от имени root!"
         info "Выйдите из root: exit"
         info "И перезапустите скрипт под пользователем, скрипт сам запросит повышение прав."
@@ -1074,7 +1074,6 @@ cleanup_autofs() {
 #===============================================================================
 main() {
     local HAS_ERRORS=0
-    check_user
     show_preview
     check_root
     clear
