@@ -64,6 +64,14 @@ check_root() {
     fi
 }
 
+check_user(){
+    if [ "$(id -u)" -eq 0 ]; then
+        error "Скрипт нельзя запускать от имени root!"
+        info "Выйдите из root: exit"
+        info "И перезапустите скрипт под пользователем, скрипт сам запросит повышение прав."
+    fi
+}
+
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
     echo -e "${GREEN}        Установка Талисмана SQL            ${NC}"
@@ -1065,6 +1073,7 @@ cleanup_autofs() {
 #===============================================================================
 main() {
     local HAS_ERRORS=0
+    check_user
     show_preview
     check_root
     clear
