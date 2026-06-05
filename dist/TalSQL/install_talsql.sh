@@ -1075,6 +1075,7 @@ cleanup_autofs() {
 #===============================================================================
 main() {
     local HAS_ERRORS=0
+    check_user
     show_preview
     check_root
     clear
