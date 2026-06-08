@@ -107,7 +107,12 @@
                     <li><a href="#printer-connect">Подключение к сетевому принтеру</a></li>
                 </ul>
             </li>
-            <li><a href="#scan">Сканер</a></li>
+            <li><a href="#scan">Сканер</a>
+                <ul>
+                    <li><a href="#scan-auto">Автоматическая установка</a></li>
+                    <li><a href="#scan-pdf">Программа для сканирования</a></li>
+                </ul>
+            </li>
             <li><a href=#tldr>tldr</a></li>
             <li><a href="#myoffice">МойОфис</a></li>
             <li><a href="#wine">Wine</a></li>
@@ -2620,6 +2625,64 @@
         <!-- Глава -->
         <section id="scan">
             <h1>Сканер</h1>
+            <!-- Глава -->
+            <section id="scan-auto">
+                <h2>Автоматическая установка</h2>
+                <p><code>scanner-wizard.sh</code></p>
+                <p>Автоматическая установка драйверов. Проверяет доступность репозиториев и сама устанавливает все необходимые пакеты для работы сканеров (SANE, AirScan, драйверы Epson, HP, сетевые утилиты).
+                Настройка прав доступа. Добавляет текущего пользователя в системные группы (lp и scanner), чтобы обычные программы могли получать доступ к USB-устройствам без ошибок.
+                Поиск устройств. Сканирует подключенные USB-сканеры и ищет сетевые/Wi-Fi МФУ в локальной сети (используя Avahi и AirScan).
+                Диагностика и тест. Не просто ищет устройства, но и проводит реальное тестовое сканирование в фоне, чтобы подтвердить, что сканер физически исправен и готов к работе.
+                Отчетность и удобство. Формирует подробный технический отчёт (который можно сохранить в файл), показывает результат пользователю и предлагает сразу открыть приложение для сканирования (Simple Scan).</p>
+                <p>Что именно устанавливается:<br>
+                1. Базовые компоненты SANE (ядро системы сканирования)<br>
+                sane-backends (libsane) — базовая библиотека<br>
+                sane-frontends — консольные утилиты (scanimage)<br>
+                firmware-iscan — прошивки для некоторых сканеров<br>
+                2. Для сетевых сканеров<br>
+                sane-airscan — драйвер для сканеров с поддержкой eSCL/WSD (современные МФУ)<br>
+                avahi — служба обнаружения устройств в сети (mDNS/Bonjour)<br>
+                3. Для конкретных производителей<br>
+                epsonscan2 — драйверы для сканеров Epson<br>
+                imagescan-sane + iscan-free + iscan-data — альтернативные драйверы для Epson<br>
+                4. Вспомогательные программы<br>
+                simple-scan — графическое приложение для сканирования (как в Windows)<br>
+                nmap — утилита для поиска сетевых устройств<br>
+                hplip — драйверы для HP (в вашем отчёте не устанавливался, т.к. уже был)<br>
+                Что НЕ устанавливается:<br>
+                Драйверы для Brother (brscan4, brscan5) — их нужно ставить отдельно<br>
+                Проприетарные драйверы для Canon (если не поддерживаются SANE)<br>
+                Драйверы для редких или очень старых сканеров</p>
+                <p>Скачайте пакет:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">mkdir -p ~/altlinux/dist/scan</div>
+                        <div class="cmd cmd-user">wget -O ~/altlinux/dist/scan/scanner-wizard-1.3-alt1.noarch.rpm https://github.com/tohch/madalt/releases/download/madalt/scanner-wizard-1.3-alt1.noarch.rpm</div>
+                    </div>
+                </div>
+                <p>Установите пакет:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su - -c "</div>
+                        <div class="cmd cmd-user">chmod +x /home/$USER/altlinux/dist/scan/scanner-wizard-1.3-alt1.noarch.rpm</div>
+                        <div class="cmd cmd-user">apt-get install -y /home/$USER/altlinux/dist/scan/scanner-wizard-1.3-alt1.noarch.rpm</div>
+                        <div class="cmd cmd-user">"</div>
+                    </div>
+                </div>
+                <p>Запустите автоматическую установку сканера:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">/opt/scanner-wizard/scanner-wizard.sh</div>
+                    </div>
+                </div>
+            </section>
+            <h2 id="scan-pdf">Программа для сканирования</h2>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
