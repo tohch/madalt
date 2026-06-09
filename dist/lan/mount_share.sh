@@ -11,8 +11,9 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # === Обработка флагов запуска ===
-AUTO_YES=false
-SMB_VERSION=""
+ORIGINAL_ARGS=("$@")
+AUTO_YES="${AUTO_YES:-false}"
+SMB_VERSION="${SMB_VERSION:-}"
 while getopts "yhv:" opt; do
     case $opt in
         y) AUTO_YES=true ;;
@@ -127,21 +128,18 @@ check_root() {
         ORIG_USER=$(whoami)      
         echo "[!] Требуются права root. Введите пароль:"
         
-        local flags=""
-        [[ "$AUTO_YES" == "true" ]] && flags="-y"
-        
         local escaped_args=()
-        for arg in "$@"; do
+        for arg in "${ORIGINAL_ARGS[@]}"; do
             escaped_args+=("$(printf '%q' "$arg")")
         done
         
-        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' SMB_VERSION='$SMB_VERSION' bash -- \"$(realpath "$0")\" $flags ${escaped_args[*]}"
+        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' SMB_VERSION='$SMB_VERSION' bash -- \"$(realpath "$0")\" ${escaped_args[*]}"
     fi
 }
 
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
-    echo -e "${GREEN}   Монтирование сетевых папок (autofs)    ${NC}"
+    echo -e "${GREEN}   Монтирование сетевых папок (autofs)     ${NC}"
     echo -e "${GREEN}Этапы работы скрипта:                      ${NC}"
     echo -e "${GREEN}- поиск сервера по IP или сетевому имени;  ${NC}"
     echo -e "${GREEN}- выбор сетевых папок;                     ${NC}"
@@ -154,7 +152,7 @@ show_preview(){
     echo -e "${GREEN}Атрибуты: -h помощь;                       ${NC}"
     echo -e "${GREEN}-v 1, 2 или 3 версии smb                   ${NC}"
     echo -e "${GREEN}-y автосогласие на вопросы.                ${NC}"
-    echo -e "${GREEN}Пример: ./mount_share.sh -y -v 3    ${NC}"
+    echo -e "${GREEN}Пример: ./mount_share.sh -y -v 3           ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -762,7 +760,7 @@ create_unc_links() {
     fi
 
     if [[ -z "$ORIG_USER" ]]; then
-        read -rp "Введите имя пользователя для запуска: " ORIG_USER
+        read -rp "Введите имя пользователя на чей рабочий стол создать ярлык: " ORIG_USER
         [[ -z "$ORIG_USER" ]] && { error "Имя пользователя не указано"; return 1; }
         if ! id "$ORIG_USER" &>/dev/null; then
             error "Пользователь '$ORIG_USER' не существует в системе"
