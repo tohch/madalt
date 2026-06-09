@@ -21,8 +21,8 @@ while getopts "yhv:" opt; do
             echo "-v: - выбор версии smb (-v 1 - SMB1, -v 2 - SMB2, -v 3 - SMB3)"
             echo "-h - подсказка"
             echo "Пример использования скрипта:"
-            echo "chmod +x mount_share_autofs.sh"
-            echo "./mount_share_autofs.sh -y -v 3"
+            echo "chmod +x mount_share.sh"
+            echo "./mount_share.sh -y -v 3"
             exit 0;;
         \?) echo "Недопустимая опция: -$OPTARG" >&2; exit 1 ;;
         :)  echo "Опция -$OPTARG требует аргумент 1,2 или 3" >&2; exit 1 ;;
@@ -154,7 +154,7 @@ show_preview(){
     echo -e "${GREEN}Атрибуты: -h помощь;                       ${NC}"
     echo -e "${GREEN}-v 1, 2 или 3 версии smb                   ${NC}"
     echo -e "${GREEN}-y автосогласие на вопросы.                ${NC}"
-    echo -e "${GREEN}Пример: ./mount_share_autofs.sh -y -v 3    ${NC}"
+    echo -e "${GREEN}Пример: ./mount_share.sh -y -v 3    ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -759,6 +759,15 @@ create_unc_links() {
     if [[ -z "$SERVER" ]]; then
         read -rp "Введите IP или имя сервера для UNC-путей: " SERVER
         [[ -z "$SERVER" ]] && { error "Сервер не указан."; return 1; }
+    fi
+
+    if [[ -z "$ORIG_USER" ]]; then
+        read -rp "Введите имя пользователя для запуска: " ORIG_USER
+        [[ -z "$ORIG_USER" ]] && { error "Имя пользователя не указано"; return 1; }
+        if ! id "$ORIG_USER" &>/dev/null; then
+            error "Пользователь '$ORIG_USER' не существует в системе"
+            return 1
+        fi
     fi
 
     local unc_dir=""
