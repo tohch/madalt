@@ -1211,28 +1211,28 @@
                     </div>
                 </div>
             </section>
-            <p>Убедитесь что пакеты samba и cifs установлены</p>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команды -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd-comment"># Установка</div>
-                    <div class="cmd cmd-root">apt-get install -y samba-client cifs-utils</div>
-                    <div class="cmd-comment"># Проверка установленных утилит</div>
-                    <div class="cmd cmd-root">which smbclient smbtree</div>
-                </div>
-            </div>
-            <p>Выберите один из вариантов подключения к сетевым ресурсам.</p>
             <!-- Глава -->
             <section id="share-autofs">
                 <h2>Вариант 1. Монтирование через AutoFS</h2>
+                <p>Убедитесь что пакеты samba и cifs установлены</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Установка</div>
+                        <div class="cmd cmd-root">apt-get install -y samba-client cifs-utils</div>
+                        <div class="cmd-comment"># Проверка установленных утилит</div>
+                        <div class="cmd cmd-root">which smbclient smbtree</div>
+                    </div>
+                </div>
+                <p>Выберите один из вариантов подключения к сетевым ресурсам.</p>
                 <p>AutoFS даёт возможность автоматического монтирования съёмных носителей и сетевых ресурсов при вставке или обращении к ним. AutoFS предустановлена в Альт Линукс СП 10 Рабочая станция.</p>
                 <p>В отличие от cifs в fstab AutoFS восстанавливает монтирования после обрыва, т.к. у него нет счетчика попыток подключения.</p>
                 <p>Статья <a href="https://www.altlinux.org/Autofs">Autofs</a> на ALT Linux Wiki.</p>
