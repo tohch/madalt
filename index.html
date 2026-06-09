@@ -37,9 +37,9 @@
                     <li><a href="#install-alt-10-work-install">Установка</a></li>
                     <li><a href="#install-UEFI">Создание разделов для микропрограммы UEFI</a></li>
                     <li><a href="#install-Legacy">Создание разделов для микропрограммы Legacy(BIOS)</a></li>
-                    <li><a href="#after-install-alt-10-work">После установки</a></li>
                 </ul>
             </li>
+            <li><a href="#after-install-alt-10-work">После установки</a></li>
             <li><a href="#vim">Vim</a></li>
             <li><a href="#useradd">Управление пользователями</a></li>
             <li><a href="#sudo">sudo</a></li>
@@ -373,92 +373,94 @@
                 <p>Создайте учетную запись пользователя</p>
                 <img src="img/install-alt-10-work/img-install-alt-26.png" alt="Установка Альт СП 10 Рабочая Станция">
                 <img src="img/install-alt-10-work/img-install-alt-27.png" alt="Установка Альт СП 10 Рабочая Станция">
-                <section id="after-install-alt-10-work">
-                    <h2>После установки</h2>
-                    <p>Удалить атрибут <b>noexec</b> в /etc/fstab с <b>/tmp</b> и <b>/home</b></p>
-                    <!-- Примечание -->
-                    <div class="alert alert-note">
-                        <div class="alert-content">
-                            <div class="alert-title">Примечание</div>
-                            <p class="alert-text">Если раздел /home отдельно не создавался при разметке диска, то его и не будет в fstab</p>
-                        </div>
-                    </div>
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="cmd cmd-user">su -</div>
-                        </div>
-                    </div>
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="cmd cmd-root">vim /etc/fstab</div>
-                        </div>
-                    </div>
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="vim-line vim-string">proc         /proc       proc                nosuid,noexec,gid=proc            0 0</div>
-                            <div class="vim-line vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620    0 0</div>
-                            <div class="vim-line vim-string">tmpfs        <span class="mark">/tmp</span>        tmpfs               <span class="mark">nosuid</span>                            0 0</div>
-                            <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime         1 1</div>
-                            <div class="vim-line vim-string">UUID=16669fd2-821f-4fe6-87be-255aca71576b    <span class="mark">/home</span>  ext4      <span class="mark">nosuid,relatime</span>  1 2</div>
-                            <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults         0 0</div>
-                            <div class="vim-line vim-string">tmpfs        /tmp/.private/root     tmpfs                     defaults         0 0</div>
-                            <div class="vim-line vim-string">/dev/sr0    /media/ALTLinux   udf,iso9660   ro,noauto,user,utf8,nofail,comment=x-gvfs-show 0 0</div>
-                        </div>
-                    </div>
-                    <!-- Подсказка -->
-                    <div class="alert alert-tip">
-                        <div class="alert-content">
-                            <div class="alert-title">Подсказка</div>
-                            <p class="alert-text">В редакторе vim для входа в режим ввода нажмите: <code>i</code> или <code>a</code> или <code>o</code></p>
-                            <p class="alert-text"><code>i</code> - ввод до курсора; <code>a</code> - ввод после курсора; <code>o</code> - ввод с новой строки</p>
-                            <p class="alert-text">Для сохранения и выхода войдите в режим команды нажав Esc затем наберите: <code>:wq</code></p>
-                            <p class="alert-text">Затем нажмите Enter</p>
-                        </div>
-                    </div>
-                    <p>Примените настройки fstab (можно просто сделать reboot)</p>
-                    <!-- Команды -->
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="cmd cmd-root">mount -o remount /tmp</div>
-                            <div class="cmd cmd-root">mount -o remount /home</div>
-                        </div>
-                    </div>
-                    <p>Для СП фиксация для исключения деградации</p>
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="cmd cmd-root">integalert fix</div>
-                        </div>
-                    </div>
-                    <p>Раскомментируйте три репозитория "rpm [cert8] http:..."</p>
-                    <!-- Команды -->
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>      
-                        </div>
-                    </div>
-                    <!-- Команды -->
-                    <div class="code-wrapper">
-                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                            <div class="vim-comment"># update.altsp.su (IVK, Moscow)</div>
-                            <div class="vim-comment"># ALT Certified 10</div>
-                            <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64 classic gostcrypto</div>
-                            <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64-i586 classic</div>
-                            <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>
-                            <div class="vim-line"><br></div>
-                            <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64 classic gostcrypto</div>
-                            <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64-i586 classic</div>
-                            <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>           
-                        </div>
-                    </div>
-                </section>
+                
             </section> 
+        </section>
+
+        <section id="after-install-alt-10-work">
+            <h1>После установки</h1>
+            <p>Удалить атрибут <b>noexec</b> в /etc/fstab с <b>/tmp</b> и <b>/home</b></p>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Если раздел /home отдельно не создавался при разметке диска, то его и не будет в fstab</p>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/fstab</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">proc         /proc       proc                nosuid,noexec,gid=proc            0 0</div>
+                    <div class="vim-line vim-string">devpts       /dev/pts    devpts              nosuid,noexec,gid=tty,mode=620    0 0</div>
+                    <div class="vim-line vim-string">tmpfs        <span class="mark">/tmp</span>        tmpfs               <span class="mark">nosuid</span>                            0 0</div>
+                    <div class="vim-line vim-string">UUID=ed2c20aa-74b8-4b69-a121-30d19eff4ed5    /      ext4      relatime         1 1</div>
+                    <div class="vim-line vim-string">UUID=16669fd2-821f-4fe6-87be-255aca71576b    <span class="mark">/home</span>  ext4      <span class="mark">nosuid,relatime</span>  1 2</div>
+                    <div class="vim-line vim-string">UUID=22611df3-cdcd-41a7-b4c1-1e89eaafecba    swap   swap      defaults         0 0</div>
+                    <div class="vim-line vim-string">tmpfs        /tmp/.private/root     tmpfs                     defaults         0 0</div>
+                    <div class="vim-line vim-string">/dev/sr0    /media/ALTLinux   udf,iso9660   ro,noauto,user,utf8,nofail,comment=x-gvfs-show 0 0</div>
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">В редакторе vim для входа в режим ввода нажмите: <code>i</code> или <code>a</code> или <code>o</code></p>
+                    <p class="alert-text"><code>i</code> - ввод до курсора; <code>a</code> - ввод после курсора; <code>o</code> - ввод с новой строки</p>
+                    <p class="alert-text">Для сохранения и выхода войдите в режим команды нажав Esc затем наберите: <code>:wq</code></p>
+                    <p class="alert-text">Затем нажмите Enter</p>
+                </div>
+            </div>
+            <p>Примените настройки fstab (можно просто сделать reboot)</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mount -o remount /tmp</div>
+                    <div class="cmd cmd-root">mount -o remount /home</div>
+                </div>
+            </div>
+            <p>Для СП фиксация для исключения деградации</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">integalert fix</div>
+                </div>
+            </div>
+            <p>Раскомментируйте три репозитория "rpm [cert8] http:..."</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>      
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-comment"># update.altsp.su (IVK, Moscow)</div>
+                    <div class="vim-comment"># ALT Certified 10</div>
+                    <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64 classic gostcrypto</div>
+                    <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64-i586 classic</div>
+                    <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>
+                    <div class="vim-line"><br></div>
+                    <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64 classic gostcrypto</div>
+                    <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64-i586 classic</div>
+                    <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>           
+                </div>
+            </div>
         </section>
 
         <!-- Глава -->
