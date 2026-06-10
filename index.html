@@ -182,6 +182,7 @@
                     <li><a href="#drweb-guard">Настройка исключений для SpIDer Guard</a></li>
                 </ul>
             </li>
+            <li><a href="#nalogul">Налогоплательщик ЮЛ</a></li>
             <li><a href="#timeshift">TimeShift</a>
                 <ul>
                     <li><a href="#timeshift-install">Установка</a></li>
@@ -2658,7 +2659,7 @@
                 <img src="img/printer/img-printer-5.png" alt="Сетевое подключение принтера">
                 <p>Итого</p>
                 <img src="img/printer/img-printer-6.png" alt="Сетевое подключение принтера">
-            </seciont>
+            </section>
         </section>
 
         <!-- Глава -->
@@ -4400,6 +4401,186 @@
                 <!-- Картинка -->
                 <img src="img/drweb/img-drweb-1.png" alt="Dr.Web">
             </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="nalogul">
+            <h1>Налогоплательщик ЮЛ</h1>
+            <p>Перейдите на сайт налоговой службы и скачайте инсталляционный файл Налогоплательщика ЮЛ: <a href="https://www.nalog.gov.ru/rn77/program/5961229/">перейти</a></p>
+            <p>Перейдите на сайт налоговой службы и скачайте инсталляционный файл Tester: <a href="https://www.nalog.gov.ru/rn77/program/5961279/">перейти</a></p>
+            <p>Установите Wine:</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y i586-wine winetricks wine-mono-8.1.0</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Создание 32-х битный префикса:</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.nalogul WINEARCH=win32 wineboot -i</div>
+                </div>
+            </div>
+            <p>Установите дополнительные компоненты:</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">for pkg in dotnet452 msxml3 msxml6 msftedit corefonts tahoma \</div>
+                    <div class="cmd cmd-serial">riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \</div>
+                    <div class="cmd cmd-serial">vcrun2012 vcrun2013 win10 glsl=disabled ddr=gdi; do</div>
+                    <div class="cmd cmd-serial">WINEPREFIX=~/.nalogul winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <p>Установит Налогоплательщик ЮЛ:</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># 494 - это версия и она будет отличаться, укажите текущую версию</div>
+                    <div class="cmd cmd-user">WINEPREFIX=~/.nalogul wine ~/Загрузки/NalogUL<space class="mark">494</space>.exe</div>
+                </div>
+            </div>
+            <p>Установит Tester:</p>
+            <!-- Команда -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd-comment"># 2289 - это версия и она будет отличаться, укажите текущую версию</div>
+                    <div class="cmd cmd-user">WINEPREFIX=~/.nalogul wine ~/Загрузки/tester<space class="mark">2289</space>.exe</div>
+                </div>
+            </div>
+            <p>Если Налогоплательщик используется в однопользовательском режиме, то установка завершена.</p>
+            <p>Для многопользовательского режима подключитесь к локальному серверу Налогоплательщика ЮЛ</p>
+            <p>Подключите расшаренную папку с Налогоплательщиком ЮЛ</p>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Для простоты подключения к сетевой папке используйте: <code><a href="#share-sh">mount_share</a></code></p>
+                </div>
+            </div>
+            <p>Перед подключением сетевых папок проверти установлен ли autofs:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y autofs</div>
+                </div>
+            </div>
+            <p>Создайте файл с логином и паролем, которые будут использоваться при подключении к сетевой папке</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /root/.cifsnalogul</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">username=administrator</div>
+                    <div class="vim-line vim-string">password=mir9Ckflrbq</div>
+                    <div class="vim-comment"># Параметр domain необязателен в сетях без домена</div>
+                    <div class="vim-line vim-string">domain=RCBUSO</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">chmod 600 /root/.cifsnalogul</div>
+                </div>
+            </div>
+            <p>Создайте папку с именем сервера</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mkdir /mnt/192.168.205.86</div>
+                </div>
+            </div>
+            <p>Создайте конфигурационный файл</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/auto.192.168.205.86</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">"Налогоплательщик ЮЛ" -fstype=cifs,rw,credentials=/root/.cifsnalogul,nobrl,soft,file_mode=0777,dir_mode=0777 ://192.168.205.86/"Налогоплательщик ЮЛ"</div>
+                </div>
+            </div>
+            <p>Настройте подключение конфигурационных файлов</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/auto.master</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">/mnt/192.168.205.86 /etc/auto.192.168.205.86 --ghost,--timeout=60</div>
+                </div>
+            </div>
+            <p>Запустите сервис</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">systemctl enable autofs</div>
+                    <div class="cmd cmd-root">systemctl start autofs</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Создайте ярлык на подключенный локальный сервер Налогоплательщика ЮЛ:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">cat << EOF > ~/"Рабочий стол"/"Налогоплательщик ЮЛ Сетевой.desktop"</div>
+                    <div class="cmd cmd-serial">[Desktop Entry]</div>
+                    <div class="cmd cmd-serial">Name=Hалогоплательщик ЮЛ Сетевой</div>
+                    <div class="cmd cmd-serial">Exec=env "WINEPREFIX=/home/<space class="mark">$USER</space>/.nalogul" wine "z:\\mnt\\<space class="mark">192.168.205.86</space>\\Налогоплательщик ЮЛ\\INPUTDOC\\inputdoc.exe"</div>
+                    <div class="cmd cmd-serial">Type=Application</div>
+                    <div class="cmd cmd-serial">StartupNotify=true</div>
+                    <div class="cmd cmd-serial">Path=/home/<space class="mark">$USER</space>/.nalogul/dosdevices/z:/mnt/<space class="mark">192.168.205.86</space>/Налогоплательщик ЮЛ/INPUTDOC</div>
+                    <div class="cmd cmd-serial">Icon=4083_inputdoc.0</div>
+                    <div class="cmd cmd-serial">StartupWMClass=inputdoc.exe</div>
+                    <div class="cmd cmd-serial">Name[ru_RU]=Hалогоплательщик ЮЛ Сетевой</div>
+                    <div class="cmd cmd-serial">EOF</div>
+                    <div class="cmd cmd-user">chmod +x ~/"Рабочий стол"/"Налогоплательщик ЮЛ Сетевой.desktop"</div>
+                </div>
+            </div>                      
         </section>
 
         <!-- Глава -->
