@@ -620,6 +620,8 @@ reload_autofs() {
     info "Перезагрузка службы autofs..."
     
     if command -v systemctl &>/dev/null; then
+        systemctl enable autofs 2>/dev/null
+        systemctl start autofs 2>/dev/nul
         if systemctl reload autofs 2>/dev/null || systemctl restart autofs 2>/dev/null; then
             success "autofs перезапущен через systemctl"
             return 0
