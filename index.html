@@ -97,8 +97,12 @@
             </li>
             <li><a href="#talisman2.0">Талисман 2.0</a>
                 <ul>
-                    <li><a href="#tal2.0-kvm">Вариант 1. KVM</a></li>
-                    <li><a href="#tal2.0-local">Вариант 2. Только локальные базы</a></li>
+                    <li><a href="#talisman2.0-autoinstall">Автоматическая установка</a></li>
+                    <li><a href="#talisman2.0-download">Скачать</a></li>
+                    <li><a href="#talisman2.0-share">Настройка сетевых папок</a></li>
+                    <li><a href="#talisman2.0-wine">Установка Wine</a></li>
+                    <li><a href="#talisman2.0-lic">Настройка проверки лицензии</a></li>
+                    <li><a href="#talisman2.0-install">Установка BDE и Талисмана 2.0</a></li>
                 </ul>
             </li>
             <li><a href="#printer">Принтер</a>
@@ -1981,7 +1985,7 @@
                 <ul>
                     <li>Установка Wine и создание 32-х битного префикса .talsql;</li>
                     <li>Установка дополнительных компонентов для префикса .talsql;</li>
-                    <li>Настройка сетевых папок (Автомонтирование по запросу через fstab);</li>
+                    <li>Настройка сетевых папок (Автомонтирование по запросу через autofs);</li>
                     <li>Установка Талисмана SQL (Reinstall_Tal3.1.52.exe);</li>
                     <li>Копирования файлов из сетевой папки out в TalSQL для актуализации версии и настроек подключения к базе;</li>
                     <li>Установка designfr (для просмотра выгруженных отчетов);</li>
@@ -2111,7 +2115,6 @@
             </section>
             <section id="talisman-sql-setting-share">
                 <h2>Настройка сетевых папок</h2>
-                <p>Создайте директорию для монтирования</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -2128,6 +2131,7 @@
                         <div class="cmd cmd-root">apt-get install -y autofs</div>
                     </div>
                 </div>
+                <p>Создайте директорию для монтирования</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -2135,7 +2139,7 @@
                         <div class="cmd cmd-root">mkdir -p /mnt/192.168.205.4</div>
                     </div>
                 </div>
-                <p>Настройте fstab для автоматического монтирования сетевых папок по запросу</p>
+                <p>Настройте autofs для автоматического монтирования сетевых папок по запросу</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -2403,163 +2407,320 @@
         <!-- Глава -->
         <section id="talisman2.0">
             <h1>Талисман 2.0</h1>
-            <!-- Глава -->
-            <section id="tal2.0-kvm">
-                <h2>Вариант 1. KVM</h2>
-                <p>Для полноценной работы используйте виртуальную машину KVM. Для установки KVM см. раздел <a href="#kvm">KVM</a></p>
-            </section>
-            <section id="tal2.0-local">
-                <h2>Вариант 2. Только локальные базы</h2>
-                <p>При установке непосредственно в Альт Линукс возможно работать только с локальными базами; работа с сервером Талисмана 2.0 невозможна, т.к. BDE не распознает сетевые пути Wine.</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            <h2 id="talisman2.0-autoinstall">Автоматическая установка</h2>
+            <p>Скачайте скрипты и инструкцию:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
+                    <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
+                    <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~/altlinux</div>
+                </div>
+            </div>
+            <p>Для автоматической установки Талисмана 2.0 сделайте скрипт исполняемым и запустите его:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmod +x ~/altlinux/dist/Tal2.0/install_tal2.0.sh</div>
+                    <div class="cmd cmd-user">~/altlinux/dist/Tal2.0/install_tal2.0.sh -y</div>
+                </div>
+            </div>
+            <p><code>instal_tal2.0.sh</code> - это баш скрипт автоматической установки Талисмана 2.0. Он выполнит все действия, которые описаны в ниже стоящих главах, а именно:</p>
+            <ul>
+                <li>Установка Wine и создание 32-х битного префикса .tal2.0;</li>
+                <li>Установка дополнительных компонентов для префикса .tal2.0;</li>
+                <li>Настройка сетевых папок (Автомонтирование по запросу через autofs);</li>
+                <li>Установка Талисмана 2.0 и BDE;</li>
+            </ul>
+            <p>Для монтирования сетевых папок Талисмана 2.0 производится через mount_share: вам будет предложено ввести IP адрес или сетевое имя сервера, логин и пароль для подключения.</p>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">В установщике Талисмана 2.0 указывайте путь: <code>C:\5dll</code></p>
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Используйте атрибут <code>-y</code>, чтобы ответить положительно на все вопросы: <code>./install_tal2.0.sh -y</code></p>
+                    <p class="alert-text">Обратите внимание, что атрибут <code>-y</code> не избавит вас от необходимости нажимать Далее в диалоговых окнах и ввода данных для сетевого подключения к расшаренным папкам сервера Талисмана 2.0.</p>
+                    <p class="alert-text">Запустите без атрибута <code>-y</code>, чтобы отвечать самостоятельно: <code>./install_tal2.0.sh</code></p>
+                </div>
+            </div>
+            <!-- Примечание -->
+            <div class="alert alert-note">
+                <div class="alert-content">
+                    <div class="alert-title">Примечание</div>
+                    <p class="alert-text">Лог файл: ~/cache/tal2.0/install_tal2.0_дата_время.log</p>
+                    <p class="alert-text">Архив конфигов autofs: /root/backup_t</p>
+                </div>
+            </div>
+            <!-- Далее -->
+            <div class="next-chapter-wrapper">
+                <a href="#printer" class="next-chapter-btn">
+                    Принтер
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            <h2 id="talisman2.0-download">Скачать</h2>
+            <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
+            <p>Скачайте Талисман 2.0</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/odan8KCiqVlK1Q -o ~/altlinux/dist/Tal2.0</div>
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Для полноценной работы используйте виртуальную машину KVM. Для установки KVM см. раздел <a href="#kvm">KVM</a></p>
+                </div>
+            </div>
+            <h2 id="talisman2.0-share">Настройка сетевых папок</h2>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Для простоты подключения к сетевой папке используйте: <code><a href="#share-sh">mount_share</a></code></p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <p>Установить autofs:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y autofs</div>
+                </div>
+            </div>
+            <p>Создайте директорию для монтирования</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">mkdir -p /mnt/tal</div>
+                </div>
+            </div>
+            <p>Настройте autofs для автоматического монтирования сетевых папок по запросу</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /root/.cifstal</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">username=userbuh</div>
+                    <div class="vim-line vim-string">password=gla375fdg!d</div>
+                    <div class="vim-line vim-string">domain=RCBUSO</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">chmod 600 /root/.cifstal</div>
+                </div>
+            </div>
+            <p>Создайте конфигурационный файл:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/auto.tal</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">talisman_all -fstype=cifs,rw,credentials=/root/.cifsmnt,nobrl,soft,file_mode=0777,dir_mode=0777 ://tal/talisman_all</div>
+                </div>
+            </div>
+            <p>Настройте подключение конфигурационного файла:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">vim /etc/auto.master</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">/mnt/tal /etc/auto.tal --ghost,--timeout=60</div>
+                </div>
+            </div>
+            <p>Запустите сервис:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">systemctl enable autofs</div>
+                    <div class="cmd cmd-root">systemctl start autofs</div>
+                    <div class="cmd cmd-root">systemctl restart autofs</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <h2 id="talisman2.0-wine">Установка Wine</h2>
+            <p>Установить Wine:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su - -c "</div>
+                    <div class="cmd cmd-serial">apt-get update</div>
+                    <div class="cmd cmd-serial">apt-get install -y i586-wine winetricks wine-mono-8.1.0</div>
+                    <div class="cmd cmd-serial">"</div>
+                </div>
+            </div>
+            <p>Создайте префикс</p>
+            <!-- Внимание -->
+            <div class="alert alert-warning">
+                <div class="alert-content">
+                    <div class="alert-title">Внимание</div>
+                    <p class="alert-text">Обязательно создавайте 32-х битный префикс</p>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.talbde WINEARCH=win32 wineboot -i</div>
+                </div>
+            </div>
+            <p>Установите дополнительные компоненты</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">for pkg in win2k8 glsl=disabled ddr=gdi dotnet452 msxml3 msxml6 msftedit \</div>
+                    <div class="cmd cmd-serial">corefonts tahoma riched20 riched30 vb6run gdiplus vcrun2005 \</div>
+                    <div class="cmd cmd-serial">vcrun2008 vcrun2010 vcrun2012 vcrun2013; do</div>
+                    <div class="cmd cmd-serial">WINEPREFIX=~/.talbde winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
+                    <div class="cmd cmd-serial">done</div>
+                </div>
+            </div>
+            <h2 id="#talisman2.0-lic">Настройка проверки лицензии</h2>
+            <p>Т.к. проверка лицензии не работает через Wine, то придется ее обойти созданием копии mac адреса сервера Талисман 2.0 на виртуальном сетевом интерфейсе.</p>
+            <p>Получите MAC адрес с сервера, с которого был сделан запрос на ключ Талисман 2.0</p>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Чтобы узнать MAC-адрес на сервере в cmd наберите: <code>ipconfig /all</code></p>
+                </div>
+            </div>
+            <p>Создать виртуальный сетевой интерфейс для этого мак адреса</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su - -c "</div>
+                    <div class="cmd cmd-serial">ip link show</div>
+                    <div class="cmd cmd-serial">nmcli connection add type dummy \</div>
+                    <div class="cmd cmd-serial">ifname veth0 \</div>
+                    <div class="cmd cmd-serial">connection.id "veth0" \</div>
+                    <div class="cmd cmd-serial">ethernet.cloned-mac-address 00:C0:26:AB:F7:92 \</div>
+                    <div class="cmd cmd-serial">ipv4.method manual \</div>
+                    <div class="cmd cmd-serial">ipv4.addresses 172.31.10.100/24</div>
+                    <div class="cmd cmd-serial">nmcli connection up "veth0"</div>
+                    <div class="cmd cmd-serial">nmcli device status</div>
+                    <div class="cmd cmd-serial">ip addr show veth0</div>
+                    <div class="cmd cmd-serial">"</div>
+                </div>
+            </div>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Чтобы удалить: <code>nmcli connection delete "veth0"</code></p> 
+                    <p class="alert-text">Чтобы изменить:</p> 
+                    <p class="alert-text"><code>nmcli connection modify "veth0" macvlan.parent enp0s8</code></p>
+                    <p class="alert-text"><code>nmcli connection modify "veth0" ipv4.addresses 192.168.20.50/24 ipv4.gateway 192.168.20.1</code></p>
+                    <p class="alert-text"><code>nmcli connection down "veth0" && nmcli connection up "veth0"</code></p>
+                </div>
+            </div>
+            <h2 id="talisman2.0-install">Установка BDE и Талисмана 2.0</h2>
+            <p>Установите BDE:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.talbde wine ~/altlinux/dist/Tal2/bdex64.exe</div>
+                </div>
+            </div>
+            <p>Установите Талисман 2.0:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.talbde wine ~/altlinux/dist/Tal2/setup_tal2.0.exe</div>
+                </div>
+            </div>
+            <p>Настройте BDE</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">WINEPREFIX=~/.talbde wine ~/.talbde/drive_c/Program\ Files/Borland/Common\ Files/BDE/BDEADMIN.EXE</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
-                    </div>
+                    <div class="config-line"><span class="config-key">Native</span></div>
+                    <div class="config-line">    <span class="config-key">PARADOX</span></div>
+                    <div class="config-line">        <span class="config-key">NET DIR:</span> <span class="config-value">z:\mnt\tal\talisman_all</span></div>
+                    <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">Pdox ANSI Cyrilic</span></div>
+                    <div class="config-line">    <span class="config-key">DBASE</span></div>
+                    <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">dBASE RUS cp866</span></div>
+                    <div class="config-line"><span class="config-key">System</span></div>
+                    <div class="config-line">    <span class="config-key">INIT</span></div>
+                    <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">Pdox ANSI Cyrilic</span></div>
+                    <div class="config-line">        <span class="config-key">LOCAL SHARE:</span> <span class="config-value">TRUE</span></div>
+                    <div class="config-line">        <span class="config-key">SHAREDMEMLOCATION:</span> <span class="config-value">3000</span></div>
+                    <div class="config-line">    <span class="config-key">Formats</span></div>
+                    <div class="config-line">        <span class="config-key">Date</span></div>
+                    <div class="config-line">            <span class="config-key">FOURDIGITYER:</span> <span class="config-value">TRUE</span></div>
+                    <div class="config-line">            <span class="config-key">LEADINGZEROD:</span> <span class="config-value">TRUE</span></div>
+                    <div class="config-line">            <span class="config-key">LEAINGZEROM:</span> <span class="config-value">TRUE</span></div>
+                    <div class="config-line">            <span class="config-key">YEARBIASED:</span> <span class="config-value">TRUE</span></div>         
                 </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">apt-get update</div>
-                        <div class="cmd cmd-root">apt-cache search wine</div>
-                        <div class="cmd cmd-root">apt-get install -y i586-wine && \</div>
-                        <div class="cmd cmd-root">apt-cache search wine</div>
-                        <div class="cmd cmd-root">apt-get install -y winetricks && \</div>
-                        <div class="cmd cmd-root">apt-get install -y wine-mono-8.1.0 && \</div>
-                        <div class="cmd cmd-root">exit</div>
-                    </div>
+            </div>
+            <p>В Талисмане 2.0 укажите путь до базы:</p>
+            <!-- Подсказка -->
+            <div class="alert alert-tip">
+                <div class="alert-content">
+                    <div class="alert-title">Подсказка</div>
+                    <p class="alert-text">Диск <code>Z:\</code> ссылается на корень /</p>
+                    <p class="alert-text">Используйте его, чтобы указать путь до подключенной сетевой папки с базой Талисмана 2.0</p>
+                    <p class="alert-text">Например: сетевую папку <code>\\tal\talisman_all</code> смонтировали <code>/mnt/tal/talisman_all</code> значит в Талисмане 2.0 путь надо указывать <code>z:\mnt\tal\talisman_all</code></p>
                 </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">WINEPREFIX=~/.tal WINEARCH=win32  winetricks -q winxp dotnet452</div>
-                        <div class="cmd cmd-user">mkdir ~/.tal/drive_c/tal_local</div>
-                        <div class="cmd cmd-user">WINEPREFIX=~/.tal wine ~/altlinux/dist/InstallBDE.exe</div>
-                        <div class="cmd-comment"># Копировать базы в tal_local</div>
-                    </div>
-                </div>
-                <p>Создать ярлыки BDEADMIN и Tal2.0</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                    <div class="cmd cmd-user">vim ~/'Рабочий стол'/bdeadmin.desktop</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="vim-line vim-string">[Desktop Entry]</div>
-                        <div class="vim-line vim-string">Name=BDEADMIN</div>
-                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user1</span>/.tal" wine "C:\\Program Files\\Borland\\Common Files\\BDE\\BDEADMIN.EXE" ""</div>
-                        <div class="vim-line vim-string">Type=Application</div>
-                        <div class="vim-line vim-string">StartupNotify=true</div>
-                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user1</span>/.tal/drive_c/5dll/bdeadmin.ico</div>
-                        <div class="vim-line vim-string">StartupWMClass=BDEADMIN.EXE</div>
-                        <div class="vim-line vim-string">Path=/home/<span class="mark">user1</span>/.tal/drive_c/Program Files/Borland/Common Files/BDE</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">chmod +x ~/'Рабочий стол'/bdeadmin.desktop</div>
-                        <div class="cmd cmd-user">vim ~/'Рабочий стол'/'Талисман 2.0.desktop'</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="vim-line vim-string">[Desktop Entry]</div>
-                        <div class="vim-line vim-string">Name=Талисман 2.0</div>
-                        <div class="vim-line vim-string">Exec=env "WINEPREFIX=/home/<span class="mark">user1</span>/.tal" wine "C:\\5dll\\tal2005.exe" ""</div>
-                        <div class="vim-line vim-string">Type=Application</div>
-                        <div class="vim-line vim-string">StartupNotify=true</div>
-                        <div class="vim-line vim-string">Icon=/home/<span class="mark">user1</span>/.tal/drive_c/5dll/tal2005.ico</div>
-                        <div class="vim-line vim-string">StartupWMClass=tal2005.exe</div>
-                        <div class="vim-line vim-string">Path=/home/<span class="mark">user1</span>/.tal/drive_c/5dll</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">chmod +x ~/'Рабочий стол'/'Талисман 2.0.desktop'</div>
-                    </div>
-                </div>
-                <p>Настройте BDE</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                        <div class="code-block">
-                        <div class="config-line"><span class="config-key">Native</span></div>
-                        <div class="config-line">    <span class="config-key">PARADOX</span></div>
-                        <div class="config-line">        <span class="config-key">NET DIR:</span> <span class="config-value">C:\5dll</span></div>
-                        <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">Pdox ANSI Cyrilic</span></div>
-                        <div class="config-line">    <span class="config-key">DBASE</span></div>
-                        <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">dBASE RUS cp866</span></div>
-                        <div class="config-line"><span class="config-key">System</span></div>
-                        <div class="config-line">    <span class="config-key">INIT</span></div>
-                        <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">Pdox ANSI Cyrilic</span></div>
-                        <div class="config-line">        <span class="config-key">LOCAL SHARE:</span> <span class="config-value">TRUE</span></div>
-                        <div class="config-line">        <span class="config-key">SHAREDMEMLOCATION:</span> <span class="config-value">3000</span></div>
-                        <div class="config-line">    <span class="config-key">Formats</span></div>
-                        <div class="config-line">        <span class="config-key">Date</span></div>
-                        <div class="config-line">            <span class="config-key">FOURDIGITYER:</span> <span class="config-value">TRUE</span></div>
-                        <div class="config-line">            <span class="config-key">LEADINGZEROD:</span> <span class="config-value">TRUE</span></div>
-                        <div class="config-line">            <span class="config-key">LEAINGZEROM:</span> <span class="config-value">TRUE</span></div>
-                        <div class="config-line">            <span class="config-key">YEARBIASED:</span> <span class="config-value">TRUE</span></div>         
-                    </div>
-                </div>
-                <p>Получите MAC адрес с сервера, с которого был сделан запрос на ключ Талисман 2.0</p>
-                <!-- Подсказка -->
-                <div class="alert alert-tip">
-                    <div class="alert-content">
-                        <div class="alert-title">Подсказка</div>
-                        <p class="alert-text">Чтобы узнать MAC-адрес на сервере в cmd наберите: <code>ipconfig /all</code></p>
-                    </div>
-                </div>
-                <p>Создать виртуальный сетевой интерфейс для этого мак адреса</p>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-user">su -</div>
-                    </div>
-                </div>
-                <!-- Команды -->
-                <div class="code-wrapper">
-                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                    <div class="code-block">
-                        <div class="cmd cmd-root">ip link show</div>
-                        <div class="cmd cmd-root">nmcli connection add type dummy \</div>
-                        <div class="cmd cmd-serial">ifname veth0 \</div>
-                        <div class="cmd cmd-serial">connection.id "veth0" \</div>
-                        <div class="cmd cmd-serial">ethernet.cloned-mac-address 00:C0:26:AB:F7:92 \</div>
-                        <div class="cmd cmd-serial">ipv4.method manual \</div>
-                        <div class="cmd cmd-serial">ipv4.addresses 192.168.10.100/24</div>
-                        <div class="cmd cmd-root">nmcli connection up "veth0"</div>
-                        <div class="cmd cmd-root">nmcli device status</div>
-                        <div class="cmd cmd-root">ip addr show veth0</div>
-                    </div>
-                </div>
-                <!-- Подсказка -->
-                <div class="alert alert-tip">
-                    <div class="alert-content">
-                        <div class="alert-title">Подсказка</div>
-                        <p class="alert-text">Чтобы удалить: <code>nmcli connection delete "veth0"</code></p> 
-                        <p class="alert-text">Чтобы изменить:</p> 
-                        <p class="alert-text"><code>nmcli connection modify "veth0" macvlan.parent enp0s8</code></p>
-                        <p class="alert-text"><code>nmcli connection modify "veth0" ipv4.addresses 192.168.20.50/24 ipv4.gateway 192.168.20.1</code></p>
-                        <p class="alert-text"><code>nmcli connection down "veth0" && nmcli connection up "veth0"</code></p>
-                    </div>
-                </div>
-            </section>
+            </div>
+            <!-- Картинка -->
+            <img src="img/Tal2.0/img-tal2.0-1.png" alt="Путь до базы Талисмана 2.0">
         </section>
 
         <!-- Глава -->
