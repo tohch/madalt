@@ -335,7 +335,7 @@ discover_and_select_share() {
         confirm "Хотите оставить анонимного пользователя для подключения?" || user_anon="false"
     fi
 
-    if [[ "$user_anon" == "false" && ( $auth_status -ne 0 || -z "$RAW" ) ]]; then
+    if [[ "$user_anon" == "false" || $auth_status -ne 0 || -z "$RAW" ]]; then
         local max_attempts=3
         local attempt=0
         local auth_success=false
@@ -534,7 +534,6 @@ EOF
         cat > "$CRED_FILE" <<EOF
 username=guest
 password=
-guest
 EOF
     fi
     chmod 600 "$CRED_FILE"
