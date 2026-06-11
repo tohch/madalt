@@ -195,8 +195,13 @@ install_wine(){
 #===============================================================================
 set_virtual_lan(){
     confirm "Установить виртуальный интерфейс?" || return 0
+    local mac_address
+    read -p "Введите MAC адрес сервера Талисман 2.0 ( например: 00:C0:26:AB:F7:92 ): " mac_address
+    if [ -z "$mac_address" ]; then
+        mac_address="00:C0:26:AB:F7:92"
+    fi
     info "Введите пароль от root"
-    if su - -c "nmcli connection add type dummy ifname veth0 connection.id "veth0" ethernet.cloned-mac-address 00:C0:26:AB:F7:92 ipv4.method manual ipv4.addresses 172.31.10.100/24; nmcli connection up "veth0"; nmcli device status; ip addr show veth0;"; then
+    if su - -c "nmcli connection add type dummy ifname veth0 connection.id veth0 ethernet.cloned-mac-address $mac_address ipv4.method manual ipv4.addresses 172.31.10.100/24 && nmcli connection up veth0 && nmcli device status && ip addr show veth0"; then
         success "Виртуальный интерфейс установлен"
         return 0
     else
