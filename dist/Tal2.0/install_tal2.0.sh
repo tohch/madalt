@@ -40,6 +40,44 @@ case "$SMB_VERSION" in
         ;;
 esac
 
+check_root() {
+    if [ "$(id -u)" -ne 0 ]; then
+        ORIG_USER=$(whoami)      
+        echo "[!] Требуются права root. Введите пароль:"
+        
+        local escaped_args=()
+        for arg in "${ORIGINAL_ARGS[@]}"; do
+            escaped_args+=("$(printf '%q' "$arg")")
+        done
+        
+        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' SMB_VERSION='$SMB_VERSION' bash -- \"$(realpath "$0")\" ${escaped_args[*]}"
+    fi
+}
+
+#===============================================================================
+# Запустить от имени пользователя
+#===============================================================================
+urun(){
+    if [[ -z "$ORIG_USER" ]]; then
+        read -rp "Введите имя пользователя для запуска: " ORIG_USER
+        [[ -z "$ORIG_USER" ]] && { error "Имя пользователя не указано"; return 1; }
+        if ! id "$ORIG_USER" &>/dev/null; then
+            error "Пользователь '$ORIG_USER' не существует в системе"
+            return 1
+        fi
+    fi
+
+    local cmd="$*"
+    
+    if su - "$ORIG_USER" -c "$cmd" 2>&1; then
+        success "$cmd выполнен успешно"
+        return 0
+    else
+        error "Не удалось выполнить: $cmd"
+        return 1
+    fi
+}
+
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
 }
@@ -175,8 +213,8 @@ check_mount_share_installed() {
         warn "mount_share не установлен."
         info "Установка: apt-get install mount_share"
         if confirm "Установить mount_share?"; then
-            mkdir -p ~/altlinux/dist/lan
-            wget -O ~/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm https://github.com/tohch/madalt/releases/download/madalt/mount-share-1.0-alt1.noarch.rpm
+            urun "mkdir -p ~/altlinux/dist/lan"
+            urun "wget -O ~/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm https://github.com/tohch/madalt/releases/download/madalt/mount-share-1.0-alt1.noarch.rpm"
             info "Введите пароль root"
             if su - -c "chmod +x /home/$USER/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm; apt-get install -y /home/$USER/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm"; then
                 success "mount_share установлен"
@@ -251,9 +289,9 @@ check-installer(){
             info "Введите пароль от root"
             su - -c "apt-get install -y python3-module-pip" || { error "Ошибка pip"; return 1; }
         fi
-        pip3 install ydiskarc && python3 -c 'import ydiskarc' || { error "Ошибка ydiskarc"; return 1; }
-        pip3 install tqdm && python3 -c 'import tqdm' || { error "Ошибка tqdm"; return 1; }
-        ~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/odan8KCiqVlK1Q -o $safe_workpath || { error "Ошибка скачивания"; return 1; }
+        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка ydiskarc"; return 1; }
+        urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка tqdm"; return 1; }
+        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/odan8KCiqVlK1Q -o $safe_workpath" || { error "Ошибка скачивания"; return 1; }
         [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
         success "Файл успешно скачан."
     fi
@@ -265,7 +303,7 @@ check-installer(){
 #===============================================================================
 create-prefix(){
     confirm "Создать Префикс .talbde?" || return 0
-    WINEPREFIX=/home/"$USER"/.talbde WINEARCH=win32 wineboot -i || return 1
+    urun "WINEPREFIX=/home/$USER/.talbde WINEARCH=win32 wineboot -i" || return 1
     success "Префикс успешно создан"
     return 0
 }
@@ -281,7 +319,7 @@ install-components(){
         echo "Установка: $pkg"
         local max_retries=3 attempt=0 success=false
         while [ $attempt -le $max_retries ]; do
-            if WINEPREFIX=/home/"$USER"/.talbde winetricks -q $pkg; then
+            if urun "WINEPREFIX=/home/$USER/.talbde winetricks -q $pkg"; then
                 success=true
                 break
             fi
@@ -329,7 +367,7 @@ install(){
     confirm "Установить $1?" || return 0
     local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
     local safe_workpath=$(printf '%q' "$script_dir")
-    WINEPREFIX=/home/"$USER"/.talbde wine "$safe_workpath/$1" || return 1
+    urun "WINEPREFIX=/home/$USER/.talbde wine $safe_workpath/$1" || return 1
 }
 
 #===============================================================================
@@ -339,6 +377,9 @@ install(){
 main(){
     local HAS_ERRORS=0
     check_user
+    show_preview
+    check_root
+    clear
     mkdir -p "/home/$USER/.cache/tal2.0"
     show_preview
     check check_mount_share_installed  || HAS_ERRORS=1
