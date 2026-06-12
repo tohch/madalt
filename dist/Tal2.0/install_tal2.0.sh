@@ -13,13 +13,32 @@ NC='\033[0m' # No Color
 LOG_FILE="/home/$USER/.cache/tal2.0/install_tal2.0_$(date +%Y%m%d_%H%M%S).log"
 # === Обработка флагов запуска ===
 AUTO_YES=false
-while getopts "y" opt; do
+SMB_VERSION="${SMB_VERSION:-}"
+while getopts "yhv:" opt; do
     case $opt in
         y) AUTO_YES=true ;;
+        v) SMB_VERSION="$OPTARG" ;;
+        h)  echo "-y - автоответ Да на вопросы"
+            echo "-v: - выбор версии smb (-v 1 - SMB1, -v 2 - SMB2, -v 3 - SMB3)"
+            echo "-h - подсказка"
+            echo "Пример использования скрипта:"
+            echo "chmod +x ./install_tal2.0.sh"
+            echo "./mount_share.sh -y -v 3"
+            exit 0;;
         \?) echo "Недопустимая опция: -$OPTARG" >&2; exit 1 ;;
+        :)  echo "Опция -$OPTARG требует аргумент 1,2 или 3" >&2; exit 1 ;;
     esac
 done
 shift $((OPTIND - 1))
+
+# === Валидация SMB_VERSION ===
+case "$SMB_VERSION" in
+    1|2|3|"") ;;  # OK
+    *)
+        echo "Ошибка: -v принимает только 1, 2 или 3 (получено: '$SMB_VERSION')" >&2
+        exit 1
+        ;;
+esac
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
@@ -42,18 +61,14 @@ show_preview(){
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}Архив конфигов autofs: /root/backup_t      ${NC}"
     echo -e "${GREEN}Отвечать Да на все вопросы:                ${NC}"
-    echo -e "${GREEN}./install_tal2.0.sh -y                     ${NC}"
+    echo -e "${GREEN}Подключиться по SMB1                       ${NC}"
+    echo -e "${GREEN}./install_tal2.0.sh -v 1                   ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
 show_success(){
-    echo -e "${GREEN}===========================================${NC}"
-    echo -e "${GREEN}Поздравляю!                                ${NC}"
-    echo -e "${GREEN}Талисман 2.0 успешно установлен!           ${NC}"
-    echo -e "${GREEN}===========================================${NC}"
-    echo "Запустите BDE Admin через ярлык на рабочем столе"
-    echo "Данный ярлык содержит команду запаска BDE Admin:"
-    echo "Настройки BDE: "
+    info "Запустите BDE Admin через ярлык на рабочем столе"
+    info "Настройте BDE: "
     echo "Native"
     echo "   PARADOX"
     echo "       NET DIR: z:\mnt\tal\talisman_all"
@@ -71,6 +86,13 @@ show_success(){
     echo "           LEADINGZEROD: TRUE"
     echo "           LEAINGZEROM: TRUE"
     echo "           YEARBIASED: TRUE "
+    echo ""           
+    info "В Талисмане 2.0 путь до базы указывайте как: Z:\mnt\<сервер>\<база>"
+    echo -e "${GREEN}===========================================${NC}"
+    echo -e "${GREEN}Поздравляю!                                ${NC}"
+    echo -e "${GREEN}Талисман 2.0 успешно установлен!           ${NC}"
+    echo -e "${GREEN}===========================================${NC}"
+    success "Скрипт выполнился успешно."
 }
 
 #===============================================================================
@@ -292,7 +314,11 @@ check_user(){
 
 do_mount_share(){
     confirm "Запустить mount_share?" || return 0
-    mount_share || return 1
+    local option_v
+    if [ "$SMB_VERSION" -ne 0 ]; then
+        option_v="-v${SMB_VERSION}"
+    fi
+    mount_share "$option_v" || return 1
     return 0
 }
 
@@ -316,7 +342,7 @@ main(){
     mkdir -p "/home/$USER/.cache/tal2.0"
     show_preview
     check check_mount_share_installed  || HAS_ERRORS=1
-    do_mount_share                     || HAS_ERRORS=1
+    check do_mount_share               || HAS_ERRORS=1
     check install_wine                 || HAS_ERRORS=1
     create-prefix                      || HAS_ERRORS=1
     install-components                 || HAS_ERRORS=1

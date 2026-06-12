@@ -332,7 +332,7 @@ discover_and_select_share() {
     if [[ $auth_status -eq 0 && -n "$RAW" ]]; then
         user_anon="true"
         success "Выполнено анонимное подключение к серверу"
-        confirm "Хотите оставить анонимного пользователя для подключения?" || user_anon="false"
+        confirm "Доступно анонимное подключение, всё равно ввести логин и пароль для подключения?" && user_anon="false"
     fi
 
     if [[ "$user_anon" == "false" || $auth_status -ne 0 || -z "$RAW" ]]; then
