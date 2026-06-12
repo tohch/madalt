@@ -198,7 +198,7 @@ check_mount_share_installed() {
 install_wine(){
     confirm "Установить Wine?" || return 0
     if ! rpm -q i586-wine &>/dev/null || ! rpm -q winetricks &>/dev/null || ! rpm -q wine-mono-8.1.0 &>/dev/null; then
-        warn "mount_share не установлен."
+        warn "Wine не установлен."
         info "Установка: apt-get install wine"
         info "Введите пароль root"
         if su - -c "apt-get update; apt-get install -y i586-wine winetricks wine-mono-8.1.0"; then
