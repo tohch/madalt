@@ -346,7 +346,7 @@ main(){
     check install_wine                 || HAS_ERRORS=1
     create-prefix                      || HAS_ERRORS=1
     install-components                 || HAS_ERRORS=1
-    set_virtual_lan                    || HAS_ERRORS=1
+    check set_virtual_lan              || HAS_ERRORS=1
     check-installer "bdex64.exe"       || HAS_ERRORS=1
     check-installer "setup_tal2.0.exe" || HAS_ERRORS=1
     install "bdex64.exe"               || HAS_ERRORS=1
