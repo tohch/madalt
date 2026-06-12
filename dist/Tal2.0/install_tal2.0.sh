@@ -313,13 +313,14 @@ create-prefix(){
 #===============================================================================
 install-components(){
     confirm "Установить дополнительные компоненты?" || return 0
+    local base_cmd="WINEPREFIX=/home/$USER/.talbde winetricks -q"
     for pkg in win2k8 glsl=disabled ddr=gdi dotnet452 msxml3 msxml6 msftedit corefonts tahoma \
                riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \
                vcrun2012 vcrun2013; do
         echo "Установка: $pkg"
         local max_retries=3 attempt=0 success=false
         while [ $attempt -le $max_retries ]; do
-            if urun "WINEPREFIX=/home/$USER/.talbde winetricks -q $pkg"; then
+            if urun "$base_cmd $pkg"; then
                 success=true
                 break
             fi
