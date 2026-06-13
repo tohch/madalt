@@ -316,7 +316,7 @@ install-components(){
     local base_cmd="WINEPREFIX=/home/$USER/.talbde winetricks -q"
     for pkg in win2k8 glsl=disabled ddr=gdi dotnet452 msxml3 msxml6 msftedit corefonts tahoma \
                riched20 riched30 vb6run gdiplus vcrun2005 vcrun2008 vcrun2010 \
-               vcrun2012 vcrun2013; do
+               vcrun2012 vcrun2013 win2k8; do
         echo "Установка: $pkg"
         local max_retries=3 attempt=0 success=false
         while [ $attempt -le $max_retries ]; do
