@@ -208,7 +208,7 @@ check() {
 #===============================================================================
 
 check_mount_share_installed() {
-    confirm "Установить mount_share?" || return 0
+    confirm "Проверить установлен ли mount_share?" || return 0
     if ! ls /usr/bin/mount_share &>/dev/null; then
         warn "mount_share не установлен."
         info "Установка: apt-get install mount_share"
