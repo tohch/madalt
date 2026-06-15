@@ -3176,9 +3176,8 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">for pkg in win7 msxml3 msxml6 \</div>
-                    <div class="cmd cmd-serial">msftedit corefonts tahoma riched20 riched30 \</div>
-                    <div class="cmd cmd-serial">gdiplus vcrun2010 win7; do</div>
+                    <div class="cmd cmd-user">for pkg in win7 msxml3 msxml6 msftedit corefonts \</div>
+                    <div class="cmd cmd-serial">tahoma riched20 riched30 vcrun2010 win7; do</div>
                     <div class="cmd cmd-serial">WINEPREFIX=~/.office2010 winetricks -q "$pkg" || echo "===== НЕ УДАЛОСЬ: $pkg, продолжаем...";</div>
                     <div class="cmd cmd-serial">done</div>
                 </div>
