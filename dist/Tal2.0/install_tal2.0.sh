@@ -99,6 +99,7 @@ show_preview(){
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}Архив конфигов autofs: /root/backup_t      ${NC}"
     echo -e "${GREEN}Отвечать Да на все вопросы:                ${NC}"
+    echo -e "${GREEN}./install_tal2.0.sh -y                     ${NC}"
     echo -e "${GREEN}Подключиться по SMB1                       ${NC}"
     echo -e "${GREEN}./install_tal2.0.sh -v 1                   ${NC}"
     echo -e "${GREEN}===========================================${NC}"
