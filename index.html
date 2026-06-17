@@ -168,7 +168,6 @@
             <li><a href="#katarsis">Катарсис</a></li>
             <li><a href="#port-redirect">Проброс портов</a>
                 <ul>
-                    <li><a href="#port-redirect-install">Установка</a></li>
                     <li><a href="#port-redirect-server">Прокси Сервер (компьютер с ViPNet)</a></li>
                     <li><a href="#port-redirect-client">Клиент</a></li>
                 </ul>
@@ -3030,6 +3029,9 @@
                     <div class="cmd cmd-root">vim /usr/share/applications/myoffice-text.desktop</div>
                     <div class="vim-comment"># меняем строку Exec=myoffice-text %u на</div>
                     <div class="vim-line vim-string">Exec=env QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=1.25 myoffice-text</div>
+                    <div class="cmd cmd-root">vim /usr/share/applications/myoffice-presentation-editor.desktop</div>
+                    <div class="vim-comment"># меняем строку Exec=myoffice-presentation-editor %u на</div>
+                    <div class="vim-line vim-string">Exec=env QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=1.25 myoffice-presentation-editor</div>
                     <div class="vim-comment"># сохраняем и выходим (нажать esс, и команда :wq)</div>
                 </div>
             </div>
@@ -4147,10 +4149,11 @@
         <!-- Глава -->
         <section id="port-redirect">
             <h1>Проброс портов</h1>
-            <p>Для проброса портов будет использовать <code>socat</code></p>
             <!-- Глава -->
-            <section id="port-redirect-install">
-                <h2>Установка</h2>
+            <section id="port-redirect-server">
+                <h2>Прокси Сервер (компьютер с ViPNet)</h2>
+                <h3>Альт Линукс</h3>
+                <p>Для проброса портов будет использоваться <code>socat</code></p>
                 <p>Установите <code>socat</code></p>
                 <!-- Команды -->
                 <div class="code-wrapper">
@@ -4167,16 +4170,104 @@
                         <div class="cmd cmd-root">apt-get install -y socat</div>
                     </div>
                 </div>
-            </section>
-            <!-- Глава -->
-            <section id="port-redirect-server">
-                <h2>Прокси Сервер (компьютер с ViPNet)</h2>
-                <h3>Альт Линукс</h3>
-                <p>Ниже приведен вареант Прокси Сервера на Альт Линуксе.</p>
+                <p>Ниже приведен вариант Прокси Сервера на Альт Линуксе.</p>
                 <p>На компьютере с ViPNet создайте systemd юнит с запуском <code>socad</code>.</p>
-                <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера, куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
-                <p>Для удобства создайти переменные с параметрами перенаправления:</p>
+                <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера информационной системы (ИС), куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
+                <p>Для удобства создайте переменные с параметрами перенаправления:</p>
                 <!-- Команды -->
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Параметры для разных информационных систем (ИС):</p>
+                        <table>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    LISTEN_PORT
+                                </th>
+                                <th>
+                                    DEST_IP
+                                </th>
+                                <th>
+                                    DEST_PORT
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    ЕМСЭД
+                                </th>
+                                <td>
+                                    6201
+                                </td>
+                                <td>
+                                    10.99.105.13
+                                </td>
+                                <td>
+                                    443
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Катарсис
+                                </th>
+                                <td>
+                                    6202
+                                </td>
+                                <td>
+                                    192.168.23.58
+                                    <p><a href="#list-katarsis-groups">см. список по районам</a></p>
+                                </td>
+                                <td>
+                                    80
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Парус Отчетность
+                                </th>
+                                <td>
+                                    6203
+                                </td>
+                                <td>
+                                    10.46.29.10
+                                </td>
+                                <td>
+                                    8081
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Парус Бюджет-8 (ПФХД)
+                                </th>
+                                <td>
+                                    6204
+                                </td>
+                                <td>
+                                    10.46.29.8
+                                </td>
+                                <td>
+                                    8080
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Талисман ЭДО и ТМЦ
+                                </th>
+                                <td>
+                                    6205
+                                </td>
+                                <td>
+                                    192.168.23.45
+                                </td>
+                                <td>
+                                    443
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
@@ -4224,7 +4315,7 @@
                     </div>
                 </div>
                 <h3>Windows</h3>
-                <p>Ниже приведен вареант Прокси Сервера на Windows.</p>
+                <p>Ниже приведен вариант Прокси Сервера на Windows.</p>
                 <p>На компьютере с ViPNet создайте <code>porproxy.bat</code> в автозапуске <code>win+r shell:startup</code></p>
                 <p>Предположим, что у этого компьютера ip <code>192.168.205.80</code>, а у сервера, куда надо пересылать запросы, ip <code>192.168.23.58</code></p>
                 <!-- Команды -->
@@ -4232,24 +4323,86 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd">netsh interface portproxy reset</div>
-                        <div class="cmd">netsh interface portproxy add v4tov4 listenaddress=192.168.23.58 listenport=6202 connectaddress=192.168.23.58 connectport=80</div>
+                        <div class="cmd">netsh interface portproxy add v4tov4 listenaddress=192.168.205.80 listenport=6202 connectaddress=192.168.23.58 connectport=80</div>
                     </div>
                 </div>
                 <!-- Примечание -->
                 <div class="alert alert-note">
                     <div class="alert-content">
                         <div class="alert-title">Примечание</div>
-                        <p class="alert-text">Зачастую сброс правил (netsh interface portproxy reset) и создание bat файла в автозапуске необходимы, т.к. без него после перезагрузки правила перестают работать. Это происходит из-за бага ОС.</p>
+                        <p class="alert-text">Зачастую сброс правил (netsh interface portproxy reset) и создание bat файла в автозапуске (выполнить - shell:startup) необходимы, т.к. без него после перезагрузки правила перестают работать. Это происходит из-за бага ОС.</p>
                     </div>
                 </div>
             </section>
             <!-- Глава -->
             <section id="port-redirect-client">
                 <h2>Клиент</h2>
-                <p>На клиенте, в настроках приложения, где требуется проброс портов, указывайте Прокси сервер (ip компьютера с настроенным Проски Сервером)</p>
-                <p>В данном примере показанна настройка клиентской части Катарсиса.</p>
+                <h3>Вариант 1. Изменение адреса в клиенткой части ИС</h3>
+                <p>На клиенте, в настройках приложения, где требуется проброс портов, указывайте Прокси Сервер (ip компьютера с установленным ViPNet)</p>
+                <p>В данном примере показана настройка клиентской части Катарсиса.</p>
                 <!-- Картинка -->
-                <img src="img/port-redirect/img-port-redirect-1.png" alt="Установка Альт СП 10 Рабочая Станция">
+                <img src="img/port-redirect/img-port-redirect-1.png" alt="Проброс портов">
+                <p>Пример для ЕМСЭД:</p>
+                <img src="img/port-redirect/img-port-redirect-2.png" alt="Проброс портов">
+                <!-- Внимание -->
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <div class="alert-title">Внимание</div>
+                        <p class="alert-text">Обязательно используйте полную ссылку https://192.168.205.80:6201/login/</p>
+                        <p class="alert-text">Если перейдете просто на https://192.168.205.80:6201 , то сайт перенаправить на https://192.168.205.80/login/ , а без указания порта портмаппинг не будет работать!</p>
+                    </div>
+                </div>
+                <h3>Вариант 2. Перенаправление всех запросов</h3>
+                <p>Если клиентская часть ИС не позволяет изменять ip адрес и порт, то жестко перенаправляем все пакеты отправляемые на ip адрес сервера ИС на наш Прокси Сервер с установленным ViPNet</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text"><code>192.168.23.58:80</code> - ip:порт Сервера ИС куда хотим получить доступ</p>
+                        <p class="alert-text"><code>192.168.205.80:6202</code> - ip:порт Прокси Сервера с установленным ViPNet</p>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">alterator-net-iptables dnat add tcp:192.168.23.58:80 192.168.205.80:6202</div>
+                        <div class="cmd cmd-root">alterator-net-iptables dnat add udp:192.168.23.58:80 192.168.205.80:6202</div>
+                    </div>
+                </div>
+                <p>Запустите службу iptalbes:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl enable iptables</div>
+                        <div class="cmd cmd-root">systemctl start iptables</div>
+                        <div class="cmd cmd-root">systemctl restart iptables</div>
+                    </div>
+                </div>
+                <p>Проверить прописанные правила:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">alterator-net-iptables dnat list</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Чтобы удалить правило удалите его в iptables</p>
+                        <p class="alert-text"><code>vim /etc/sysconfig/iptables</code></p>
+                    </div>
+                </div>
             </section>
         </section>
 
