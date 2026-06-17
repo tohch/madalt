@@ -28,7 +28,7 @@ cd "$(dirname "$REAL_PATH")" || exit 1
 WIN_PATH=$(WINEPREFIX="$WPREFIX" winepath -w "$REAL_PATH" 2>/dev/null) || WIN_PATH="$REAL_PATH"
 
 # 4. Запуск
-if WINEPREFIX="$WPREFIX" wine tasklist /fi "IMAGENAME eq EXCEL.EXE" 2>/dev/null | grep -q WINWORD; then
+if WINEPREFIX="$WPREFIX" wine tasklist /fi "IMAGENAME eq EXCEL.EXE" 2>/dev/null | grep -q EXCEL; then
     # Word уже работает — пробуем открыть в том же экземпляре
     WINEPREFIX="$WPREFIX" wine "$WINWORD_PATH" /reuse "$WIN_PATH"
 else
