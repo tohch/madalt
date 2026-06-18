@@ -3526,8 +3526,8 @@
                         <div class="cmd cmd-user">mkdir -p ~/altlinux/dist/RMS</div>
                         <div class="cmd cmd-user">wget -O ~/altlinux/dist/RMS/rms-viewer-1.0.0-26.x86_64.rpm https://rmansys.ru/download/qt/linux/rms-viewer-1.0.0-26.x86_64.rpm</div>
                         <div class="cmd cmd-user">su - -c "</div>
-                        <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/RMS/rms-agent-1.0.0-19.x86_64.rpm</div>
-                        <div class="cmd cmd-serial">apt-get install -y libx11-xcb1 libxfixes3 libxtst6 libxcb-shm0 libxdamage1 libgtkglext1 libx11-6 libxcb-xinerama0 libxcb1 xdg-utils</div>
+                        <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/RMS/rms-viewer-1.0.0-26.x86_64.rpm</div>
+                        <div class="cmd cmd-serial">apt-get install -y xdg-utils</div>
                         <div class="cmd cmd-serial">"</div>
                     </div>
                 </div>
@@ -3535,10 +3535,11 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">rms-agent</div>
+                        <div class="cmd cmd-user">rms-viewer</div>
                     </div>
                 </div>
                 <h2>Хост</h2>
+                <p>Модуль «Хост» позволяет удаленно управлять компьютером, на котором он установлен.</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -3547,7 +3548,7 @@
                         <div class="cmd cmd-user">wget -O ~/altlinux/dist/RMS/rms-host-1.0.0-26.x86_64.rpm https://rmansys.ru/download/qt/linux/rms-host-1.0.0-26.x86_64.rpm</div>
                         <div class="cmd cmd-user">su - -c "</div>
                         <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/RMS/rms-host-1.0.0-26.x86_64.rpm</div>
-                        <div class="cmd cmd-serial">apt-get install -y libx11-xcb1 libxfixes3 libxtst6 libxcb-shm0 libxdamage1 libgtkglext1 libx11-6 libxcb-xinerama0 libxcb1 xdg-utils</div>
+                        <div class="cmd cmd-serial">apt-get install -y xdg-utils</div>
                         <div class="cmd cmd-serial">"</div>
                     </div>
                 </div>
@@ -3555,7 +3556,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">rms-agent</div>
+                        <div class="cmd cmd-user">rms-host-config-launcher</div>
                     </div>
                 </div>
                 <p>Модуль «Хост» позволяет удаленно управлять компьютером, на котором он установлен.</p>
