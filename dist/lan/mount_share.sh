@@ -143,7 +143,7 @@ check_root() {
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
     echo -e "${GREEN}  Монтирование сетевых папок (autofs)      ${NC}"
-    echo -e "${GREEN}  Version: 1.1.0                           ${NC}"
+    echo -e "${GREEN}  Version: 1.1                             ${NC}"
     echo -e "${GREEN}Этапы работы скрипта:                      ${NC}"
     echo -e "${GREEN}- поиск сервера по IP или сетевому имени;  ${NC}"
     echo -e "${GREEN}- выбор сетевых папок;                     ${NC}"
