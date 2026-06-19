@@ -14,16 +14,19 @@ NC='\033[0m' # No Color
 ORIGINAL_ARGS=("$@")
 AUTO_YES="${AUTO_YES:-false}"
 SMB_VERSION="${SMB_VERSION:-}"
-while getopts "yhv:" opt; do
+DELETE_MODE="${DELETE_MODE:-false}"
+while getopts "yhv:d" opt; do
     case $opt in
         y) AUTO_YES=true ;;
         v) SMB_VERSION="$OPTARG" ;;
+        d) DELETE_MODE=true ;;
         h)  echo "-y - автоответ Да на вопросы"
             echo "-v: - выбор версии smb (-v 1 - SMB1, -v 2 - SMB2, -v 3 - SMB3)"
+            echo "-d - режим удаления настроек autofs"
             echo "-h - подсказка"
             echo "Пример использования скрипта:"
-            echo "chmod +x mount_share.sh"
-            echo "./mount_share.sh -y -v 3"
+            echo "mount_share -y -v 3"
+            echo "mount_share -d # удалить настройку"
             exit 0;;
         \?) echo "Недопустимая опция: -$OPTARG" >&2; exit 1 ;;
         :)  echo "Опция -$OPTARG требует аргумент 1,2 или 3" >&2; exit 1 ;;
@@ -139,7 +142,8 @@ check_root() {
 
 show_preview(){
     echo -e "${GREEN}===========================================${NC}"
-    echo -e "${GREEN}   Монтирование сетевых папок (autofs)     ${NC}"
+    echo -e "${GREEN}  Монтирование сетевых папок (autofs)      ${NC}"
+    echo -e "${GREEN}  Version: 1.1.0                           ${NC}"
     echo -e "${GREEN}Этапы работы скрипта:                      ${NC}"
     echo -e "${GREEN}- поиск сервера по IP или сетевому имени;  ${NC}"
     echo -e "${GREEN}- выбор сетевых папок;                     ${NC}"
@@ -149,10 +153,12 @@ show_preview(){
     echo -e "${GREEN}Логирование:                               ${NC}"
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}Архив конфигов: /root/backup_t             ${NC}"
-    echo -e "${GREEN}Атрибуты: -h помощь;                       ${NC}"
+    echo -e "${GREEN}Атрибуты:                                  ${NC}"
+    echo -e "${GREEN}-h помощь;                                 ${NC}"
     echo -e "${GREEN}-v 1, 2 или 3 версии smb                   ${NC}"
     echo -e "${GREEN}-y автосогласие на вопросы.                ${NC}"
-    echo -e "${GREEN}Пример: ./mount_share.sh -y -v 3           ${NC}"
+    echo -e "${GREEN}-d режим удаления настроек autofs          ${NC}"
+    echo -e "${GREEN}Пример: mount_share -y -v 3                ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -332,7 +338,7 @@ discover_and_select_share() {
     if [[ $auth_status -eq 0 && -n "$RAW" ]]; then
         user_anon="true"
         success "Выполнено анонимное подключение к серверу"
-        confirm "Доступно анонимное подключение, всё равно ввести логин и пароль для подключения?" && user_anon="false"
+        confirm "Ввести логин и пароль для подключения?" && user_anon="false"
     fi
 
     if [[ "$user_anon" == "false" || $auth_status -ne 0 || -z "$RAW" ]]; then
@@ -897,10 +903,127 @@ cleanup_autofs() {
 }
 
 #===============================================================================
+# Удаление настройки autofs с интерактивным выбором
+#===============================================================================
+delete_autofs_config() {
+    info "Режим удаления настроек autofs"
+    
+    # 1. Поиск всех map-файлов в /etc/auto.d/
+    local -a map_files=()
+    if [[ -d "$AUTOFUS_MAP_DIR" ]]; then
+        while IFS= read -r -d '' file; do
+            map_files+=("$file")
+        done < <(find "$AUTOFUS_MAP_DIR" -name "auto.*" -type f -print0 2>/dev/null)
+    fi
+    
+    if [[ ${#map_files[@]} -eq 0 ]]; then
+        warn "Не найдено настроенных autofs-карт в $AUTOFUS_MAP_DIR"
+        return 0
+    fi
+    
+    # 2. Показываем список доступных конфигураций
+    echo -e "${GREEN}=== Найденные конфигурации autofs ===${NC}"
+    local -a server_names=()
+    
+    for i in "${!map_files[@]}"; do
+        local file="${map_files[$i]}"
+        local basename=$(basename "$file")
+        # Извлекаем имя сервера из auto.server_name
+        local server="${basename#auto.}"
+        server_names+=("$server")
+        echo "   [$i] $server  (файл: $file)"
+    done
+    echo "   [a] Удалить ВСЕ конфигурации"
+    echo "   [q] Отмена"
+    echo ""
+    
+    # 3. Запрос выбора
+    local choice
+    read -p "Введите номера для удаления (через запятую) или 'a'/'q': " choice
+    choice="${choice,,}"  # к нижнему регистру
+    
+    # Отмена
+    [[ "$choice" == "q" ]] && { info "Удаление отменено."; return 0; }
+    
+    # Удалить всё
+    if [[ "$choice" == "a" ]]; then
+        if ! confirm "Вы уверены, что хотите удалить ВСЕ конфигурации autofs?"; then
+            info "Удаление отменено."
+            return 0
+        fi
+        for file in "${map_files[@]}"; do
+            local server=$(basename "$file" | sed 's/^auto\.//')
+            info "Удаление конфигурации для: $server"
+            SERVER="$server" cleanup_autofs
+        done
+        success "Все конфигурации удалены"
+        return 0
+    fi
+    
+    # 4. Парсинг выбора (номера через запятую)
+    choice="${choice// /}"  # убрать пробелы
+    IFS=',' read -ra indices <<< "$choice"
+    
+    local -a to_delete=()
+    for idx in "${indices[@]}"; do
+        [[ -z "$idx" ]] && continue
+        if ! [[ "$idx" =~ ^[0-9]+$ ]]; then
+            warn "'$idx' — не число, пропускаем"
+            continue
+        fi
+        if (( idx < 0 || idx >= ${#map_files[@]} )); then
+            warn "Номер $idx вне диапазона (0–$((${#map_files[@]}-1)))"
+            continue
+        fi
+        # Проверка на дубликаты
+        local dup=false
+        for existing in "${to_delete[@]}"; do
+            [[ "$existing" == "$idx" ]] && { dup=true; break; }
+        done
+        $dup || to_delete+=("$idx")
+    done
+    
+    [[ ${#to_delete[@]} -eq 0 ]] && { warn "Ничего не выбрано для удаления."; return 0; }
+    
+    # 5. Подтверждение и удаление
+    echo -e "${YELLOW}Будет удалено:${NC}"
+    for idx in "${to_delete[@]}"; do
+        echo "   • ${server_names[$idx]}"
+    done
+    
+    if ! confirm "Подтвердить удаление?"; then
+        info "Удаление отменено пользователем"
+        return 0
+    fi
+    
+    # 6. Выполнение удаления
+    local success_count=0
+    for idx in "${to_delete[@]}"; do
+        local server="${server_names[$idx]}"
+        local file="${map_files[$idx]}"
+        
+        info "Удаление конфигурации: $server"
+        SERVER="$server" cleanup_autofs && ((success_count++))
+    done
+    
+    success "Готово. Удалено конфигураций: $success_count из ${#to_delete[@]}"
+    return 0
+}
+
+#===============================================================================
 # MAIN
 #===============================================================================
 main() {
     local HAS_ERRORS=0
+
+    # === Если запущен в режиме удаления — выполняем и выходим ===
+    if [[ "$DELETE_MODE" == "true" ]]; then
+        show_preview
+        check_root  # Права root всё ещё нужны для удаления конфигов
+        delete_autofs_config
+        exit 0
+    fi
+
     show_preview
     check_root
     clear
