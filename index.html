@@ -215,6 +215,12 @@
             <li><a href="#apt-get">apt-get - управление пакетами</a></li>
             <li><a href="#autorun">Автозапуск приложений</a></li>
             <li><a href="#format-flash">Форматирование флешки</a></li>
+            <li><a href="#usb-installer">Создание загрузочной флешки</a>
+                <ul>
+                    <li><a href="#usb-installer-linux">Из под Альт Линукс</a>
+                    <li><a href="#usb-installer-windows">Из под Windows</a>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -6042,6 +6048,151 @@
                     <div class="cmd cmd-root">mkfs.ntfs /dev/sdb4</div>
                 </div>
             </div>
+        </section>
+
+        <section id="usb-installer">
+            <h1>Создание загрузочной флешки</h1>
+            <section id="usb-installer-linux">
+                <h2>Из под Альт Линукс</h2>
+                <p>Для создание загрузочной флешки будет использовать Ventoy</p>
+                <p><a href="https://github.com/ventoy/Ventoy/releases">Ventoy</a> - позволяет создать загрузочную флешку</p>
+                <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
+                <p>Скачайте Ventoy</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/6UwEG2p0P_Azxg -o ~/altlinux/dist/ventoy</div>
+                    </div>
+                </div>
+                <p>Распакуйте ventoy:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">tar -xvf ~/altlinux/dist/ventoy/ventoy-1.1.12-linux.tar -С ~/altlinux/dist/ventoy</div>
+                    </div>
+                </div>
+                <p>Узнайте обозначение флешки</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">lsblk</div>
+                        <div class="cmd-comment"># Допустим это будет <space class="mark">/dev/sdc</space></div>
+                    </div>
+                </div>
+                <p>Запустите Ventoy с атрибутом -i и укажите вместо <space class="mark">/dve/sdc</space> обозначение своей флешки</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su - -c "</div>
+                        <div class="cmd cmd-serial">cd /home/$USER/altlinux/dist/ventoy/ventoy-1.1.12/</div>
+                        <div class="cmd cmd-serial">chmod +x ./Ventoy2Disk.sh</div>
+                        <div class="cmd cmd-serial">./Ventoy2Disk.sh -i <space class="mark">/dev/sdc</space></div>
+                        <div class="cmd cmd-serial">"</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Если раздел занят, то отмонтируйте его: <code>umount /dev/sdc1</code></p>
+                    </div>
+                </div>
+                <p>После инициализации, достаточно поместить ISO в корень флешки, чтобы сделать ее загрузочной</p>
+                <p>Установить 7z и смонтируйте флешку</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su - -c "</div>
+                        <div class="cmd cmd-serial">apt-get update</div>
+                        <div class="cmd cmd-serial">apt-get install -y p7zip</div>
+                        <div class="cmd cmd-serial">mkdir /mnt/ventoy</div>
+                        <div class="cmd cmd-serial">mount -o uid=$(id -u),gid=$(id -g) <space class="mark">/dev/sdc1</space> /mnt/ventoy</div>
+                        <div class="cmd cmd-serial">"</div>
+                    </div>
+                </div>
+                <h3>Список доступных для скачивания ISO</h3>
+                <p>Альт Линукс СП 10 Рабочая станция</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment"># Скачать</div>
+                        <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/mwRgI11tio82tA -o ~/altlinux/dist/iso</div>
+                        <div class="cmd-comment"># Распаковать в корень флешки</div>
+                        <div class="cmd cmd-user">7z x ~/altlinux/dist/iso/"Альт Рабочая Станция.zip.001" -o/mnt/ventoy</div>
+                    </div>
+                </div>
+                <p>Альт Линукс СП 10 Сервер</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/RVDrjLMLrUOZHw -o ~/altlinux/dist/iso</div>
+                        <div class="cmd cmd-user">7z x ~/altlinux/dist/iso/ALTLinuxServerSP10.z01 -o/mnt/ventoy</div>
+                    </div>
+                </div>
+                <p>Windows 10</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/HehgTUk1wR1usw -o ~/altlinux/dist/iso</div>
+                        <div class="cmd cmd-user">7z x ~/altlinux/dist/iso/Windows10.zip.001 -o/mnt/ventoy</div>
+                    </div>
+                </div>
+                <p>Windows 11</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/svAKlb3FCKJAAg -o ~/altlinux/dist/iso</div>
+                        <div class="cmd cmd-user">7z x ~/altlinux/dist/iso/Win11_25H2_Russian_x64_v2.zip.001 -o/mnt/ventoy</div>
+                    </div>
+                </div>
+                <p>AdminPE - флешка админа (набор полезный утилит для восстановления системы)</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://https://disk.yandex.ru/d/s5c-g1YI2l9JZQ -o ~/altlinux/dist/iso</div>
+                        <div class="cmd cmd-user">cp ~/altlinux/dist/iso/AdminPE10_UEFI.iso -d /run/media/$USER/Ventoy/</div>
+                    </div>
+                </div>
+                <p>Отмонтируйте флешку и удалите директорию для монтирования:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su - -c "umount /mnt/ventoy; rmdir /mnt/ventoy"</div>
+                    </div>
+                </div>
+                <p>Флешка готова к использованию.</p>
+            </section>
+            <section id="usb-installer-windows">
+                <h2>Из под Windows</h2>
+                <p>Скачайте <a href="https://github.com/ventoy/Ventoy/releases">Ventoy</a> для Windows</p>
+                <p>Распакуйте архив</p>
+                <p>Запустите Ventoy2Disk.exe</p>
+                <p>Выберите флешку и инициализируйте ее</p>
+                <p>Скачайте ISO и поместите в корень флешки</p>
+                <p><a href="https://disk.yandex.ru/d/mwRgI11tio82tA">Альт Линукс СП 10 Рабочая станция</a></p>
+                <P><a href="https://disk.yandex.ru/d/RVDrjLMLrUOZHw">Альт Линукс СП 10 Сервер</a></P>
+                <P><a href="https://disk.yandex.ru/d/HehgTUk1wR1usw">Windows 10</a></P>
+                <P><a href="https://disk.yandex.ru/d/svAKlb3FCKJAAg">Windows 11</a></P>
+                <P><a href="https://https://disk.yandex.ru/d/s5c-g1YI2l9JZQ">AdminPE</a></P>
+                <!-- Примечание -->
+                <div class="alert alert-note">
+                    <div class="alert-content">
+                        <div class="alert-title">Примечание</div>
+                        <p class="alert-text">Из-за ограничений Яндекс Диска ISO разбиты на архивы. Обязательно распакуйте архив и копируйте уже распакованный .iso в корень флешки.</p>
+                    </div>
+                </div>
+            </section>
         </section>
     </main>
 
