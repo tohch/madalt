@@ -2799,7 +2799,7 @@
                     <div class="code-block">
                     <div class="config-line"><span class="config-key">Native</span></div>
                     <div class="config-line">    <span class="config-key">PARADOX</span></div>
-                    <div class="config-line">        <span class="config-key">NET DIR:</span> <span class="config-value">z:\mnt\tal\talisman_all</span></div>
+                    <div class="config-line">        <span class="config-key">NET DIR:</span> <span class="config-value">z:\mnt\tal\talisman_bde</span></div>
                     <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">Pdox ANSI Cyrilic</span></div>
                     <div class="config-line">    <span class="config-key">DBASE</span></div>
                     <div class="config-line">        <span class="config-key">LANGDRIVER:</span> <span class="config-value">dBASE RUS cp866</span></div>
@@ -3948,6 +3948,31 @@
                             <div class="vim-line vim-string">share /mnt/share virtiofs rw,relatime,_netdev 0 0</div>
                         </div>
                     </div>
+                    <p>Создание ярлыка быстрого запуска ВМ:</p>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd-comment"># создайте переменную с именем виртуальной машины для удобства создания ярлыка (к примеру ВМ называется win10)</div>
+                            <div class="cmd cmd-user">VM="win10"</div>
+                        </div>
+                    </div>
+                    <!-- Команды -->
+                    <div class="code-wrapper">
+                        <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-block">
+                            <div class="cmd cmd-user">echo '[Desktop Entry]' > ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Version=1.0' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Type=Application' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Name=ВМ '$VM'' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Comment=Прямой запуск виртуальной машины '$VM'' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Exec=bash -c "virsh -c qemu:///system start '$VM' 2>/dev/null; sleep 2; virt-manager --connect qemu:///system --show-domain-console '$VM'"' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Icon=virt-manager' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Terminal=false' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">echo 'Categories=System;Emulator;' >> ~/Рабочий\ стол/"${VM}.desktop"</div>
+                            <div class="cmd cmd-user">chmod +x ~/Рабочий\ стол/"${VM}.desktop"</div>
+                        </div>
+                    </div>
                 </section>
             </section>
             <!-- Глава -->
@@ -4258,12 +4283,20 @@
                     <p class="alert-text">Так же заменить <code>user1</code> на имя своей учетной записи.</p>
                 </div>
             </div>
-            <p>Создание ярлыка. Укажите в GROUP номер своей группы</p>
+            <p>Создание ярлыка. Укажите в NG номер своей группы</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">GROUP="Соцзащита группа районов <span class="mark">2</span>"</div>
+                    <div class="cmd-comment"># создайте переменную NG с номером своей группы (например 2)</div>
+                    <div class="cmd cmd-user">NG="<span class="mark">2</span>"</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">GROUP="Соцзащита группа районов ${NG}"</div>
                     <div class="cmd cmd-user">DESKTOP=~/'Рабочий стол'/'ПК Катарсис  '"$GROUP"'.desktop'</div>
                     <div class="cmd cmd-user">if [ -f "$DESKTOP" ]; then mv -f "$DESKTOP" "$DESKTOP.backup"; fi</div>
                     <div class="cmd cmd-user">echo '[Desktop Entry]' > "$DESKTOP"</div>
