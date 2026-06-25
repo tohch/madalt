@@ -110,7 +110,7 @@ show_success(){
     info "Настройте BDE: "
     echo "Native"
     echo "   PARADOX"
-    echo "       NET DIR: z:\mnt\tal\talisman_all"
+    echo "       NET DIR: z:\mnt\tal\talisman_bde"
     echo "       LANGDRIVER: Pdox ANSI Cyrilic"
     echo "   DBASE"
     echo "       LANGDRIVER: dBASE RUS cp866"
