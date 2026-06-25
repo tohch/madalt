@@ -215,9 +215,9 @@ check_mount_share_installed() {
         info "Установка: apt-get install mount_share"
         if confirm "Установить mount_share?"; then
             urun "mkdir -p ~/altlinux/dist/lan"
-            urun "wget -O ~/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm https://github.com/tohch/madalt/releases/download/madalt/mount-share-1.0-alt1.noarch.rpm"
+            urun "wget -O ~/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm https://github.com/tohch/madalt/releases/download/madalt/mount-share-1.1-alt1.noarch.rpm"
             info "Введите пароль root"
-            if su - -c "chmod +x /home/$USER/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm; apt-get install -y /home/$USER/altlinux/dist/lan/mount-share-1.0-alt1.noarch.rpm"; then
+            if su - -c "chmod +x /home/$USER/altlinux/dist/lan/mount-share-1.1-alt1.noarch.rpm; apt-get install -y /home/$USER/altlinux/dist/lan/mount-share-1.1-alt1.noarch.rpm"; then
                 success "mount_share установлен"
                 return 0
             else
