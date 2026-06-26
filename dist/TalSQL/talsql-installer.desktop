@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Установщик Талисман SQL
+Comment=Графическая установка Талисман SQL через Wine
+Exec=/usr/local/bin/install_talsql_gui
+Icon=application-x-executable
+Terminal=false
+Categories=System;

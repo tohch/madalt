@@ -28,12 +28,13 @@ AUTOFUS_MAP_DIR="/etc/auto.d"
 AUTOFUS_MAP_FILE=""
 CRED_FILE_DIR="/etc/samba/credentials"
 BASE_MOUNT_ROOT="/mnt"  # Корневая точка для autofs
+USR_PATH="/usr/local/share/talsql-installer"
 
 #===============================================================================
 # Функции логирования и вывода
 #===============================================================================
 LOG_FILE="/var/log/install_talsql_$(date +%Y%m%d_%H%M%S).log"
-WINEPREFIX="WINEPREFIX=$HOME/.talsql"
+WINEPREFIX=""  # Будет задан в функции get_wine_prefix
 SHARES=()
 USER="" PASS=""
 SERVER=""
@@ -60,7 +61,20 @@ check_root() {
             escaped_args+=("$(printf '%q' "$arg")")
         done
         
-        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
+        # Безопасное экранирование переменных для передачи через su
+        local esc_prefix=$(printf '%q' "$CUSTOM_WINEPREFIX")
+        local esc_server=$(printf '%q' "$CUSTOM_SERVER")
+        local esc_user=$(printf '%q' "$CUSTOM_USER")
+        local esc_pass=$(printf '%q' "$CUSTOM_PASS")
+        local esc_path_exe=$(printf '%q' "$CUSTOM_PATH_EXE")
+        
+        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' \
+            CUSTOM_WINEPREFIX=$esc_prefix \
+            CUSTOM_SERVER=$esc_server \
+            CUSTOM_USER=$esc_user \
+            CUSTOM_PASS=$esc_pass \
+            CUSTOM_PATH_EXE=$esc_path_exe \
+            bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
     fi
 }
 
@@ -89,7 +103,7 @@ show_preview(){
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}Архив конфигов autofs: /root/backup_t      ${NC}"
     echo -e "${GREEN}Отвечать Да на все вопросы:                ${NC}"
-    echo -e "${GREEN}./install_talsql.sh -y                     ${NC}"
+    echo -e "${GREEN}./install_talsql -y                        ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
@@ -291,7 +305,13 @@ discover_and_select_share() {
     
     SHARES=()
 
-    read -p "Введите IP или имя сервера (Например: 192.168.1.100): " SERVER
+    # === Чтение сервера из GUI или интерактивно ===
+    if [[ -n "$CUSTOM_SERVER" ]]; then
+        SERVER="$CUSTOM_SERVER"
+        info "Сервер получен из GUI: $SERVER"
+    else
+        read -p "Введите IP или имя сервера (Например: 192.168.1.100): " SERVER
+    fi
     [[ -z "$SERVER" ]] && { warn "Сервер не указан."; return 1; }
 
     if ! command -v smbclient &>/dev/null; then
@@ -329,14 +349,36 @@ discover_and_select_share() {
             
             echo -e "${BLUE}=================================================${NC}"
             echo "Введите учётные данные для подключения к серверу:"
-            read -p "   Логин (Enter для пропуска): " USER
+            
+            # === Чтение логина из GUI или интерактивно ===
+            if [[ -n "$CUSTOM_SERVER" && $attempt -eq 1 ]]; then
+                SERVER="$CUSTOM_USER"
+                info "   Сервер получен из GUI"
+            else
+                read -p "Введите IP или имя сервера (Например: 192.168.1.100): " SERVER
+            fi
+
+            # === Чтение логина из GUI или интерактивно ===
+            if [[ -n "$CUSTOM_USER" && $attempt -eq 1 ]]; then
+                USER="$CUSTOM_USER"
+                info "   Логин получен из GUI"
+            else
+                read -p "   Логин (Enter для пропуска): " USER
+            fi
             
             if [[ -z "$USER" ]]; then
                 info "   Пропущено. Возвращаемся к предыдущему шагу."
                 break
             fi
             
-            read -sp "   Пароль: " PASS; echo
+            # === Чтение пароля из GUI или интерактивно ===
+            if [[ -n "$CUSTOM_PASS" && $attempt -eq 1 ]]; then
+                PASS="$CUSTOM_PASS"
+                info "   Пароль получен из GUI"
+                echo "   Пароль: ********"
+            else
+                read -sp "   Пароль: " PASS; echo
+            fi
             
             AUTH="-U $USER%$PASS"
             RAW=$(smbclient -L "//$SERVER" $AUTH -g 2>&1)
@@ -812,7 +854,7 @@ find_out_directory() {
 }
 
 #===============================================================================
-# Функции установки (без изменений)
+# Функции установки
 #===============================================================================
 install_wine(){
     confirm "Установить Wine?" || return 0
@@ -830,7 +872,9 @@ install_wine(){
 }
 
 create-prefix(){
-    confirm "Создать Префикс .talsql?" || return 0
+    confirm "Создать префикс Wine?" || return 0
+    local prefix_path="${WINEPREFIX#WINEPREFIX=}"
+    info "Используется префикс: $prefix_path"
     local base_cmd="$WINEPREFIX WINEARCH=win32 wineboot"
     urun "$base_cmd" || return 1
     return 0
@@ -868,66 +912,108 @@ install-components(){
 
 check-talsql(){
     confirm "Проверить наличие установочного файла Талисмана SQL?" || return 0
-    local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local script_dir; 
+    if [[ -n "$CUSTOM_PATH_EXE" ]]; then
+        script_dir=$CUSTOM_PATH_EXE
+    else
+        script_dir="/usr/local/share/talsql-installer"
+    fi
+
     local installertalsql="Reinstall_Tal3.1.52.exe"
     local installer_path="$script_dir/$installertalsql"
     
     if [[ -f "$installer_path" ]]; then
         success "$installer_path существует."
     else
-        warn "$installer_path не найден!"
-        local safe_workpath=$(printf '%q' "$script_dir")
-        confirm "Скачать $installertalsql?" || return 1
-        apt-get install -y python3-module-pip || { error "Ошибка pip"; return 1; }
-        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка ydiskarc"; return 1; }
-        urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка tqdm"; return 1; }
-        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || { error "Ошибка скачивания"; return 1; }
-        [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
-        success "Файл успешно скачан."
+        local dir_path="/home/$ORIG_USER/altlinux/dist/TalSQL"
+        installer_path="$dir_path/$installertalsql"
+        if [[ ! -f "$installer_path" ]]; then
+            warn "$script_dir/$installertalsql не найден!"
+            warn "$installer_path не найден!"
+            confirm "Скачать $installertalsql?" || return 1
+            apt-get install -y python3-module-pip || { error "Ошибка pip"; return 1; }
+            urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || { error "Ошибка ydiskarc"; return 1; }
+            urun "pip3 install tqdm && python3 -c 'import tqdm'" || { error "Ошибка tqdm"; return 1; }
+            mkdir -p "$dir_path"
+            urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $dir_path" || { error "Ошибка скачивания"; return 1; }
+            [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
+            success "Файл успешно скачан."
+        else
+            success "Файл $installer_path существует."
+        fi
     fi
     return 0
 }
 
 check_designfr(){
     confirm "Проверить наличие установочного файла Designfr" || return 0
-    local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local script_dir; 
+    
+    if [[ -n "$CUSTOM_PATH_EXE" ]]; then
+        script_dir="$CUSTOM_PATH_EXE"
+    else
+        script_dir="/usr/local/share/talsql-installer"
+    fi
+
     local installertalsql="designfr.exe"
     local installer_path="$script_dir/$installertalsql"
     
     if [[ -f "$installer_path" ]]; then
         success "$installer_path существует."
     else
-        warn "$installer_path не найден!"
-        local safe_workpath=$(printf '%q' "$script_dir")
-        confirm "Скачать $installertalsql?" || return 1
-        apt-get install -y python3-module-pip || return 1
-        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || return 1
-        urun "pip3 install tqdm && python3 -c 'import tqdm'" || return 1
-        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || return 1
-        [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
-        success "Файл успешно скачан."
+        local dir_path="/home/$ORIG_USER/altlinux/dist/TalSQL"
+        installer_path="$dir_path/$installertalsql"
+        if [[ ! -f "$installer_path" ]]; then
+            warn "$script_dir/$installertalsql не найден!"
+            warn "$installer_path не найден!"
+            confirm "Скачать $installertalsql?" || return 1
+            apt-get install -y python3-module-pip || return 1
+            urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || return 1
+            urun "pip3 install tqdm && python3 -c 'import tqdm'" || return 1
+            mkdir -p "$dir_path"
+            urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $dir_path" || return 1
+            [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
+            success "Файл успешно скачан."
+        else
+            success "Файл $installer_path существует."
+        fi
     fi
     return 0
 }
 
 check_bde(){
     confirm "Проверить наличие установочного файла BDE" || return 0
-    local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local script_dir; 
+    
+    if [[ -n "$CUSTOM_PATH_EXE" ]]; then
+        script_dir=$CUSTOM_PATH_EXE
+    else
+        script_dir="/usr/local/share/talsql-installer"
+    fi
+    
     local installertalsql="bdex64.exe"
     local installer_path="$script_dir/$installertalsql"
     
     if [[ -f "$installer_path" ]]; then
         success "$installer_path существует."
     else
-        warn "$installer_path не найден!"
-        local safe_workpath=$(printf '%q' "$script_dir")
-        confirm "Скачать $installertalsql?" || return 1
-        apt-get install -y python3-module-pip || return 1
-        urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || return 1
-        urun "pip3 install tqdm && python3 -c 'import tqdm'" || return 1
-        urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $safe_workpath" || return 1
-        [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
-        success "Файл успешно скачан."
+        local dir_path="/home/$ORIG_USER/altlinux/dist/TalSQL"
+        installer_path="$dir_path/$installertalsql"
+        if [[ ! -f "$installer_path" ]]; then
+            warn "$script_dir/$installertalsql не найден!"
+            warn "$installer_path не найден!"
+
+            confirm "Скачать $installertalsql?" || return 1
+            apt-get install -y python3-module-pip || return 1
+            urun "pip3 install ydiskarc && python3 -c 'import ydiskarc'" || return 1
+            urun "pip3 install tqdm && python3 -c 'import tqdm'" || return 1
+            mkdir -p "$dir_path"
+            urun "~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o $dir_path" || return 1
+            [[ ! -f "$installer_path" ]] && { error "Не удалось скачать!"; return 1; }
+            success "Файл успешно скачан."
+        else
+            success "Файл $installer_path существует."
+        fi
     fi
     return 0
 }
@@ -974,17 +1060,32 @@ copy_talsql_files(){
 }
 
 install-talsql(){
-    info "Во время установки укажите папку C:\Talisman_SQL"
+    info "Во время установки укажите папку C:\\Talisman_SQL"
     confirm "Запустить установку Талисмана SQL?" || return 0
-    local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-    local safe_workpath=$(printf '%q' "$script_dir")
+    local safe_workpath
+    if [[ -n "$CUSTOM_PATH_EXE" ]]; then
+        safe_workpath="$CUSTOM_PATH_EXE"
+    elif [[ -f "$USR_PATH/Reinstall_Tal3.1.52.exe" ]]; then
+        safe_workpath="$USR_PATH"
+    else
+        safe_workpath="/home/$ORIG_USER/altlinux/dist/TalSQL"
+    fi
     local base_cmd="$WINEPREFIX wine $safe_workpath/Reinstall_Tal3.1.52.exe"
     urun "$base_cmd" || return 1
 }
 
 install_designfr(){
     confirm "Запустить установку Designfr?" || return 0
-    local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local script_dir; 
+
+    if [[ -n "$CUSTOM_PATH_EXE" ]]; then
+        script_dir=$CUSTOM_PATH_EXE
+    elif [[ -f "$USR_PATH/designfr.exe" ]]; then
+        script_dir="$USR_PATH"
+    else
+        script_dir="/home/$ORIG_USER/altlinux/dist/TalSQL"
+    fi
+    
     local safe_workpath=$(printf '%q' "$script_dir")
     local base_cmd="$WINEPREFIX wine $safe_workpath/designfr.exe"
     urun "$base_cmd" || return 1
@@ -992,7 +1093,16 @@ install_designfr(){
 
 install_bde(){
     confirm "Запустить установку BDE?" || return 0
-    local script_dir; script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    local script_dir; 
+
+    if [[ -n "$CUSTOM_PATH_EXE" ]]; then
+        script_dir=$CUSTOM_PATH_EXE
+    elif [[ -f "$USR_PATH/bdex64.exe" ]]; then
+        script_dir="$USR_PATH"
+    else
+        script_dir="/home/$ORIG_USER/altlinux/dist/TalSQL"
+    fi
+    
     local safe_workpath=$(printf '%q' "$script_dir")
     local base_cmd="$WINEPREFIX wine $safe_workpath/bdex64.exe"
     urun "$base_cmd" || return 1
@@ -1033,6 +1143,57 @@ DESKTOP_EOF"
     fi
     [[ "$AUTO_YES" != "true" ]] && echo "" && info "Совет: если ярлык не запускается, кликните ПКМ → Свойства → Разрешения → Разрешить выполнение"
     return 0
+}
+
+#===============================================================================
+# Запрос пути к префиксу Wine
+#===============================================================================
+get_wine_prefix() {
+    local default_prefix="$HOME/.talsql"
+    
+    # Если путь передан из графической оболочки
+    if [[ -n "$CUSTOM_WINEPREFIX" ]]; then
+        WINEPREFIX="WINEPREFIX=$CUSTOM_WINEPREFIX"
+        info "Используется префикс из GUI: $CUSTOM_WINEPREFIX"
+        return 0
+    fi
+
+    if [[ "$AUTO_YES" == "true" ]]; then
+        WINEPREFIX="WINEPREFIX=$default_prefix"
+        info "Режим AUTO_YES: используется префикс по умолчанию: $default_prefix"
+        return 0
+    fi
+    
+    echo -e "${BLUE}===========================================${NC}"
+    echo -e "${BLUE}         Настройка префикса Wine           ${NC}"
+    echo -e "${BLUE}===========================================${NC}"
+    
+    while true; do
+        read -p "Введите путь для префикса Wine [Enter для $default_prefix]: " custom_prefix
+        
+        if [[ -z "$custom_prefix" ]]; then
+            custom_prefix="$default_prefix"
+        fi
+        
+        # Заменяем ~ на $HOME
+        custom_prefix="${custom_prefix/#\~/$HOME}"
+        
+        if [[ -e "$custom_prefix" && ! -d "$custom_prefix" ]]; then
+            error "Путь $custom_prefix существует, но это не директория!"
+            continue
+        fi
+        
+        if [[ -d "$custom_prefix" && "$(ls -A "$custom_prefix" 2>/dev/null)" ]]; then
+            warn "Директория $custom_prefix не пуста."
+            if ! confirm "Использовать существующую непустую директорию? (Может привести к конфликтам)"; then
+                continue
+            fi
+        fi
+        
+        WINEPREFIX="WINEPREFIX=$custom_prefix"
+        success "Префикс будет создан/использован: $custom_prefix"
+        break
+    done
 }
 
 #===============================================================================
@@ -1082,6 +1243,8 @@ main() {
     check_root
     clear
     show_preview
+    
+    get_wine_prefix  # Запрос пути к префиксу
 
     check install_wine       || HAS_ERRORS=1
     check create-prefix      || HAS_ERRORS=1

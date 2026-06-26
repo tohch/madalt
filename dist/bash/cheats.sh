@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+# ================
+# Сборка в директории
+# ===============
+rpmbuild -bb --define "_topdir /home/admin/source/madalt/build/TalSQL/" /home/admin/source/madalt/build/TalSQL/SPECS/talsql-installer.spec  
+
+
 # Не строгая проверка на ошибки (сразу выход)
 set -o pipefail
 
