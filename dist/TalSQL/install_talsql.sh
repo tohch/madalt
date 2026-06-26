@@ -50,16 +50,24 @@ success(){ echo -e "${GREEN}[OK]${NC} $1"; log "OK: $1"; }
 
 check_root() {
     if [ "$(id -u)" -ne 0 ]; then
+        [[ "$__ALT_LOGIN_SHELL" == "1" ]] && return 0
         ORIG_USER=$(whoami)   
         echo "[!] Требуются права root. Введите пароль:"
-        
+        run_c
+    fi
+}
+
+# Защита от дурака
+check_user(){
+    if [[ "$(id -u)" -eq 0 && -z $ORIG_USER ]]; then
+        [[ "$__ALT_LOGIN_SHELL" == "1" ]] && return 0
+        run_c
+    fi
+}
+
+run_c(){
         local flags=""
         [[ "$AUTO_YES" == "true" ]] && flags="-y"
-        
-        local escaped_args=()
-        for arg in "$@"; do
-            escaped_args+=("$(printf '%q' "$arg")")
-        done
         
         # Безопасное экранирование переменных для передачи через su
         local esc_prefix=$(printf '%q' "$CUSTOM_WINEPREFIX")
@@ -67,25 +75,28 @@ check_root() {
         local esc_user=$(printf '%q' "$CUSTOM_USER")
         local esc_pass=$(printf '%q' "$CUSTOM_PASS")
         local esc_path_exe=$(printf '%q' "$CUSTOM_PATH_EXE")
-        
+        local esc_orig_user=$(printf '%q' "$CUSTOM_ORIG_USER")
+
         exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' \
             CUSTOM_WINEPREFIX=$esc_prefix \
             CUSTOM_SERVER=$esc_server \
             CUSTOM_USER=$esc_user \
             CUSTOM_PASS=$esc_pass \
+            CUSTOM_ORIG_USER=$esc_orig_user \
             CUSTOM_PATH_EXE=$esc_path_exe \
-            bash \"$(realpath "$0")\" $flags ${escaped_args[*]}"
-    fi
+            __ALT_LOGIN_SHELL=1 \
+            bash \"$(realpath "$0")\" $flags"
 }
 
-# Защита от дурака
-check_user(){
-    if [[ "$(id -u)" -eq 0 && -z $ORIG_USER ]]; then
-        error "Скрипт нельзя запускать от имени root!"
-        info "Выйдите из root: exit"
-        info "И перезапустите скрипт под пользователем, скрипт сам запросит повышение прав."
-        exit 1
+set_orig_user(){
+    if [[ -n "$CUSTOM_ORIG_USER" ]]; then
+        ORIG_USER="$CUSTOM_ORIG_USER"
     fi
+    if [[ -z "$ORIG_USER" ]]; then
+        warn "Имя локального пользователя для создания префикса Wine не определено"
+        read -p "Введите имя локального пользователя: " ORIG_USER
+    fi
+    return 0
 }
 
 show_preview(){
@@ -113,6 +124,7 @@ show_success(){
     echo -e "${GREEN}Талисман SQL успешно установлен!           ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
+
 
 #===============================================================================
 # Подтверждение действия пользователем
@@ -331,7 +343,7 @@ discover_and_select_share() {
     if [[ $auth_status -eq 0 && -n "$RAW" ]]; then
         user_anon="true"
         success "Выполнено анонимное подключение к серверу"
-        confirm "Хотите оставить анонимного пользователя для подключения?" || user_anon="false"
+        confirm "Ввести имя пользователя и пароль для подключение к серверу?" && user_anon="false"
     fi
 
     if [[ "$user_anon" == "false" && ( $auth_status -ne 0 || -z "$RAW" ) ]]; then
@@ -352,7 +364,7 @@ discover_and_select_share() {
             
             # === Чтение логина из GUI или интерактивно ===
             if [[ -n "$CUSTOM_SERVER" && $attempt -eq 1 ]]; then
-                SERVER="$CUSTOM_USER"
+                SERVER="$CUSTOM_SERVER"
                 info "   Сервер получен из GUI"
             else
                 read -p "Введите IP или имя сервера (Например: 192.168.1.100): " SERVER
@@ -375,7 +387,6 @@ discover_and_select_share() {
             if [[ -n "$CUSTOM_PASS" && $attempt -eq 1 ]]; then
                 PASS="$CUSTOM_PASS"
                 info "   Пароль получен из GUI"
-                echo "   Пароль: ********"
             else
                 read -sp "   Пароль: " PASS; echo
             fi
@@ -1149,7 +1160,9 @@ DESKTOP_EOF"
 # Запрос пути к префиксу Wine
 #===============================================================================
 get_wine_prefix() {
-    local default_prefix="$HOME/.talsql"
+    confirm "Настроить префикс Win?"
+    check set_orig_user
+    local default_prefix="/home/$ORIG_USER/.talsql"
     
     # Если путь передан из графической оболочки
     if [[ -n "$CUSTOM_WINEPREFIX" ]]; then
@@ -1241,9 +1254,9 @@ main() {
     check_user
     show_preview
     check_root
+    set_orig_user
     clear
     show_preview
-    
     get_wine_prefix  # Запрос пути к префиксу
 
     check install_wine       || HAS_ERRORS=1

@@ -12,15 +12,99 @@ if ! command -v yad &> /dev/null; then
     exit 1
 fi
 
-# Показываем форму для ввода данных
+# Определяем текущего пользователя (даже при su -)
+CURRENT_USER="${SUDO_USER:-$USER}"
+if [[ "$CURRENT_USER" == "root" ]]; then
+    # Пробуем получить из переменных окружения su/sudo
+    CURRENT_USER="${LOGNAME:-${USER}}"
+    [[ "$CURRENT_USER" == "root" ]] && CURRENT_USER=""
+fi
+
+# Функция проверки имени пользователя
+validate_user() {
+    local name="$1"
+    
+    # Пустое имя
+    if [[ -z "$name" ]]; then
+        echo "Имя пользователя не может быть пустым"
+        return 1
+    fi
+    
+    # Длина
+    if [[ ${#name} -gt 32 ]]; then
+        echo "Имя пользователя слишком длинное (макс. 32 символа)"
+        return 1
+    fi
+    
+    # Формат: буквы/цифры/_/-, не начинается с - или цифры
+    if [[ ! "$name" =~ ^[a-z_][a-z0-9_-]*[$]?$ ]]; then
+        echo "Недопустимые символы в имени пользователя.\nРазрешены: a-z, 0-9, _, -"
+        return 1
+    fi
+    
+    # Не root
+    if [[ "$name" == "root" ]]; then
+        echo "Нельзя устанавливать для пользователя root"
+        return 1
+    fi
+    
+    # Проверка существования в системе
+    if ! id "$name" &>/dev/null; then
+        echo "Пользователь '$name' не существует в системе"
+        return 1
+    fi
+    
+    return 0
+}
+
+# Цикл запроса имени пользователя
+while true; do
+    TARGET_USER=$(yad --title="Имя пользователя" \
+        --form --center --width=350 \
+        --borders=10 \
+        --text="Введите имя пользователя, для которого устанавливается Талисман SQL:" \
+        --field="Имя пользователя:":FLD "$CURRENT_USER" \
+        --button="gtk-cancel:1" \
+        --button="Далее:0" 2>/dev/null)
+    
+    RET=$?
+    if [ $RET -ne 0 ]; then
+        exit 0
+    fi
+    
+    TARGET_USER="${TARGET_USER%|}"
+    TARGET_USER=$(echo "$TARGET_USER" | tr '[:upper:]' '[:lower:]' | xargs)  # в нижний регистр, trim
+    
+    # Проверяем имя
+    ERROR_MSG=$(validate_user "$TARGET_USER")
+    if [[ $? -eq 0 ]]; then
+        break  # всё ок, выходим из цикла
+    fi
+    
+    # Показываем ошибку и повторяем
+    yad --error --title="Ошибка" \
+        --text="$ERROR_MSG" \
+        --width=350 --center 2>/dev/null
+    
+    CURRENT_USER="$TARGET_USER"  # подставим введённое, чтобы можно было исправить
+done
+
+TARGET_USER="${TARGET_USER%|}"
+
+if [[ -z "$TARGET_USER" ]]; then
+    yad --error --text="Не указано имя пользователя!" --width=300 2>/dev/null
+    exit 1
+fi
+
+# Второй диалог - остальные поля с предзаполненным путём
 FORM_DATA=$(yad --title="Установка Талисман SQL" \
     --form --center --width=480 --height=280 \
-    --field="Путь к префиксу Wine:":FLD "$HOME/.talsql" \
+    --field="Путь к префиксу Wine:":FLD "/home/$TARGET_USER/.talsql" \
     --field="IP или имя сервера:":FLD "" \
     --field="Логин (опционально):":FLD "" \
     --field="Пароль (опционально):":H "" \
     --button="gtk-cancel:1" \
-    --button="Установить:0")
+    --button="Установить:0" 2>/dev/null)
 
 RET=$?
 if [ $RET -ne 0 ]; then
@@ -28,22 +112,33 @@ if [ $RET -ne 0 ]; then
 fi
 
 # Парсим вывод yad (разделитель |)
-IFS='|' read -r PREFIX_PATH SERVER USER PASS <<< "$FORM_DATA"
+IFS='|' read -r PREFIX_PATH SERVER LOGIN PASS <<< "$FORM_DATA"
 
-# Убираем завершающий разделитель (yad добавляет | в конце)
+# Убираем завершающий разделитель
 PREFIX_PATH="${PREFIX_PATH%|}"
 SERVER="${SERVER%|}"
-USER="${USER%|}"
+LOGIN="${LOGIN%|}"
 PASS="${PASS%|}"
 
 # Проверка обязательных полей
+if [[ -z "$TARGET_USER" ]]; then
+    yad --error --text="Не указано имя пользователя!" --width=300 2>/dev/null
+    exit 1
+fi
+
 if [[ -z "$PREFIX_PATH" ]]; then
-    yad --error --text="Не указан путь к префиксу Wine!" --width=300
+    yad --error --text="Не указан путь к префиксу Wine!" --width=300 2>/dev/null
     exit 1
 fi
 
 if [[ -z "$SERVER" ]]; then
-    yad --error --text="Не указан IP или имя сервера!" --width=300
+    yad --error --text="Не указан IP или имя сервера!" --width=300 2>/dev/null
+    exit 1
+fi
+
+# Проверяем существование домашнего каталога пользователя
+if [[ ! -d "/home/$TARGET_USER" ]]; then
+    yad --error --text="Домашний каталог пользователя $TARGET_USER не найден:\n/home/$TARGET_USER" --width=400 2>/dev/null
     exit 1
 fi
 
@@ -87,12 +182,12 @@ if [[ ! -x "$SCRIPT_PATH" ]]; then
     exit 1
 fi
 
-
 # Формируем команду запуска
 RUN_CMD="env CUSTOM_WINEPREFIX=\"$PREFIX_PATH\" \
               CUSTOM_SERVER=\"$SERVER\" \
-              CUSTOM_USER=\"$USER\" \
+              CUSTOM_USER=\"$LOGIN\" \
               CUSTOM_PASS=\"$PASS\" \
+              CUSTOM_ORIG_USER=\"$TARGET_USER\" \
               CUSTOM_PATH_EXE=\"/usr/local/share/talsql-installer/\" \
           bash -c \"\\\"$SCRIPT_PATH\\\" -y; echo ''; echo '=== Установка завершена ==='; echo 'Нажмите Enter для закрытия окна...'; read\""
 
@@ -102,4 +197,3 @@ if [ -t 1 ]; then
 else
     $TERM_CMD $TERM_ARGS bash -c "$RUN_CMD"
 fi
-
