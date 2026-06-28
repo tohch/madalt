@@ -122,24 +122,20 @@ PASS="${PASS%|}"
 
 # Проверка обязательных полей
 if [[ -z "$TARGET_USER" ]]; then
-    yad --error --text="Не указано имя пользователя!" --width=300 2>/dev/null
-    exit 1
+    yad --error --text="Не указано имя пользователя!" --width=300 2>/dev/null || { echo "Отмена"; exit 1; }
 fi
 
 if [[ -z "$PREFIX_PATH" ]]; then
-    yad --error --text="Не указан путь к префиксу Wine!" --width=300 2>/dev/null
-    exit 1
+    yad --error --text="Не указан путь к префиксу Wine!" --width=300 2>/dev/null || { echo "Отмена"; exit 1; }
 fi
 
 if [[ -z "$SERVER" ]]; then
-    yad --error --text="Не указан IP или имя сервера!" --width=300 2>/dev/null
-    exit 1
+    yad --error --text="Не указан IP или имя сервера!" --width=300 2>/dev/null || { echo "Отмена"; exit 1; }
 fi
 
 # Проверяем существование домашнего каталога пользователя
 if [[ ! -d "/home/$TARGET_USER" ]]; then
-    yad --error --text="Домашний каталог пользователя $TARGET_USER не найден:\n/home/$TARGET_USER" --width=400 2>/dev/null
-    exit 1
+    yad --error --text="Домашний каталог пользователя $TARGET_USER не найден:\n/home/$TARGET_USER" --width=400 2>/dev/null || { echo "Отмена"; exit 1; }
 fi
 
 # Ищем графический терминал для вывода процесса установки
@@ -170,7 +166,7 @@ else
 fi
 
 # Определяем путь к основному скрипту
-SCRIPT_PATH="/usr/local/bin/install_talsql.sh"
+SCRIPT_PATH="/usr/local/bin/install_talsql"
 if [[ ! -x "$SCRIPT_PATH" ]]; then
     # Если установлен в другом месте, ищем рядом с GUI-обёрткой
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

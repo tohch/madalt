@@ -2060,26 +2060,29 @@
             <!-- Глава -->
             <section id="talisman-sql-autoinstall">
                 <h2>Автоматическая установка</h2>
-                <p>Скачайте скрипты и инструкцию:</p>
+                <p>Скачайте пакет:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">wget -O ~/Загрузки/madalt.zip https://github.com/tohch/madalt/archive/refs/heads/main.zip</div>
-                        <div class="cmd cmd-user">unzip -d ~/Загрузки -o ~/Загрузки/madalt.zip</div>
-                        <div class="cmd cmd-user">mkdir -p ~/altlinux && yes | cp -rf ~/Загрузки/madalt-main/* ~/altlinux</div>
+                        <div class="cmd cmd-user">mkdir -p ~/altlinux/dist/TalSQL</div>
+                        <div class="cmd cmd-user">wget -O ~/altlinux/dist/TalSQL/install_talsql_gui-1.0-1.noarch.rpm https://github.com/tohch/madalt/releases/download/madalt/install_talsql_gui-1.0-1.noarch.rpm</div>
                     </div>
                 </div>
-                <p>Для автоматической установки Талисмана-SQL сделайте скрипт исполняемым и запустите его:</p>
+                <p>Установите и запустите пакет:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">chmod +x ~/altlinux/dist/TalSQL/install_talsql.sh</div>
-                        <div class="cmd cmd-user">~/altlinux/dist/TalSQL/install_talsql.sh -y</div>
+                        <div class="cmd cmd-user">su -c "</div>
+                        <div class="cmd cmd-serial">chmod +x /home/$USER/altlinux/dist/TalSQL/install_talsql_gui-1.0-1.noarch.rpm</div>
+                        <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/TalSQL/install_talsql_gui-1.0-1.noarch.rpm</div>
+                        <div class="cmd cmd-serial">install_talsql_gui</div>
+                        <div class="cmd cmd-serial">"</div>
                     </div>
                 </div>
-                <p><code>instal_talsql.sh</code> - это баш скрипт автоматической установки Талисмана SQL. Он выполнит все действия, которые описаны в ниже стоящих главах, а именно:</p>
+                <p><code>instal_talsql_gui</code> - это графическая оболочка для баш скрипт install_talsql</p>
+                <p><code>instal_talsql</code> - это баш скрипт автоматической установки Талисмана SQL. Он выполнит все действия, которые описаны в ниже стоящих главах, а именно:</p>
                 <ul>
                     <li>Установка Wine и создание 32-х битного префикса .talsql;</li>
                     <li>Установка дополнительных компонентов для префикса .talsql;</li>
@@ -2094,6 +2097,16 @@
                 <div class="alert alert-tip">
                     <div class="alert-content">
                         <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Запуск без графического окна: <code>install_talsql</code></p>
+                    </div>
+                </div>
+                <p>Запуск установки возможет из меню Система:</p>
+                <!-- Картинка -->
+                <img src="img/talisman-sql/img-talsql-4.png" alt="Запуск через меню install_talsql_gui">
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
                         <p class="alert-text">В установщике Талисмана-SQL указывайте путь: <code>C:\Talisman_SQL</code></p>
                     </div>
                 </div>
@@ -2101,9 +2114,9 @@
                 <div class="alert alert-tip">
                     <div class="alert-content">
                         <div class="alert-title">Подсказка</div>
-                        <p class="alert-text">Используйте атрибут <code>-y</code>, чтобы ответить положительно на все вопросы: <code>./install_talsql.sh -y</code></p>
+                        <p class="alert-text">Используйте атрибут <code>-y</code>, чтобы ответить положительно на все вопросы: <code>install_talsql -y</code></p>
                         <p class="alert-text">Обратите внимание, что атрибут <code>-y</code> не избавит вас от необходимости нажимать Далее в диалоговых окнах и ввода данных для сетевого подключения к расшаренным папкам сервера Талисмана-SQL.</p>
-                        <p class="alert-text">Запустите без атрибута <code>-y</code>, чтобы отвечать самостоятельно: <code>./install_talsql</code></p>
+                        <p class="alert-text">Запустите без атрибута <code>-y</code>, чтобы отвечать самостоятельно: <code>install_talsql</code></p>
                     </div>
                 </div>
                 <!-- Примечание -->

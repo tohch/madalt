@@ -53,31 +53,40 @@ check_root() {
         [[ "$__ALT_LOGIN_SHELL" == "1" ]] && return 0
         ORIG_USER=$(whoami)   
         echo "[!] Требуются права root. Введите пароль:"
-        run_c
+        run_c || return 1
     fi
+    return 0
 }
 
 # Защита от дурака
 check_user(){
     if [[ "$(id -u)" -eq 0 && -z $ORIG_USER ]]; then
         [[ "$__ALT_LOGIN_SHELL" == "1" ]] && return 0
-        run_c
+        run_c || return 1
     fi
+    return 0
 }
 
 run_c(){
-        local flags=""
-        [[ "$AUTO_YES" == "true" ]] && flags="-y"
-        
-        # Безопасное экранирование переменных для передачи через su
-        local esc_prefix=$(printf '%q' "$CUSTOM_WINEPREFIX")
-        local esc_server=$(printf '%q' "$CUSTOM_SERVER")
-        local esc_user=$(printf '%q' "$CUSTOM_USER")
-        local esc_pass=$(printf '%q' "$CUSTOM_PASS")
-        local esc_path_exe=$(printf '%q' "$CUSTOM_PATH_EXE")
-        local esc_orig_user=$(printf '%q' "$CUSTOM_ORIG_USER")
+    local flags=""
+    [[ "$AUTO_YES" == "true" ]] && flags="-y"
+    
+    # Безопасное экранирование переменных для передачи через su
+    local esc_prefix=$(printf '%q' "$CUSTOM_WINEPREFIX")
+    local esc_server=$(printf '%q' "$CUSTOM_SERVER")
+    local esc_user=$(printf '%q' "$CUSTOM_USER")
+    local esc_pass=$(printf '%q' "$CUSTOM_PASS")
+    local esc_path_exe=$(printf '%q' "$CUSTOM_PATH_EXE")
+    local esc_orig_user=$(printf '%q' "$CUSTOM_ORIG_USER")
 
-        exec su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' \
+    local max_attempts=3
+    local attempt=1
+
+    while [[ $attempt -le $max_attempts ]]; do
+        echo "Попытка $attempt из $max_attempts..." >&2
+        
+        # Запускаем su БЕЗ exec, чтобы перехватить код возврата
+        su root -c "ORIG_USER='$ORIG_USER' AUTO_YES='$AUTO_YES' \
             CUSTOM_WINEPREFIX=$esc_prefix \
             CUSTOM_SERVER=$esc_server \
             CUSTOM_USER=$esc_user \
@@ -86,6 +95,65 @@ run_c(){
             CUSTOM_PATH_EXE=$esc_path_exe \
             __ALT_LOGIN_SHELL=1 \
             bash \"$(realpath "$0")\" $flags"
+        
+        local su_status=$?
+
+        # Если пароль верный и скрипт от root успешно отработал
+        if [[ $su_status -eq 0 ]]; then
+            # Выходим из текущего скрипта, чтобы не продолжать от обычного юзера
+            exit 0
+        fi
+
+        # Если пароль неверный
+        echo "Неверный пароль root." >&2
+        ((attempt++))
+        
+        # Если это не последняя попытка, даём небольшую паузу
+        if [[ $attempt -le $max_attempts ]]; then
+            sleep 1
+        fi
+    done
+
+    # Все попытки исчерпаны
+    error "Превышено максимальное количество попыток ($max_attempts). Доступ запрещён." >&2
+    return 1
+}
+
+# Функция проверки имени пользователя
+validate_user() {
+    local name="$1"
+    
+    # Пустое имя
+    if [[ -z "$name" ]]; then
+        error "Имя пользователя не может быть пустым"
+        return 1
+    fi
+    
+    # Длина
+    if [[ ${#name} -gt 32 ]]; then
+        error "Имя пользователя слишком длинное (макс. 32 символа)"
+        return 1
+    fi
+    
+    # Формат: буквы/цифры/_/-, не начинается с - или цифры
+    if [[ ! "$name" =~ ^[a-z_][a-z0-9_-]*[$]?$ ]]; then
+        error "Недопустимые символы в имени пользователя.\nРазрешены: a-z, 0-9, _, -"
+        return 1
+    fi
+    
+    # Не root
+    if [[ "$name" == "root" ]]; then
+        error "Нельзя устанавливать для пользователя root"
+        return 1
+    fi
+    
+    # Проверка существования в системе
+    if ! id "$name" &>/dev/null; then
+        error "Пользователь '$name' не существует в системе"
+        return 1
+    fi
+    
+    return 0
 }
 
 set_orig_user(){
@@ -95,6 +163,10 @@ set_orig_user(){
     if [[ -z "$ORIG_USER" ]]; then
         warn "Имя локального пользователя для создания префикса Wine не определено"
         read -p "Введите имя локального пользователя: " ORIG_USER
+        if ! validate_user "$ORIG_USER";then 
+            ORIG_USER=""
+            return 1
+        fi
     fi
     return 0
 }
@@ -1251,10 +1323,10 @@ cleanup_autofs() {
 #===============================================================================
 main() {
     local HAS_ERRORS=0
-    check_user
+    check_user || exit 1
     show_preview
-    check_root
-    set_orig_user
+    check_root || exit 1
+    check set_orig_user || HAS_ERRORS=1
     clear
     show_preview
     get_wine_prefix  # Запрос пути к префиксу
