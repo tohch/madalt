@@ -666,7 +666,7 @@ EOF
 
 generate_map_filename() {
     local server_clean="${SERVER//[^a-zA-Z0-9._-]/_}"
-    echo "/etc/auto.d/auto.talsql_${server_clean}"
+    echo "/etc/auto.d/auto.${server_clean}"
 }
 
 escape_for_autofs() {
