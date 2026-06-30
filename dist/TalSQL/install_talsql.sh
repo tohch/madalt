@@ -186,7 +186,7 @@ show_preview(){
     echo -e "${GREEN}$LOG_FILE ${NC}"
     echo -e "${GREEN}Архив конфигов autofs: /root/backup_t      ${NC}"
     echo -e "${GREEN}Отвечать Да на все вопросы:                ${NC}"
-    echo -e "${GREEN}./install_talsql -y                        ${NC}"
+    echo -e "${GREEN}install_talsql -y                          ${NC}"
     echo -e "${GREEN}===========================================${NC}"
 }
 
