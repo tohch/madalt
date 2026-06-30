@@ -3283,16 +3283,10 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">su -</div>
-                </div>
-            </div>
-            <!-- Команда -->
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
-                <div class="code-block">
-                    <div class="cmd cmd-root">apt-get update</div>
-                    <div class="cmd cmd-root">apt-get install -y i586-wine winetricks wine-mono-8.1.0</div>
-                    <div class="cmd cmd-root">exit</div>
+                    <div class="cmd cmd-user">su - -c "</div>
+                    <div class="cmd cmd-serial">apt-get update</div>
+                    <div class="cmd cmd-serial">apt-get install -y i586-wine winetricks wine-mono-8.1.0</div>
+                    <div class="cmd cmd-serial">"</div>
                 </div>
             </div>
             <p>Создание префикса</p>
