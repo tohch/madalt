@@ -187,6 +187,7 @@
                     <li><a href="#drweb-guard">Настройка исключений для SpIDer Guard</a></li>
                 </ul>
             </li>
+            <li><a href="#kes">Kaspersky</a>
             <li><a href="#nalogul">Налогоплательщик ЮЛ</a></li>
             <li><a href="#timeshift">TimeShift</a>
                 <ul>
@@ -4973,6 +4974,90 @@
                 <!-- Картинка -->
                 <img src="img/drweb/img-drweb-1.png" alt="Dr.Web">
             </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="kes">
+            <h1>Kaspersky</h1>
+            <p>Установка сертифицированной ФСБ версии Kaspersky Endpoint Security 12.0</p>
+            <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
+            <p>Скачайте Касперского:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/kv6Iqa-_2VeaHQ -o ~/altlinux/dist/kes</div>
+                </div>
+            </div>
+            <p>Установите 7z:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y p7zip</div>
+                    <div class="cmd cmd-root">exit</div>
+                </div>
+            </div>
+            <p>Распакуйте архив:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">7z x ~/altlinux/dist/kes/KES12Linux_12.0.0.6672_FSB_643.46856491.20105-04.zip -o/home/"$USER"/altlinux/dist/kes</div>
+                </div>
+            </div>
+            <p>Установите Kaspersky, графический интерфейс, запустите kes-setup.pl и добавьте роль admin пользователю:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su - -c "</div>
+                    <div class="cmd-comment"># Установка Kaspersky</div>
+                    <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/kes/KES12Linux_12.0.0.6672_FSB_643.46856491.20105-04/kesl/kesl-12.0.0-6672.x86_64.rpm</div>
+                    <div class="cmd-comment"># Установка графического интерфейса</div>
+                    <div class="cmd cmd-serial">apt-get install -y /home/$USER/altlinux/dist/kes/KES12Linux_12.0.0.6672_FSB_643.46856491.20105-04/kesl/gui/kesl-gui-12.0.0-6672.x86_64.rpm</div>
+                    <div class="cmd-comment"># Запуск kes-setup.pl</div>
+                    <div class="cmd cmd-serial">/opt/kaspersky/kesl/bin/kesl-setup.pl</div>
+                    <div class="cmd-comment"># Добавление роли admin</div>
+                    <div class="cmd cmd-serial">kesl-control --grant-role admin $USER</div>
+                    <div class="cmd cmd-serial">"</div>
+                </div>
+            </div>
+            <p>Добавьте исключение:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">kesl-control --set-settings File_Threat_Protection --add-exclusion  "/sys/*"</div>
+                    <div class="cmd cmd-user">kesl-control --set-settings File_Threat_Protection --add-exclusion  "/proc/*"</div>
+                    <div class="cmd cmd-user">kesl-control --set-settings Web_Threat_Protection --add-trusted-url  "*.krasnodar.ru"</div>
+                    <div class="cmd cmd-user">kesl-control --set-settings Web_Threat_Protection --add-trusted-url  "10.99.105.13"</div>
+                </div>
+            </div>
+            <p>Проверьте исключения:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">kesl-control --get-settings File_Threat_Protection</div>
+                    <div class="cmd cmd-user">kesl-control --get-settings Web_Threat_Protection</div>
+                </div>
+            </div>
+            <p>Запустить программу и активировать ключ лицензии:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">kesl</div>
+                </div>
+            </div>
         </section>
 
         <!-- Глава -->
