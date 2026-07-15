@@ -43,6 +43,7 @@
             <li><a href="#vim">Vim</a></li>
             <li><a href="#useradd">Управление пользователями</a></li>
             <li><a href="#sudo">sudo</a></li>
+            <li><a href="#ydiskarc">Установка ydiskarc</a></li>
             <li><a href="#preparation">Подготовка altlinux</a>
                 <ul>
                     <li><a href="#preparation-ydiskarc">Установка ydiskarc</a></li>
@@ -625,9 +626,8 @@
         </section>
 
         <!-- Глава -->
-        <section id="preparation">
-            <h1>Подготовка altlinux</h1>
-            <h2 id="preparation-ydiskarc">Установка ydiskarc</h2>
+        <section id="ydiskarc">
+            <h1 id="preparation-ydiskarc">Установка ydiskarc</h1>
             <p>Чтобы подготовить все пакеты и инструкцию, их надо скачать на ваш компьютер, для этого будет использовать ydiskarc.</p>
             <!-- Примечание -->
             <div class="alert alert-note">
@@ -658,8 +658,7 @@
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">pip3 install ydiskarc && \</div>
-                    <div class="cmd cmd-user">pip3 install tqdm</div>
+                    <div class="cmd cmd-user">pip3 install ydiskarc tqdm</div>
                 </div>
             </div>
             <p>Чтобы все приложения, в том числе и ydiskarc, из ~/.local/bin запускать без указания путей, выполните:</p>
@@ -673,7 +672,13 @@
                     <div class="cmd cmd-user">source ~/.bash_profile</div>
                 </div>
             </div>
+        </section>
+
+        <!-- Глава -->
+        <section id="preparation">
+            <h1>Подготовка altlinux</h1>
             <h2 id="preparation-full">Скачать Все</h2>
+            <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
             <p>Для удобства скачайте дистрибутивы, скрипты и инструкцию в домашнюю директорию ~/</p>
             
             <!-- Примечание -->
