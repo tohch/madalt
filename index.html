@@ -5042,8 +5042,8 @@
                 <div class="code-block">
                     <div class="cmd cmd-user">kesl-control --set-settings File_Threat_Protection --add-exclusion "/sys/*"</div>
                     <div class="cmd cmd-user">kesl-control --set-settings File_Threat_Protection --add-exclusion "/proc/*"</div>
-                    <div class="cmd cmd-user">kesl-control --set-settings Web_Threat_Protection --add-trusted-url "*.krasnodar.ru"</div>
-                    <div class="cmd cmd-user">kesl-control --set-settings Web_Threat_Protection --add-trusted-url "10.99.105.13"</div>
+                    <div class="cmd cmd-user">kesl-control --set-settings Web_Threat_Protection TrustedAddresses.item_0000="https://*.krasnodar.ru"</div>
+                    <div class="cmd cmd-user">kesl-control --set-settings Web_Threat_Protection TrustedAddresses.item_0001="https://10.99.105.13"</div>
                 </div>
             </div>
             <p>Проверьте исключения:</p>
@@ -5055,12 +5055,12 @@
                     <div class="cmd cmd-user">kesl-control --get-settings Web_Threat_Protection</div>
                 </div>
             </div>
-            <p>Запустить программу и активировать ключ лицензии:</p>
+            <p>Запустить программу и активируйте ключ лицензии:</p>
             <!-- Команды -->
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                 <div class="code-block">
-                    <div class="cmd cmd-user">kesl</div>
+                    <div class="cmd cmd-user">/opt/kaspersky/kesl/libexec/kesl-gui-launcher &</div>
                 </div>
             </div>
         </section>
