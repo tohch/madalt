@@ -5030,6 +5030,16 @@
                     <div class="cmd cmd-serial">"</div>
                 </div>
             </div>
+            <p>Добавьте роль admin пользователю, если не добавили во время выполнения настройки kesl-setup.pl:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su - -c "</div>
+                    <div class="cmd cmd-serial">kesl-control --grant-role admin $USER</div>
+                    <div class="cmd cmd-serial">"</div>
+                </div>
+            </div>
             <p>Добавьте исключение:</p>
             <!-- Команды -->
             <div class="code-wrapper">
