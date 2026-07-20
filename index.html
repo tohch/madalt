@@ -156,6 +156,7 @@
                     <li><a href="#gosuslugi-plagin-gosuslugi">Расширение для плагина Госуслуги</a></li>
                 </ul>
             </li>
+            <li><a href="#emsed">ЕМСЭД</a>
             <li><a href="#virtual">Виртуализация</a>
                 <ul>
                     <li><a href="#kvm">KVM</a>
@@ -3900,6 +3901,26 @@
                 <p>- Установить криптопровайдер<br>
                 См. раздел <a href="#cryptopro5">КриптоПро 5.0</a></p>
             </section>
+        </section>
+
+        <!-- Глава -->
+        <section id="emsed">
+            <h1>ЕМСЭД</h1>
+            <p>Чтобы подключаться по доменному имени <a href="https://emsed.krasnodar.ru">https://emsed.krasnodar.ru</a>, пропишите ip 10.99.105.13 в hosts</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">su -</div>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">echo "10.99.105.13 emsed.krasnodar.ru" >> /etc/hosts</div>
+                </div>
+            </div>
         </section>
 
         <!-- Глава -->
