@@ -88,6 +88,7 @@
             <li><a href="#talisman-sql">Талисман-SQL</a>
                 <ul>
                     <li><a href="#talisman-sql-autoinstall">Автоматическая установка</a></li>
+                    <li><a href="#talisman-sql-manual-install">Ручная установка</a></li>
                     <li><a href="#talisman-sql-install-wine">Установка Wine</a></li>
                     <li><a href="#talisman-sql-setting-share">Настройка сетевых папок</a></li>
                     <li><a href="#talisman-sql-install-talsql">Установка Талисмана SQL</a></li>
@@ -107,6 +108,7 @@
                     <li><a href="#talisman2.0-install">Установка BDE и Талисмана 2.0</a></li>
                 </ul>
             </li>
+            <li><a href=#designfr>Designfr.exe</a></li>
             <li><a href="#printer">Принтер</a>
                 <ul>
                     <li><a href="#printer-driver">Установка драйверов</a></li>
@@ -138,6 +140,7 @@
                     <li><a href="#rdp">RDP</a></li>
                     <li><a href="#ssh">ssh</a></li>
                     <li><a href="#rms">RMS</a></li>
+                    <li><a href="#rudesktop">RuDesktop</a></li>
                 </ul>
             </li>
             <li><a href="#timesnewroman">Установка шрифта TimesNewRoman</a></li>
@@ -2168,6 +2171,16 @@
                     </a>
                 </div>
             </section>
+            <h2 id="talisman-sql-manual-install">Ручная установка</h2>
+            <p>Для скачивания установите ydiskarc, см. раздел <a href="#preparation-ydiskarc">Установка ydiskarc</a></p>
+            <p>Скачайте установщик Талисмана SQL:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">~/.local/bin/ydiskarc sync https://disk.yandex.ru/d/V02lQpBYE3Wzog -o ~/altlinux/dist/TalSQL</div>
+                </div>
+            </div>
             <section id="talisman-sql-install-wine">
                 <h2>Установка Wine</h2>
                 <p>Проверить что репозитории добавлены</p>
@@ -3542,7 +3555,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-user">wget -O ~/Загрузки/assistant.rpm https://lk2.xn--80akicokc0aablc.xn--p1ai/WebApi/Platforms/Download/1376</div>
+                        <div class="cmd cmd-user">wget -O ~/Загрузки/assistant.rpm https://lk3.мойассистент.рф/WebApi/Platforms/Download/1515</div>
                         <div class="cmd cmd-user">chmod +x ~/Загрузки/assistant.rpm</div>
                         <div class="cmd cmd-user">su - -c "apt-get install /home/$USER/Загрузки/assistant.rpm"</div>
                     </div>
@@ -3662,6 +3675,7 @@
                 <!-- Картинка -->
                 <img src="img/rms/img-rms-3.png" alt="RMS">
             </section>
+
             <section id="rudesktop">
                 <h2>RuDesktop</h2>
                 <!-- Команды -->
