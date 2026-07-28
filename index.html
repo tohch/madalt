@@ -228,6 +228,11 @@
                     <li><a href="#usb-installer-windows">Из под Windows</a>
                 </ul>
             </li>
+            <li><a href="#alt-server">Альт Сервер 10</a>
+                <ul>
+                    <li><a href="#alt-server-gui">Графический интерфейс</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -6529,6 +6534,72 @@
                     <div class="alert-content">
                         <div class="alert-title">Примечание</div>
                         <p class="alert-text">Из-за ограничений Яндекс Диска ISO разбиты на архивы. Обязательно распакуйте архив и копируйте уже распакованный .iso в корень флешки.</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="alt-server">
+            <h1>Альт Сервер 10</h1>
+            <section id="alt-server-gui">
+                <h2>Графический интерфейс</h2>
+                <p>Установка графического интерфейса MATE.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <p>Раскомментируйте репозитории:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/apt/sources.list.d/altsp.list</div>
+                        <div class="vim-comment"># update.altsp.su (IVK, Moscow)</div>
+                        <div class="vim-comment"># ALT Certified 10</div>
+                        <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64 classic gostcrypto</div>
+                        <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64-i586 classic</div>
+                        <div class="vim-comment">#rpm [cert8] ftp://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>
+                        <div class="vim-line"><br></div>
+                        <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64 classic gostcrypto</div>
+                        <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/x86_64-i586 classic</div>
+                        <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>           
+                    </div>
+                </div>
+                <p>Установка графического интерфейса MATE:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd-comment"># Установка графического окружения</div>
+                        <div class="cmd cmd-root">apt-get install mate-default</div>
+                        <div class="cmd-comment"># Установка менеджера дисплея</div>
+                        <div class="cmd cmd-root">apt-get install lightdm</div>
+                        <div class="cmd-comment"># Установка дополнительных пакетов</div>
+                        <div class="cmd cmd-root">apt-get install xorg-server xinit accountsservice beesu bash-completion mc</div>
+                        <div class="cmd-comment"># Установка Шрифтов</div>
+                        <div class="cmd cmd-root">apt-get install fonts-ttf-dejavu fonts-ttf-freefont</div>
+                    </div>
+                </div>
+                <p>Установите демона графики по умолчанию:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl set-default graphical.target</div>
+                        <div class="cmd cmd-root">reboot</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Чтобы перейти в текстовый режим, нажмите: <code>Ctrl+Alt+F2</code></p>
+                        <p class="alert-text">Чтобы при загрузке был текстовый режим, введите: <code>systemctl set-default multi-user.target</code></p>
+                        <p class="alert-text">Чтобы в текстовом режиме запустить графику, введите: <code>startx</code></p>
                     </div>
                 </div>
             </section>
