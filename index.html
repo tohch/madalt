@@ -6543,7 +6543,7 @@
             <h1>Альт Сервер 10</h1>
             <section id="alt-server-gui">
                 <h2>Графический интерфейс</h2>
-                <p>Установка графического интерфейса MATE.</p>
+                <p>Установка.</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
@@ -6568,14 +6568,14 @@
                         <div class="vim-line vim-string">rpm [cert8] http://update.altsp.su/pub/distributions/ALTLinux c10f/branch/noarch classic</div>           
                     </div>
                 </div>
-                <p>Установка графического интерфейса MATE:</p>
+                <p>Установка графического интерфейса Xfce:</p>
                 <!-- Команды -->
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-root">apt-get update</div>
                         <div class="cmd-comment"># Установка графического окружения</div>
-                        <div class="cmd cmd-root">apt-get install mate-default</div>
+                        <div class="cmd cmd-root">apt-get install xfce4-full</div>
                         <div class="cmd-comment"># Установка менеджера дисплея</div>
                         <div class="cmd cmd-root">apt-get install lightdm</div>
                         <div class="cmd-comment"># Установка дополнительных пакетов</div>
@@ -6600,6 +6600,7 @@
                         <p class="alert-text">Чтобы перейти в текстовый режим, нажмите: <code>Ctrl+Alt+F2</code></p>
                         <p class="alert-text">Чтобы при загрузке был текстовый режим, введите: <code>systemctl set-default multi-user.target</code></p>
                         <p class="alert-text">Чтобы в текстовом режиме запустить графику, введите: <code>startx</code></p>
+                        <p class="alert-text">Чтобы установить Mate, введите: <code>apt-get install mate-maxi</code></p>
                     </div>
                 </div>
             </section>
