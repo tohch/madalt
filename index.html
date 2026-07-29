@@ -6604,6 +6604,94 @@
                     </div>
                 </div>
             </section>
+            <section id="alt-server-dhcp">
+                <h2>DHCP</h2>
+                <p>Настройка DHCP сервера.</p>
+                <!-- Важно -->
+                <div class="alert alert-important">
+                    <div class="alert-content">
+                        <div class="alert-title">Важно</div>
+                        <p class="alert-text">Вы должны иметь хотя бы один статически сконфигурированный Ethernet-интерфейс, чтобы настраивать DHCP-сервер</p>
+                    </div>
+                </div>
+                <h3>Вариант 1. Ручная настройка через консоль.</h3>
+                <p>Установите DHCP:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install -y dhcp-server</div>
+                    </div>
+                </div>
+                <p>Настройте DHCP:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/dhcp/dhcpd.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/dhcp/dhcpd.conf</div>
+                        <div class="vim-comment"># Глобальные параметры</div>
+                        <div class="vim-comment"># Время аренды по умолчанию (в секундах)</div>
+                        <div class="vim-line vim-string">default-lease-time 600;</div>
+                        <div class="vim-comment"># Максимальное время аренды</div>
+                        <div class="vim-line vim-string">max-lease-time 7200;</div>
+                        <div class="vim-comment"># Сервер является авторитетным в этой сети</div>
+                        <div class="vim-line vim-string">authoritative;</div>
+                        <div class="vim-comment"># Настройка подсети</div>
+                        <div class="vim-line vim-string">subnet 192.168.1.0 netmask 255.255.255.0 {</div>
+                        <div class="vim-comment"># Диапазон IP-адресов для раздачи клиентам</div>
+                        <div class="vim-line vim-string">range 192.168.1.100 192.168.1.200;</div>
+                        <div class="vim-comment"># Шлюз по умолчанию (обычно IP-адрес самого сервера или роутера)</div>
+                        <div class="vim-line vim-string">option routers 192.168.1.1;</div>
+                        <div class="vim-comment"># DNS-серверы</div>
+                        <div class="vim-line vim-string">option domain-name-servers 192.168.1.1, 8.8.8.8;</div>
+                        <div class="vim-comment"># Доменное имя (опционально)</div>
+                        <div class="vim-line vim-string">option domain-name "local.lan";</div>
+                        <div class="vim-line vim-string">}</div>
+                        <div class="vim-comment"># Пример статической привязки по MAC-адресу (опционально)</div>
+                        <div class="vim-comment"># host printer {</div>
+                        <div class="vim-comment">#   hardware ethernet 00:11:22:33:44:55;</div>
+                        <div class="vim-comment">#   fixed-address 192.168.1.50;</div>
+                        <div class="vim-comment"># }</div>
+                    </div>
+                </div>
+                <p>Запустите службу и добавьте её в автозагрузку:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl enable --now dhcpd</div>
+                    </div>
+                </div>
+                <h3>Вариант 2. Через графический интерфейс</h3>
+                <p>Установить Firefox и dhcp-server:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install firefox dhcp-server</div>
+                    </div>
+                </div>
+                <p>Откройте браузер Firefox и перейдите по ссылке <code>https://127.0.0.1:8080</code></p>
+                <!-- Картинка -->
+                <img src="img/alt-server/alt-server-1.png" alt="DHCP">
+                <img src="img/alt-server/alt-server-2.png" alt="DHCP">
+            </section>
         </section>
     </main>
 
