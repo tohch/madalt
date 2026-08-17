@@ -194,6 +194,7 @@
             </li>
             <li><a href="#kes">Kaspersky</a>
             <li><a href="#nalogul">Налогоплательщик ЮЛ</a></li>
+            <li><a href="#flameshot">Flameshot</a></li>
             <li><a href="#timeshift">TimeShift</a>
                 <ul>
                     <li><a href="#timeshift-install">Установка</a></li>
@@ -5401,6 +5402,49 @@
             </div>                      
         </section>
 
+        <!-- Глава-->
+        <section id ="flameshot">
+            <h1>Flameshot</h1>
+            <p>Flameshot - мощная и в тоже время простая утилита для создания скриншотов.</p>
+            <p>Установка</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <di class="cmd cmd-user">su -</di>
+                </div>
+            </div>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">apt-get update</div>
+                    <div class="cmd cmd-root">apt-get install -y flameshot</div>
+                </div>
+            </div>
+            <p>Добавьте горячии клавиши для скриншота:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">xfce4-keyboard-settings</div>
+                </div>
+            </div>
+            <!-- Картинка -->
+            <img src="img/flameshot/img-flameshot-2.png" alt="flameshot">
+            <p>Или</p>
+            <p>Добавьте в автозагрузку:</p>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-root">xfce4-session-settings</div>
+                </div>
+            </div>
+            <!-- Картинка -->
+            <img src="img/flameshot/img-flameshot-1.png" alt="flameshot">
+        </section>
+
         <!-- Глава -->
         <section id="timeshift">
             <h1>TimeShift</h1>
@@ -5415,7 +5459,7 @@
                 <div class="alert alert-note">
                     <div class="alert-content">
                         <div class="alert-title">Примечание</div>
-                        <p class="alert-text">TimeShift установлен по умполчанию в Альт Линукс СП 10 Рабочая станция</p>
+                        <p class="alert-text">TimeShift установлен по умолчанию в Альт Линукс СП 10 Рабочая станция</p>
                     </div>
                 </div>
                 <!-- Команды -->
