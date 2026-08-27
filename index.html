@@ -6752,6 +6752,433 @@
                 <img src="img/alt-server/alt-server-1.png" alt="DHCP">
                 <img src="img/alt-server/alt-server-2.png" alt="DHCP">
             </section>
+            <section id="alt-server-ad">
+                <h2>Active Directory</h2>
+                <p>Развертывание Active Directory (AD) в ALT Linux Server 10 осуществляется с помощью Samba 4, которая работает в режиме контроллера домена (Active Directory Domain Controller — AD DC). Это позволяет полноценно заменить или дополнить Windows Server, управляя пользователями, группами и политиками.</p>
+                <p>Ниже приведена подробная пошаговая инструкция по поднятию AD DC на ALT Server 10.</p>
+                <h3>Шаг 1. Базовая подготовка системы</h3>
+                <p>Контроллер домена крайне чувствителен к сетевым настройкам и времени.</p>
+                <h4>1. Настройка статического IP-адреса</h3>
+                <p>Убедитесь, что на сервере прописан статический IP-адрес. Настроить сеть можно через утилиту nmcli (NetworkManager) или отредактировав файлы в /etc/net/.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <p>Проверьте настройки статики:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ip a</div>
+                        <div class="cmd-comment">Имя сетевого интерфейса: enp1s0</div>
+                        <div class="cmd cmd-root">cat /etc/net/ifaces/enp1s0/options</div>
+                        <div class="cmd-comment">Требуется параметр: BOOTPROTO=static</div>
+                        <div class="cmd cmd-root">cat /etc/net/ifaces/enp1s0/ipv4address</div>
+                        <div class="cmd-comment">Требуется ip и маска: 192.168.122.10/24</div>
+                    </div>
+                </div>
+                <p>Если статический IP адрес не настрое, то настройте:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ip a</div>
+                        <div class="cmd-comment">enp1s0</div>
+                        <div class="cmd cmd-root">echo "BOOTPROTO=static" > /etc/net/ifaces/enp1s0/options</div>
+                        <div class="cmd cmd-root">echo "192.168.122.10" > /etc/net/ifaces/enp1s0/ipv4address</div>
+                    </div>
+                </div>
+                <p>Перезапустите сетевую службу для применения изменений:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl restart network</div>
+                    </div>
+                </div>
+                <h4>2. Настройка имения хоста (FQDN)</h3>
+                <p>Имя сервера должно быть в формате FQDN (Fully Qualified Domain Name): dc1.domain.local (Замените domain.local на имя вашего будущего домена, в данном случае это rcbuso.local).</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">hostnamectl set-hostname srv-1.rcbuso.local</div>
+                    </div>
+                </div>
+                <h4>3. Правка файла /etc/hosts</h3>
+                <p>Это критически важный шаг. Имя хоста не должно резолвиться в 127.0.0.1 или 127.0.1.1.
+                Откройте /etc/hosts и приведите его к следующему виду:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/host</div>
+                        <div class="vim-line vim-string">127.0.0.1  localhost</div>
+                        <div class="vim-line vim-string">192.168.122.10  srv-1.rcbuso.local srv-1</div>
+                    </div>
+                </div>
+                <p>(Где 192.168.122.10 - это статический IP Вашего сервера).</p>
+                <h4>4. Синхронизация времени</h4>
+                <p>В Active Directory рассинхронизация времени более чем на 5 минут между клиентом и сервером приводит к ошибкам авторизации.</p>
+                <p>Установите и запустите chrony:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install chrony</div>
+                        <div class="cmd cmd-root">systemctl enable --now chronyd</div>
+                    </div>
+                </div>
+                <h3>Шаг 2. Установка необходимых пакетов</h3>
+                <p>В ALT Linux контроллер домена вынесен в отдельный пакет samba-dc.</p>
+                <p>Установите пакеты:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install samba-dc krb5-kinit</div>
+                    </div>
+                </div>
+                <h3>Шаг 3. Развертывание домена (Provisioning)</h3>
+                <p>Перед созданием домена нужно остановить стандартные службы Samba (если они вдруг запустились) и удалить дефолтный конфиг.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl stop smb nmb 2>/dev/null</div>
+                        <div class="cmd cmd-root">rm -f /etc/samba/smb.conf</div>
+                    </div>
+                </div>
+                <p>Запустите утилиту развертывания домена:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool domain provision --use-rfc2307 --interactive</div>
+                    </div>
+                </div>
+                <p>Утилита задаст несколько вопросов. Отвечайте на них следующим образом:</p>
+                <ul>
+                    <li><b>Realm</b>: RCBUSO.LOCAL (Имя домена в верхнем регистре, как в Kerberos).</li>
+                    <li><b>Domain</b>: RCBUSO (Короткое имя домена в верхнем регистре, префикс для NetBIOS).</li>
+                    <li><b>Server Role (dc, member, standalone)</b>: dc (Контроллер домена).</li>
+                    <li><b>DNS backend (SAMBA_INTERNAL, BIND9_FLATFILE, NONE)</b>: SAMBA_INTERNAL (Встроенный DNS, самый простой вариант).</li>
+                    <li><b>Administrator password</b>: Введите сложный пароль (минимум 8 символов, цифры, спецсимволы). Запомните его, это пароль администратора домена.</li>
+                    <li><b>Retype password</b>: Повторите пароль.</li>
+                </ul>
+                <p>После завершения скрипт выдаст сообщение об успешном создании.</p>
+                <h3>Шаг 4. Настройка Kerberos и DNS</h3>
+                <h4>1. Kerberos</h4>
+                <p>Скопируйте сгенерированный конфигурационный файл Kerberos в системную директорию:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">cp /var/lib/samba/private/krb5.conf /etc/krb5.conf</div>
+                    </div>
+                </div>
+                <h4>2. DNS</h4>
+                <p>Сервер должен использовать сам себя в качестве DNS-сервера.</p>
+                <p>Отредактируйте /etc/resolv.conf:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/resolv.conf</div>
+                        <div class="vim-line vim-string">search rcbuso.local</div>
+                        <div class="vim-line vim-string">nameserver 127.0.0.1</div>
+                    </div>
+                </div>
+                <p>Чтобы resolv.conf не перезаписывался сетевым менеджером, в ALT Linux можно установить атрибут неизменяемости:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">chattr +i /etc/resolv.conf</div>
+                    </div>
+                </div>
+                <h3>Шаг 5. Запуск и проверка служб</h3>
+                <p>В режиме AD DC служба Samba называется просто samba (а не smbd/nmbd).</p>
+                <p>Запустите и добавьте в автозагрузку:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl enable --now samba</div>
+                    </div>
+                </div>
+                <p>Проверка работоспособности:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment">Проверка уровня домена:</div>
+                        <div class="cmd cmd-root">samba-tool domain level show</div>
+                        <div class="cmd-comment">Должен показать текущий уровень функциональности домена и леса (например, 2016).</div>
+                        <div class="cmd-comment">Проверка DNS (поиск SRV записей):</div>
+                        <div class="cmd cmd-root">host -t SRV _ldap._tcp.rcbuso.local</div>
+                        <div class="cmd-comment">Должен вернуть запись с именем вашего сервера srv-1.rcbuso.local.</div>
+                        <div class="cmd-comment">Проверка Kerberos (получение билета):</div>
+                        <div class="cmd cmd-root">kinit Administrator</div>
+                        <div class="cmd-comment">Введите пароль администратора. Ошибок быть не должно. Проверить билет можно командой klist.</div>
+                        <div class="cmd-comment">Список пользователей:</div>
+                        <div class="cmd cmd-root">samba-tool user list</div>
+                        <div class="cmd-comment">Должен вывести Administrator, Guest, krbtgt.</div>
+                    </div>
+                </div>
+                <h3>Шаг 6. Настройка брандмауэра (Firewall)</h3>
+                <p>Если на сервере включен файрвол, необходимо открыть порты для работы AD.
+                В ALT Linux обычно используется iptables или nftables. Если вы используете firewalld (или стандартные скрипты ALT), откройте следующие порты:</p>
+                <ul>
+                    <li>TCP/UDP: 53 (DNS)</li>
+                    <li>TCP/UDP: 88 (Kerberos)</li>
+                    <li>TCP/UDP: 123 (NTP)</li>
+                    <li>TCP/UDP: 135 (RPC)</li>
+                    <li>TCP/UDP: 137-139 (NetBIOS)</li>
+                    <li>TCP/UDP: 389 (LDAP)</li>
+                    <li>TCP/UDP: 445 (SMB)</li>
+                    <li>TCP/UDP: 464 (Kerberos kpasswd)</li>
+                    <li>TCP: 636 (LDAPS)</li>
+                    <li>TCP: 3268-3269 (Global Catalog)</li>
+                    <li>TCP: 49152-65535 (Динамические порты RPC)</li>
+                </ul>
+                <h3>Шаг 7. Управление доменом</h3>
+                <p>С Windows-машины:</p>
+                <ol>
+                    <li>Установите пакет RSAT (Remote Server Administration Tools) на Windows 10/11 (включается в "Компонентах Windows" -> "Средства администрирования удаленного сервера").</li>
+                    <li>Введите машину в домен domain.local.</li>
+                    <li>Откройте "Active Directory — пользователи и компьютеры" (ADUC) и управляйте доменом через привычный графический интерфейс.</li>
+                </ol>
+                <p>С Linux-машины:</p>
+                <p>Для ввода Linux-машин в домен и настройки авторизации по AD в экосистеме Альт используется связка sssd + realmd или утилита authconfig / alterator-sssd.</p>
+                <h3>Добавление пользователей в домен Active Directory (Samba 4 AD DC)</h3>
+                <p>После того как контроллер домена поднят на ALT Linux Server 10, пользователей можно добавлять несколькими способами.</p>
+                <h3>Способ 1: Командная строка (samba-tool)</h3>
+                <p>Это основной и самый гибкий способ, работающий прямо на сервере.</p>
+                <h4>Создание одного пользователя</h4>
+                <p>Базовый синтаксис: <code>samba-tool user create &lt;логин&gt; &lt;пароль&gt; [опции]</code></p>
+                <p>Простой пример:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user create ivanov 'P@ssw0rd123!'</div>
+                    </div>
+                </div>
+                <p>Полный пример с указанием всех атрибутов:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user create ivanov 'P@ssw0rd123!' \</div>
+                        <div class="cmd cmd-serial">--given-name="Иван" \</div>
+                        <div class="cmd cmd-serial">--surname="Иванов" \</div>
+                        <div class="cmd cmd-serial">--full-name="Иванов Иван Иванович" \</div>
+                        <div class="cmd cmd-serial">--mail-address="ivanov@domain.local" \</div>
+                        <div class="cmd cmd-serial">--telephone-number="+7-495-123-45-67" \</div>
+                        <div class="cmd cmd-serial">--department="IT-отдел" \</div>
+                        <div class="cmd cmd-serial">--job-title="Системный администратор" \</div>
+                        <div class="cmd cmd-serial">--description="Сотрудник IT-отдела"</div>
+                    </div>
+                </div>
+                <!-- Подсказка -->
+                <div class="alert alert-tip">
+                    <div class="alert-content">
+                        <div class="alert-title">Подсказка</div>
+                        <p class="alert-text">Полезные опции при создании</p>
+                        <table>
+                            <tr>
+                                <td>Опция</td>
+                                <td>Описание</td>
+                            </tr>
+                            <tr>
+                                <td>--given-name</td>
+                                <td>Имя</td>
+                            </tr>
+                            <tr>
+                                <td>--surname</td>
+                                <td>Фамилия</td>
+                            </tr>
+                            <tr>
+                                <td>--full-name</td>
+                                <td>Полное имя (отображаемое)</td>
+                            </tr>
+                            <tr>
+                                <td>--mail-address</td>
+                                <td>Email</td>
+                            </tr>
+                            <tr>
+                                <td>--telephone-number</td>
+                                <td>Телефон</td>
+                            </tr>
+                            <tr>
+                                <td>--department</td>
+                                <td>Отдел</td>
+                            </tr>
+                            <tr>
+                                <td>--job-title</td>
+                                <td>Должность</td>
+                            </tr>
+                            <tr>
+                                <td>--description</td>
+                                <td>Описание</td>
+                            </tr>
+                            <tr>
+                                <td>--must-change-at-next-login</td>
+                                <td>Требовать смену пароля при первом входе</td>
+                            </tr>
+                            <tr>
+                                <td>--userou</td>
+                                <td>OU, в который поместить пользователя</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <h4>Создание Organizational Units (OU)</h4>
+                <p>Чтобы структурировать пользователей по отделам, создайте OU:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment">Создать OU "IT-отдел"</div>
+                        <div class="cmd cmd-root">samba-tool ou create "OU=IT-отдел"</div>
+                        <div class="cmd-comment">Создать вложенный OU "Разработка" внутри "IT-отдел"</div>
+                        <div class="cmd cmd-root">samba-tool ou create "OU=Разработка,OU=IT-отдел"</div>
+                    </div>
+                </div>
+                <p>Создание пользователя сразу в нужном OU:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user create sidorov 'P@ssw0rd456!' \</div>
+                        <div class="cmd cmd-serial">--given-name="Пётр" \</div>
+                        <div class="cmd cmd-serial">--surname="Сидоров" \</div>
+                        <div class="cmd cmd-serial">--userou="OU=IT-отдел"</div>
+                    </div>
+                </div>
+                <p>Добавление пользователя в OU:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user move ivanov "OU=IT-отдел,DC=rcbuso,DC=local"</div>
+                    </div>
+                </div>
+                <h4>Управление группами</h4>
+                <p>Создать группу:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool group add "IT-Staff" --description="Сотрудники IT-отдела"</div>
+                    </div>
+                </div>
+                <p>Добавить пользователя в группу:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool group addmembers "IT-Staff" ivanov</div>
+                    </div>
+                </div>
+                <p>Добавить нескольких пользователей сразу:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool group addmembers "IT-Staff" ivanov,petrov,sidorov</div>
+                    </div>
+                </div>
+                <p>Удалить пользователя из группы:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool group removemembers "IT-Staff" petrov</div>
+                    </div>
+                </div>
+                <p>Просмотреть состав группы:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool group listmembers "IT-Staff"</div>
+                    </div>
+                </div>
+                <h4>Управление паролями</h4>
+                <p>Сменить пароль пользователю:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user setpassword ivanov --newpassword='NewP@ss789!'</div>
+                    </div>
+                </div>
+                <p>Сбросить пароль и потребовать смену при входе:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user setpassword ivanov --newpassword='TempP@ss!' --must-change-at-next-login</div>
+                    </div>
+                </div>
+                <h4>Просмотр и поиск пользователей</h4>
+                <p>Список всех пользователей:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user list</div>
+                    </div>
+                </div>
+                <p>Подробная информация о пользователе:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user show ivanov</div>
+                    </div>
+                </div>
+                <p>Поиск пользователя:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user list | grep ivan</div>
+                    </div>
+                </div>
+                <h4>Отключение и удаление пользователей</h4>
+                <p>Отключить учётную запись (заблокировать):</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user disable ivanov</div>
+                    </div>
+                </div>
+                <p>Включить обратно:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user enable ivanov</div>
+                    </div>
+                </div>
+                <p>Удалить пользователя:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">samba-tool user delete ivanov</div>
+                    </div>
+                </div>
+                <h3>Способ 2: Массовое создание из CSV-файла</h3>
+            </section>
         </section>
     </main>
 
