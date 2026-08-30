@@ -233,6 +233,7 @@
                 <ul>
                     <li><a href="#alt-server-gui">Графический интерфейс</a></li>
                     <li><a href="#alt-server-dhcp">DHCP</a></li>
+                    <li><a href="#alt-server-ad">Active Directory</a></li>
                 </ul>
             </li>
         </ul>
@@ -6778,6 +6779,9 @@
                         <div class="cmd-comment">Требуется параметр: BOOTPROTO=static</div>
                         <div class="cmd cmd-root">cat /etc/net/ifaces/enp1s0/ipv4address</div>
                         <div class="cmd-comment">Требуется ip и маска: 192.168.122.10/24</div>
+                        <div class="cmd-comment">Шлюз по умолчанию:</div>
+                        <div class="cmd-comment">cat /etc/net/ifaces/enp1s0/ip4route</div>
+                        <div class="cmd-comment">Требуется ip шлюза: default via 192.168.122.1</div>
                     </div>
                 </div>
                 <p>Если статический IP адрес не настрое, то настройте:</p>
@@ -6788,7 +6792,8 @@
                         <div class="cmd cmd-root">ip a</div>
                         <div class="cmd-comment">enp1s0</div>
                         <div class="cmd cmd-root">echo "BOOTPROTO=static" > /etc/net/ifaces/enp1s0/options</div>
-                        <div class="cmd cmd-root">echo "192.168.122.10" > /etc/net/ifaces/enp1s0/ipv4address</div>
+                        <div class="cmd cmd-root">echo "192.168.122.10/24" > /etc/net/ifaces/enp1s0/ipv4address</div>
+                        <div class="cmd cmd-root">echo "default via 192.168.122.1" > /etc/net/ifaces/enp1s0/ipv4route</div>
                     </div>
                 </div>
                 <p>Перезапустите сетевую службу для применения изменений:</p>
@@ -7178,6 +7183,89 @@
                     </div>
                 </div>
                 <h3>Способ 2: Массовое создание из CSV-файла</h3>
+                <p>Для добавления десятков или сотен пользователей удобно использовать скрипт.</p>
+                <p>Создайте CSV-файл /root/users.csv</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /root/users.csv</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">login,password,firstname,lastname,email,department</div>
+                        <div class="vim-line vim-string">ivanov,P@ssw0rd1!,Иван,Иванов,ivanov@domain.local,IT</div>
+                        <div class="vim-line vim-string">petrov,P@ssw0rd2!,Пётр,Петров,petrov@domain.local,Бухгалтерия</div>
+                        <div class="vim-line vim-string">sidorov,P@ssw0rd3!,Анна,Сидорова,sidorova@domain.local,HR</div>
+                    </div>
+                </div>
+                <p>Создайте скрипт /root/add_users.sh</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /root/users.csv</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">#!/bin/bash</div>
+                        <div class="vim-line vim-string">CSV_FILE="/root/users.csv"</div>
+                        <div class="vim-line vim-string">DEFAULT_OU="OU=Users"</div>
+                        <div class="vim-comment"># Пропускаем заголовок и читаем построчно</div>
+                        <div class="vim-line vim-string">tail -n +2 "$CSV_FILE" | while IFS=',' read -r login password firstname lastname email department; do</div>
+                        <div class="vim-line vim-string">    echo "Создание пользователя: $login ($firstname $lastname)..."</div>
+                        <div class="vim-line vim-string">    samba-tool user create "$login" "$password" \</div>
+                        <div class="vim-line vim-string">        --given-name="$firstname" \</div>
+                        <div class="vim-line vim-string">        --surname="$lastname" \</div>
+                        <div class="vim-line vim-string">        --mail-address="$email" \</div>
+                        <div class="vim-line vim-string">        --department="$department" \</div>
+                        <div class="vim-line vim-string">        --must-change-at-next-login</div>
+                        <div class="vim-line vim-string">    if [ $? -eq 0 ]; then</div>
+                        <div class="vim-line vim-string">        echo "  ✔ Пользователь $login создан успешно"</div>
+                        <div class="vim-line vim-string">    else</div>
+                        <div class="vim-line vim-string">        echo "  ✘ Ошибка при создании $login"</div>
+                        <div class="vim-line vim-string">    fi</div>
+                        <div class="vim-line vim-string">done</div>
+                        <div class="vim-line vim-string">echo "Готово!"</div>
+                    </div>
+                </div>
+                <p>Запустите:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">chmod +x /root/add_users.sh</div>
+                        <div class="cmd cmd-root">/root/add_users.sh</div>
+                    </div>
+                </div>
+                <h3>Способ 3: Графический интерфейс RSAT (с Windows-машины)</h3>
+                <p>Это самый привычный способ для администраторов Windows.</p>
+                <h4>1. Установите RSAT на Windows 10/11:</h4>
+                <p>Параметры → Приложения → Дополнительные компоненты → Добавить компонент</p>
+                <p>Найдите и установите «Средства администрирования удаленного сервера: средства управления Active Directory»</p>
+                <h4>2. Введите Windows-машину в домен:</h4>
+                <p>Свойства системы → Имя компьютера → Изменить → Домен → введите rcbuso.local</p>
+                <p>Укажите учётные данные Administrator и пароль домена</p>
+                <p>Перезагрузите ПК</p>
+                <h4>3. Откройте оснастку ADUC:</h4>
+                <p>Пуск → Active Directory — пользователи и компьютеры</p>
+                <p>Теперь вы можете создавать пользователей, группы и OU через привычный графический интерфейс (правой кнопкой → Создать → Пользователь)</p>
+                <h3>Способ 4: Веб-интерфейс (опционально)</h3>
+                <p>Если вам нужен веб-интерфейс для управления AD, можно установить Apache Directory Studio (Java-приложение) или phpLDAPadmin:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install phpldapadmin</div>
+                    </div>
+                </div>
+                <p>После настройки он будет доступен через браузер и позволит управлять объектами LDAP/AD визуально.</p>
             </section>
         </section>
     </main>
