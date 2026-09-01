@@ -6838,7 +6838,7 @@
                 <div class="code-wrapper">
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
-                        <div class="cmd cmd-root">hostnamectl set-hostname srv-1.rcbuso.local</div>
+                        <div class="cmd cmd-root">hostnamectl set-hostname dc-1.rcbuso.local</div>
                     </div>
                 </div>
                 <h4>3. Правка файла /etc/hosts</h3>
@@ -6850,7 +6850,7 @@
                     <div class="code-block">
                         <div class="cmd cmd-root">vim /etc/host</div>
                         <div class="vim-line vim-string">127.0.0.1  localhost</div>
-                        <div class="vim-line vim-string">192.168.122.10  srv-1.rcbuso.local srv-1</div>
+                        <div class="vim-line vim-string">192.168.122.10  dc-1.rcbuso.local dc-1</div>
                     </div>
                 </div>
                 <p>(Где 192.168.122.10 - это статический IP Вашего сервера).</p>
@@ -6954,7 +6954,7 @@
                         <div class="cmd-comment">Должен показать текущий уровень функциональности домена и леса (например, 2016).</div>
                         <div class="cmd-comment">Проверка DNS (поиск SRV записей):</div>
                         <div class="cmd cmd-root">host -t SRV _ldap._tcp.rcbuso.local</div>
-                        <div class="cmd-comment">Должен вернуть запись с именем вашего сервера srv-1.rcbuso.local.</div>
+                        <div class="cmd-comment">Должен вернуть запись с именем вашего сервера dc-1.rcbuso.local.</div>
                         <div class="cmd-comment">Проверка Kerberos (получение билета):</div>
                         <div class="cmd cmd-root">kinit Administrator</div>
                         <div class="cmd-comment">Введите пароль администратора. Ошибок быть не должно. Проверить билет можно командой klist.</div>
@@ -7294,6 +7294,220 @@
                     </div>
                 </div>
                 <p>После настройки он будет доступен через браузер и позволит управлять объектами LDAP/AD визуально.</p>
+                <h3>Ввод ALT Workstation в домен Active Directory</h3>
+                <p>После того как контроллер домена поднят, Linux-машины можно вводить в домен несколькими способами. В ALT Workstation 10 есть как графический, так и консольный варианты.</p>
+                <h4>Подготовка клиентской машины</h4>
+                <p>Имя машины должно быть в формате FQDN или хотя бы коротким уникальным именем</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">hostnamectl set-hostname host-15.rcbuso.local</div>
+                    </div>
+                </div>
+                <p>Настройка DNS</p>
+                <p>Машина должна видеть контроллер домена по DNS. Откройте /etc/resolv.conf:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/resolv.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-command vim-string">search rcbuso.local</div>
+                        <div class="vim-command vim-string">nameserver 192.168.122.10</div>
+                    </div>
+                </div>
+                <p>Где 192.168.122.10 — IP вашего контроллера домена.</p>
+                <p>Синхронизация времени</p>
+                <p>Рассинхронизация более 5 минут с контроллером приведёт к ошибкам Kerberos.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get install chrony</div>
+                        <div class="cmd cmd-root">systemctl enable --now chronyd</div>
+                        <div class="cmd-comment">Проверка:</div>
+                        <div class="cmd cmd-root">chronyc sources</div>
+                    </div>
+                </div>
+                <p>Проверка связи с контроллером</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ping dc-1.domain.local</div>
+                        <div class="cmd cmd-root">host -t SRV _ldap._tcp.rcbuso.local</div>
+                    </div>
+                </div>
+                <p>Установите необходимые пакеты</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">apt-get update</div>
+                        <div class="cmd cmd-root">apt-get install realmd sssd sssd-ad sssd-tools adcli krb5-workstation oddjob-mkhomedir</div>
+                    </div>
+                </div>
+                <h4>Ввод в домен</h4>
+                <h4>Через графический интерфейс</h4>
+                <!-- Картинка -->
+                <p>Меню -> Центр управления системой -> Аутентификация -> Домен Active Directory</p>
+                <img src="img/dc/dc-1.png" alt="Active Directory">
+                <img src="img/dc/dc-2.png" alt="Active Directory">
+                <h4>Через командную строку</h4>
+                <p>Проверьте доступность домена:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">realm discover rcbuso.local</div>
+                    </div>
+                </div>
+                <p>Введите машину в домен:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">realm join --user=Administrator rcbuso.local</div>
+                    </div>
+                </div>
+                <p>Система запросит пароль администратора домена. После успешного ввода вы получите пустой вывод (это нормально).</p>
+                <p>Проверьте статус:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">realm list</div>
+                    </div>
+                </div>
+                <p>Должен показать домен rcbuso.local с типом kerberos и sssd.</p>
+                <h4>Настройка SSSD</h4>
+                <p>После ввода в домен конфиг /etc/sssd/sssd.conf уже создан, но его стоит проверить и доработать.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/sssd/sssd.conf</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">[sssd]</div>
+                        <div class="vim-line vim-string">domains = domain.local</div>
+                        <div class="vim-line vim-string">config_file_version = 2</div>
+                        <div class="vim-line vim-string">services = nss, pam</div>
+                        <div class="vim-line vim-string">[domain/domain.local]</div>
+                        <div class="vim-line vim-string">ad_domain = domain.local</div>
+                        <div class="vim-line vim-string">krb5_realm = DOMAIN.LOCAL</div>
+                        <div class="vim-line vim-string">realmd_tags = manages-system joined-with-adcli</div>
+                        <div class="vim-line vim-string">cache_credentials = True</div>
+                        <div class="vim-line vim-string">id_provider = ad</div>
+                        <div class="vim-line vim-string">krb5_store_passwords_offline = True</div>
+                        <div class="vim-line vim-string">default_shell = /bin/bash</div>
+                        <div class="vim-line vim-string">ldap_id_mapping = True</div>
+                        <div class="vim-line vim-string">use_fully_qualified_names = False</div>
+                        <div class="vim-line vim-string">fallback_homedir = /home/%u</div>
+                        <div class="vim-line vim-string">access_provider = ad</div>
+                        <div class="vim-line vim-string">ad_gpo_access_control = permissive</div>
+                    </div>
+                </div>
+                <p>Ключевые параметры:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                            <div class="vim-line vim-string"><span class="vim-command">use_fully_qualified_names = False</span> — позволяет входить просто как ivanov, а не ivanov@domain.local.</div>
+                            <div class="vim-line vim-string"><span class="vim-command">fallback_homedir = /home/%u</span> — автоматическое создание домашних каталогов.</div>
+                            <div class="vim-line vim-string"><span class="vim-command">ad_gpo_access_control = permissive</span> — отключает строгую проверку GPO (полезно на первом этапе).</div>
+                    </div>
+                </div>
+                <p>Установите правильные права:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">chmod 600 /etc/sssd/sssd.conf</div>
+                        <div class="cmd cmd-root">systemctl restart sssd</div>
+                    </div>
+                </div>
+                <h4>Автоматическое создание домашних каталогов</h4>
+                <p>Чтобы при первом входе пользователя автоматически создавался его /home/username, включите pam_mkhomedir.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">authconfig --enablemkhomedir --update</div>
+                    </div>
+                </div>
+                <p>Или отредактируйте /etc/pam.d/system-auth, добавив в конец:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/pam.d/system-auth</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">session    required     pam_mkhomedir.so skel=/etc/skel umask=077</div>
+                    </div>
+                </div>
+                <h4>Проверка работы</h4>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd-comment">Проверка получения данных пользователя:</div>
+                        <div class="cmd cmd-root">id ivanov@rcbuso.local</div>
+                        <div class="cmd-comment">Должны увидеть UID, GID и группы пользователя из AD</div>
+                        <div class="cmd-comment">Проверка поиска в NSS:</div>
+                        <div class="cmd cmd-root">getent passwd ivanov</div>
+                        <div class="cmd-comment">Должна вывести строку вида: ivanov:*:10001:10000:Иван Иванов:/home/ivanov:/bin/bash</div>
+                        <div class="cmd-comment">Проверка Kerberos-билета</div>
+                        <div class="cmd cmd-root">kinit ivanov@DOMAIN.LOCAL</div>
+                        <div class="cmd cmd-root">klist</div>
+                    </div>
+                </div>
+                <h4>Вход в систему</h4>
+                <p>Перезагрузите машину и на экране входа выберите «Другой пользователь» (или «Войти как другой пользователь»), затем введите:</p>
+                <ul>
+                    <li>Логин: ivanov (или ivanov@domain.local)</li>
+                    <li>Пароль: пароль из AD</li>
+                </ul>
+                <h4>Настройка sudo для доменных администраторов</h4>
+                <p>Чтобы доменные админы могли выполнять команды от root, добавьте их в sudoers.
+                Создайте файл /etc/sudoers.d/domain_admins:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">visudo -f /etc/sudoers.d/domain_admins</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">%rcbuso\ admins@rcbuso.local ALL=(ALL) ALL</div>
+                    </div>
+                </div>
+                <p>Или для конкретного пользователя:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">ivanov@rcbuso.local ALL=(ALL) ALL</div>
+                    </div>
+                </div>
             </section>
         </section>
     </main>
