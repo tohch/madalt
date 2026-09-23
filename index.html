@@ -132,6 +132,7 @@
                     <li><a href="#cryptopro5-opencer">Установка открытого сертификата</a></li>
                     <li><a href="#cryptopro5-cer">Установка корневого сертификата</a></li>
                     <li><a href="#cryptopro5-tokenandcer">Привязать и положить открытый сертификат в контейнер</a></li>
+                    <li><a href="#cryptopro5-keys">Копирование папки с ключами</a></li>
                 </ul>
             </li>
             <li><a href="#remote-access">Удаленный доступ</a>
@@ -3603,6 +3604,19 @@
                     <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
                     <div class="code-block">
                         <div class="cmd cmd-user">/opt/cprocsp/bin/amd64/certmgr -install -ask-container -to-container -file 'Каданцев.cer'</div>
+                    </div>
+                </div>
+            </section>
+            <section id="cryptopro5-keys">
+                <h2>Копирование папки с ключами</h2>
+                <p>Для того чтобы КриптоПро увидел скопированный ключевой контейнер в виде папки (к примеру bbugkgvy.000), необходимо разместить его в стандартной системной директории хранения ключей и назначить корректные права доступа.</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">cp -r ./bbugkgvy.000 /var/opt/cprocsp/keys/admin/</div>
+                        <div class="cmd cmd-user">chown -R admin:admin /var/opt/cprocsp/keys/admin/bbugkgvy.000/</div>
+                        <div class="cmd cmd-user">chmod 700 /var/opt/cprocsp/keys/admin/bbugkgvy.000</div>
                     </div>
                 </div>
             </section>
