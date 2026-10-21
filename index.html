@@ -3099,6 +3099,7 @@
             </section>
             <section id="printer-share">
                 <h2>Расшарить принтер</h2>
+                <h3>Автоматический вариант</h3>
                 <p>Используйте скрипт <code>share_printer.sh</code> для расшаривания принтера с Альт СП 8 для Windows 10.</p>
                 <p>Скачайте скрипты и инструкцию:</p>
                 <!-- Команды -->
@@ -3121,6 +3122,145 @@
                         <div class="cmd cmd-serial">"</div>
                     </div>
                 </div>
+                <h3>Ручной вариант</h3>
+                <p>Здесь приведены инструкции для ручного расшаривания принтера, эти действия выполняет скрипт share_printer.sh.</p>
+                <p>Отредактируйте конфигурационный фал CUPS:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-user">su -</div>
+                    </div>
+                </div>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">vim /etc/cups/cupsd.conf</div>
+                    </div>
+                </div>
+                <p>Найдите строку <code>Listen localhost:631</code> и замените на:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">Listen 0.0.0.0:631</div>           
+                    </div>
+                </div>
+                <p>Найдите блок &lt;Location /&gt;. Убедитесь, что он выглядит так (добавьте Allow @LOCAL, если его нет):</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">&lt;Location /&gt;</div>           
+                        <div class="vim-line vim-string">  Order allow,deny</div>           
+                        <div class="vim-line vim-string">  Allow @LOCAL</div>           
+                        <div class="vim-line vim-string">&lt;/Location&gt;</div>           
+                    </div>
+                </div>
+                <p>Найдите или добавьте в конец файла блок &lt;Location /printers&gt;. Он должен выглядеть так:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">&lt;Location /printers&gt;</div>           
+                        <div class="vim-line vim-string">  Order allow,deny</div>           
+                        <div class="vim-line vim-string">  Allow @LOCAL</div>           
+                        <div class="vim-line vim-string">&lt;/Location&gt;</div>           
+                    </div>
+                </div>
+                <p>перезапустите службу CUPS:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl restart cups</div>
+                    </div>
+                </div>
+                <p>Проверьте, что служба работает без ошибок:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">systemctl restart cups</div>
+                    </div>
+                </div>
+                <p>Убедитесь, что порт 631 открыт и слушается:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">ss -tlnp | grep :631</div>
+                        <div class="cmd-comment">Вы должны увидеть строку, где указано 0.0.0.0:631 или *:631.</div>
+                    </div>
+                </div>
+                <p>Найстройка брандмауэра.</p>
+                <p>Нужно разрешить входящие подключения к порту 631. В Альт СП 8 чаще всего используется iptables.</p>
+                <p>Проверьте, есть ли уже правило для порта 641:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">iptables -L INPUT -n | grep 631</div>
+                    </div>
+                </div>
+                <p>Если вывод пустой, добавьте правило, разрешающее трафик:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">iptables -I INPUT -p tcp --dport 631 -j ACCEPT</div>
+                    </div>
+                </div>
+                <p>Сохраните правило, чтобы они не сбросились после перезагрузки:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">service iptables save</div>
+                    </div>
+                </div>
+                <p>Для подключения к принтеру вам понадобится ip (или имя) хоста и имя принтера.</p>
+                <p>Чтобы получить данную информацию воспользуйтесь этими командами:</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="cmd cmd-root">hostname</div>
+                        <div class="cmd cmd-root">ip -4 addr show scope global</div>
+                        <div class="cmd cmd-root">lpstat -p</div>
+                    </div>
+                </div>
+                <p>Подключение принтера на компьютере с WIndows 10</p>
+                <p>Теперь перейдите за компьютер с Windows 10, который находится в той же локальной сети.</p>
+                <ul>
+                    <li>Нажмите Пуск → Параметры (значок шестеренки) → Устройства → Принтеры и сканеры.</li>
+                    <li>Нажмите кнопку Добавить принтер или сканер.</li>
+                    <li>Подождите несколько секунд, затем появится ссылка Необходимый принтер отсутствует в списке. Нажмите на неё.</li>
+                    <li>В открывшемся окне выберите переключатель Выбрать общий принтер по имени. (или Устройство IPP)</li>
+                    <li>В поле ввода вставьте следующий URL, заменив значения на ваши:</li>
+                </ul>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">
+                        <div class="vim-line vim-string">&lt;Location /printers&gt; http://&lt;IP-АДРЕС&gt;:631/printers/&lt;ИМЯ_ПРИНТЕРА&gt;</div>                   
+                        <div class="vim-comment vim-string">Например: </div>                   
+                        <div class="vim-line vim-string">http://192.168.0.214:631/printers/Pantum-BM5100ADW-series</div>                   
+                    </div>
+                </div>
+                <!-- Картинка -->
+                <img src="img/printer/img-printer-8.png" alt="Установка принтера">
+                <p>Или используйте IPP</p>
+                <!-- Команды -->
+                <div class="code-wrapper">
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                    <div class="code-block">                
+                        <div class="vim-line vim-string">ipp://192.168.0.214:631/printers/Pantum-BM5100ADW-series</div>                   
+                    </div>
+                </div>
+                <img src="img/printer/img-printer-9.png" alt="Установка принтера">
+                <p>После добавления обязательно укажите верный драйвер в Свойствах принтера, на вкладке Дополнительно</p>
             </section>
         </section>
 
