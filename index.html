@@ -1715,6 +1715,32 @@
             <img src="img/share/img-share-6.png" alt="Простое подключение сетевой папки через кнопку">
             <p>ПКМ по созданному значку - Свойства - Правка - Разрешить запуск этого файла в качестве программы</p>
             <img src="img/share/img-share-7.png" alt="Простое подключение сетевой папки через кнопку">
+            <h3>Создание ярлыка общей папки вручную</h3>
+            <!-- Команды -->
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">vim ~/Рабочий\ стол/share.desktop</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="vim-line vim-string">[Desktop Entry]</div>
+                    <div class="vim-line vim-string">Name=share</div>
+                    <div class="vim-line vim-string">Type=Application</div>
+                    <div class="vim-line vim-string">Comment=share</div>
+                    <div class="vim-line vim-string">Exec=xdg-open "smb://host-36/share/"</div>
+                    <div class="vim-line vim-string">Icon=folder-network</div>
+                    <div class="vim-line vim-string">Terminal=false</div>
+                </div>
+            </div>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                <div class="code-block">
+                    <div class="cmd cmd-user">chmode +x  ~/Рабочий\ стол/share.desktop</div>
+                </div>
+            </div>
             <h2 id="sshfs">Вариант 4. Монтирование SSHFS</h2>
             <!-- Команды -->
             <div class="code-wrapper">
